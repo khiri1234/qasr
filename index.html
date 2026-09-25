@@ -111,29 +111,99 @@
     display:flex; flex-direction:column; justify-content:flex-end;
     padding:26px 22px 24px;
   }
-  .banner-bg{position:absolute; inset:0; z-index:0; transition:opacity .5s;}
+  .banner{--accent:#57E6C9; touch-action:pan-y;}
+  /* Ambient backdrop: the product photo itself, blurred and color-boosted */
   .banner-photo{
-    position:absolute; inset:0; z-index:0;
+    position:absolute; inset:-40px; z-index:0;
     background-size:cover; background-position:center;
-    opacity:0; transition:opacity .5s;
+    filter:blur(34px) saturate(1.7) brightness(.62);
+    transform:scale(1.15);
+    opacity:0; transition:opacity .6s, background-image .6s;
+  }
+  .banner-glow{
+    position:absolute; inset:0; z-index:0; pointer-events:none;
+    background:
+      radial-gradient(circle at 78% 30%, color-mix(in srgb, var(--accent) 55%, transparent) 0%, transparent 55%),
+      radial-gradient(circle at 0% 100%, color-mix(in srgb, var(--accent) 22%, transparent) 0%, transparent 60%);
+    opacity:.9; transition:background .6s;
   }
   .banner-scrim{
-    position:absolute; inset:0; z-index:1;
-    background:linear-gradient(to bottom, rgba(10,11,14,0.05) 30%, rgba(10,11,14,0.55) 65%, rgba(10,11,14,0.92) 100%);
-    opacity:0; transition:opacity .5s;
+    position:absolute; inset:0; z-index:1; pointer-events:none;
+    background:
+      linear-gradient(100deg, rgba(10,11,14,0.88) 0%, rgba(10,11,14,0.62) 42%, rgba(10,11,14,0.05) 75%),
+      linear-gradient(to top, rgba(10,11,14,0.7) 0%, transparent 45%);
+    opacity:0; transition:opacity .6s;
+  }
+  .banner-grain{
+    position:absolute; inset:0; z-index:1; pointer-events:none; opacity:.18; mix-blend-mode:overlay;
+    background-image:radial-gradient(rgba(255,255,255,.18) 1px, transparent 1px);
+    background-size:3px 3px;
+  }
+  /* Crisp product card */
+  .banner-product{
+    position:absolute; z-index:2; right:16px; top:22px;
+    width:44%; aspect-ratio:1/1.1;
+    border-radius:22px; padding:10px;
+    background:linear-gradient(160deg,#FFFFFF 0%,#F1EEE8 100%);
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,.35),
+      0 24px 50px -14px rgba(0,0,0,.65),
+      0 0 60px -6px color-mix(in srgb, var(--accent) 70%, transparent);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; transform:translateY(18px) rotate(8deg) scale(.9);
+    transition:opacity .55s cubic-bezier(.2,.8,.2,1), transform .7s cubic-bezier(.2,.8,.2,1), box-shadow .6s;
+    overflow:hidden;
+  }
+  .banner-product.show{opacity:1; transform:translateY(0) rotate(4deg) scale(1); animation:heroFloat 5s ease-in-out .7s infinite;}
+  .banner-product img{width:100%; height:100%; object-fit:contain; border-radius:14px; display:block;}
+  .banner-product::after{
+    content:''; position:absolute; top:-50%; left:-80%; width:50%; height:200%;
+    background:linear-gradient(90deg, transparent, rgba(255,255,255,.55), transparent);
+    transform:rotate(20deg);
+  }
+  .banner-product.show::after{animation:heroShine 1.2s ease-out .5s 1;}
+  .banner-tag{
+    position:absolute; z-index:3; right:10px; bottom:10px;
+    background:var(--accent); color:#0B0C0F;
+    font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:12px; letter-spacing:.02em;
+    display:inline-flex; align-items:center;
+    padding:6px 11px; border-radius:999px; transform:rotate(-4deg);
+    box-shadow:0 6px 16px -4px rgba(0,0,0,.5);
+  }
+  .banner-tag .aed-icon svg{width:.8em; height:.8em;}
+  @keyframes heroFloat{
+    0%,100%{transform:translateY(0) rotate(4deg);}
+    50%{transform:translateY(-8px) rotate(2.5deg);}
+  }
+  @keyframes heroShine{ to{left:140%;} }
+  @media (prefers-reduced-motion: reduce){
+    .banner-product.show, .banner-product.show::after{animation:none;}
   }
   .banner-fig{
     position:absolute; right:-10px; top:14px; width:200px; height:200px; z-index:1;
     opacity:.95; transition:opacity .35s;
   }
-  .banner-content{position:relative; z-index:2; max-width:72%; color:#F4F2ED;}
+  .banner-content{position:relative; z-index:3; max-width:56%; color:#F4F2ED;}
+  .banner.no-photo .banner-content{max-width:72%;}
   .banner-eyebrow{
-    font-size:11px; letter-spacing:.06em; color:#9CA3A8;
-    margin-bottom:10px;
+    display:inline-flex; align-items:center; gap:7px;
+    font-size:10.5px; font-weight:700; letter-spacing:.08em; color:#F4F2ED;
+    background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.16);
+    backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+    padding:5px 11px 5px 9px; border-radius:999px;
+    margin-bottom:12px;
   }
-  .banner-head{font-size:30px; line-height:1.02; font-weight:700; margin:0 0 12px; transition:opacity .35s; color:#F4F2ED;}
+  .banner-eyebrow::before{
+    content:''; width:7px; height:7px; border-radius:50%;
+    background:var(--accent); box-shadow:0 0 10px var(--accent);
+  }
+  .banner-head{font-size:30px; line-height:1.02; font-weight:700; margin:0 0 12px; transition:opacity .35s, transform .35s; color:#F4F2ED; text-shadow:0 2px 18px rgba(0,0,0,.35);}
   .banner-head div{display:block;}
-  .banner-sub{font-size:13px; color:#9CA3A8; line-height:1.5; margin:0 0 18px; transition:opacity .35s;}
+  .banner-head .accent{color:var(--accent); transition:color .6s;}
+  .banner-sub{
+    font-size:12.5px; color:#C9CDD1; line-height:1.5; margin:0 0 18px; transition:opacity .35s;
+    display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;
+  }
   .banner-cta{
     display:inline-flex; align-items:center; gap:10px;
     background:#F4F2ED; color:#101216;
@@ -147,8 +217,14 @@
   }
   .banner-cta svg{width:13px;height:13px;}
   .dots{display:flex; gap:6px; justify-content:center; padding:14px 0 4px;}
-  .dot{width:6px; height:6px; border-radius:50%; background:var(--stroke); border:none; padding:0; transition:all .25s;}
-  .dot.active{width:18px; background:var(--mint-ink);}
+  .dot{width:6px; height:6px; border-radius:999px; background:rgba(20,22,26,0.16); border:none; padding:0; transition:width .3s; position:relative; overflow:hidden;}
+  .dot.active{width:26px;}
+  .dot.active::after{
+    content:''; position:absolute; inset:0; background:var(--mint-ink);
+    transform-origin:left; animation:dotFill 4.8s linear forwards;
+  }
+  @keyframes dotFill{ from{transform:scaleX(0);} to{transform:scaleX(1);} }
+  @media (prefers-reduced-motion: reduce){ .dot.active::after{animation:none;} }
 
   /* ---------- Category rail ---------- */
   .cat-rail{
@@ -411,7 +487,10 @@
     <div class="banner" id="banner">
       <canvas id="bannerSmoke" style="position:absolute; inset:0; z-index:0; opacity:.8;"></canvas>
       <div class="banner-photo" id="bannerPhoto"></div>
+      <div class="banner-glow"></div>
       <div class="banner-scrim" id="bannerScrim"></div>
+      <div class="banner-grain"></div>
+      <div class="banner-product" id="bannerProduct"><img id="bannerProductImg" alt=""><span class="banner-tag" id="bannerTag"></span></div>
       <div class="banner-fig" id="bannerFig"></div>
       <div class="banner-content">
         <div class="banner-eyebrow" id="bannerEyebrow">LIMITED DROP</div>
@@ -781,6 +860,10 @@ const bannerEyebrow = document.getElementById('bannerEyebrow');
 const bannerFig = document.getElementById('bannerFig');
 const bannerPhoto = document.getElementById('bannerPhoto');
 const bannerScrim = document.getElementById('bannerScrim');
+const bannerEl = document.getElementById('banner');
+const bannerProduct = document.getElementById('bannerProduct');
+const bannerProductImg = document.getElementById('bannerProductImg');
+const bannerTag = document.getElementById('bannerTag');
 const DEFAULT_FIG = `
 <svg viewBox="0 0 200 200" fill="none">
   <ellipse cx="100" cy="150" rx="46" ry="10" fill="#57E6C9" opacity="0.08"/>
@@ -795,33 +878,58 @@ const dotsEl = document.getElementById('dots');
 dotsEl.innerHTML = SLIDES.map((_,i)=>`<button class="dot ${i===0?'active':''}" data-i="${i}" aria-label="Slide ${i+1}"></button>`).join('');
 function renderSlide(i){
   const s = SLIDES[i];
-  bannerHead.style.opacity = 0; bannerSub.style.opacity = 0; bannerFig.style.opacity = 0;
+  bannerHead.style.opacity = 0; bannerHead.style.transform = 'translateY(8px)';
+  bannerSub.style.opacity = 0; bannerFig.style.opacity = 0;
+  bannerProduct.classList.remove('show');
   setTimeout(()=>{
+    bannerEl.style.setProperty('--accent', s.accent);
     bannerEyebrow.textContent = s.eyebrow;
-    bannerHead.innerHTML = `${s.lines[0]}<div>${s.lines[1]}</div><div>${s.lines[2]}</div>`;
+    bannerHead.innerHTML = `${s.lines[0]}<div>${s.lines[1]}</div><div class="accent">${s.lines[2]}</div>`;
     bannerSub.textContent = s.sub;
     if(s.image){
+      const prod = PRODUCTS.find(p=>p.image===s.image);
+      bannerEl.classList.remove('no-photo');
       bannerPhoto.style.backgroundImage = `url(${s.image})`;
       bannerPhoto.style.opacity = 1;
       bannerScrim.style.opacity = 1;
+      bannerProductImg.src = s.image;
+      bannerProductImg.alt = prod ? prod.name : '';
+      bannerTag.innerHTML = prod ? money(prod.price) : '';
+      bannerTag.style.display = prod ? '' : 'none';
+      void bannerProduct.offsetWidth;
+      bannerProduct.classList.add('show');
       bannerFig.innerHTML = '';
       bannerFig.style.opacity = 0;
     } else {
+      bannerEl.classList.add('no-photo');
       bannerPhoto.style.opacity = 0;
       bannerScrim.style.opacity = 0;
       bannerFig.innerHTML = DEFAULT_FIG;
       bannerFig.style.opacity = .95;
     }
-    bannerHead.style.opacity = 1; bannerSub.style.opacity = 1;
-  }, 180);
+    bannerHead.style.opacity = 1; bannerHead.style.transform = 'none';
+    bannerSub.style.opacity = 1;
+  }, 220);
   [...dotsEl.children].forEach((d,idx)=>d.classList.toggle('active', idx===i));
 }
+function goToSlide(i){
+  slideIndex = (i + SLIDES.length) % SLIDES.length;
+  renderSlide(slideIndex);
+  resetAutoplay();
+}
+/* Swipe between slides */
+let touchX = null;
+bannerEl.addEventListener('touchstart', e=>{ touchX = e.touches[0].clientX; }, {passive:true});
+bannerEl.addEventListener('touchend', e=>{
+  if(touchX===null) return;
+  const dx = e.changedTouches[0].clientX - touchX;
+  touchX = null;
+  if(Math.abs(dx) > 40) goToSlide(slideIndex + (dx < 0 ? 1 : -1));
+});
 dotsEl.addEventListener('click', e=>{
   const d = e.target.closest('.dot');
   if(!d) return;
-  slideIndex = Number(d.dataset.i);
-  renderSlide(slideIndex);
-  resetAutoplay();
+  goToSlide(Number(d.dataset.i));
 });
 renderSlide(0);
 let autoplay;
