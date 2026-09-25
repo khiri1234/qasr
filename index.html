@@ -445,6 +445,145 @@
   .d-row.total{color:var(--text); font-size:15.5px; font-weight:700; font-family:'Space Grotesk';}
   .checkout-btn{width:100%; background:var(--mint); color:#07120E; border:none; border-radius:999px; padding:14px; font-size:14px; font-weight:700; margin-top:12px;}
 
+  /* ---------- Delivery ---------- */
+  .deliver-row{padding:0 20px 16px; margin-top:-6px;}
+  .city-pill{
+    display:flex; align-items:center; gap:10px; width:100%;
+    background:linear-gradient(120deg, rgba(87,230,201,.16), rgba(183,156,255,.12));
+    border:1px solid var(--stroke); border-radius:16px; padding:10px 14px;
+    color:var(--text); text-align:left; font-size:12.5px;
+    transition:transform .2s, box-shadow .2s;
+  }
+  .city-pill:hover{transform:translateY(-1px); box-shadow:var(--shadow);}
+  .city-pill .pin{
+    flex:none; width:32px; height:32px; border-radius:10px; background:var(--mint); color:#07120E;
+    display:flex; align-items:center; justify-content:center; position:relative;
+  }
+  .city-pill .pin svg{width:16px; height:16px; animation:pinBob 2.4s ease-in-out infinite;}
+  .city-pill .pin::after{
+    content:''; position:absolute; inset:0; border-radius:10px; border:2px solid var(--mint);
+    animation:pinPulse 2.4s ease-out infinite;
+  }
+  .city-pill .txt{flex:1; min-width:0; line-height:1.3;}
+  .city-pill .txt small{display:block; color:var(--muted); font-size:11px;}
+  .city-pill .txt b{font-weight:700;}
+  .city-pill .eta{color:var(--mint-ink); font-weight:600;}
+  .city-pill .chev{width:16px; height:16px; color:var(--muted); flex:none;}
+  @keyframes pinBob{0%,100%{transform:translateY(0);}50%{transform:translateY(-2px);}}
+  @keyframes pinPulse{0%{transform:scale(1); opacity:.8;}100%{transform:scale(1.45); opacity:0;}}
+
+  /* City picker sheet */
+  .city-back{position:fixed; inset:0; z-index:96; background:rgba(3,4,5,.55); backdrop-filter:blur(4px); opacity:0; pointer-events:none; transition:opacity .25s;}
+  .city-back.open{opacity:1; pointer-events:auto;}
+  .city-sheet{
+    position:fixed; z-index:97; left:0; right:0; bottom:0; margin:0 auto; max-width:460px;
+    background:var(--panel); border-radius:24px 24px 0 0; padding:14px 20px calc(20px + env(safe-area-inset-bottom,0px));
+    transform:translateY(100%); transition:transform .35s cubic-bezier(.2,.8,.2,1);
+    max-height:86vh; overflow-y:auto;
+  }
+  .city-sheet.open{transform:none;}
+  .city-sheet h3{font-size:18px; margin:4px 0 2px;}
+  .city-sheet .lead{font-size:12.5px; color:var(--muted); margin:0 0 14px;}
+  .city-list{display:flex; flex-direction:column; gap:8px;}
+  .city-opt{
+    display:flex; align-items:center; gap:12px; width:100%; text-align:left;
+    background:var(--panel-soft); border:1.5px solid transparent; border-radius:14px; padding:11px 13px; color:var(--text);
+    opacity:0; transform:translateY(8px);
+    transition:border-color .2s, background .2s;
+  }
+  .city-sheet.open .city-opt{animation:cityIn .35s cubic-bezier(.34,1.4,.64,1) forwards;}
+  .city-opt.active{border-color:var(--mint-ink); background:rgba(14,169,136,.08);}
+  .city-opt .ico{flex:none; width:38px; height:38px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:18px; background:var(--panel); box-shadow:var(--shadow);}
+  .city-opt .nm{flex:1; min-width:0;}
+  .city-opt .nm b{display:block; font-size:14px;}
+  .city-opt .nm span{font-size:11.5px; color:var(--muted);}
+  .city-opt .fee{font-size:12.5px; font-weight:700; text-align:right; font-family:'Space Grotesk',sans-serif;}
+  .city-opt .fee small{display:block; font-weight:500; color:var(--muted); font-size:10.5px; font-family:'Inter',sans-serif;}
+  .city-opt .aed-icon svg{width:.75em; height:.75em;}
+  @keyframes cityIn{to{opacity:1; transform:none;}}
+
+  /* Delivery section on the home page */
+  .deliv{
+    margin:28px 20px 0; border-radius:26px; overflow:hidden; position:relative;
+    background:linear-gradient(135deg,#0F1F1B 0%, #10161C 60%, #1A1530 100%); color:#F4F2ED;
+    padding:24px 20px 20px;
+  }
+  .deliv::before{
+    content:''; position:absolute; right:-60px; top:-80px; width:240px; height:240px; border-radius:50%;
+    background:radial-gradient(circle, rgba(87,230,201,.28), transparent 70%);
+  }
+  .deliv-eyebrow{font-size:10.5px; letter-spacing:.08em; font-weight:700; color:var(--mint); margin-bottom:6px; position:relative;}
+  .deliv h2{font-size:22px; line-height:1.15; margin:0 0 6px; position:relative;}
+  .deliv > p{font-size:12.5px; color:#AEB4B9; margin:0 0 16px; position:relative; max-width:420px;}
+  .deliv-road{position:relative; height:34px; margin:0 0 16px; border-bottom:2px dashed rgba(255,255,255,.18);}
+  .deliv-road .truck{
+    position:absolute; bottom:2px; left:-40px; width:34px; height:34px; color:var(--mint);
+    animation:truckDrive 7s linear infinite;
+  }
+  .deliv-road .truck svg{width:100%; height:100%; animation:truckBump .35s ease-in-out infinite alternate;}
+  .deliv-road .puff{position:absolute; bottom:8px; width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,.25); animation:truckDrive 7s linear infinite, puffFade .7s ease-out infinite;}
+  @keyframes truckDrive{from{left:-40px;} to{left:calc(100% + 10px);}}
+  @keyframes truckBump{from{transform:translateY(0);} to{transform:translateY(-1.5px);}}
+  @keyframes puffFade{0%{opacity:.6; transform:translate(-6px,0) scale(.6);}100%{opacity:0; transform:translate(-20px,-6px) scale(1.4);}}
+  .deliv-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px; position:relative;}
+  .deliv-card{
+    text-align:left; color:inherit; border:1px solid rgba(255,255,255,.1);
+    background:rgba(255,255,255,.05); border-radius:16px; padding:12px;
+    transition:transform .2s, background .2s, border-color .2s;
+  }
+  .deliv-card:hover{transform:translateY(-2px); background:rgba(255,255,255,.09);}
+  .deliv-card.active{border-color:var(--mint); background:rgba(87,230,201,.12);}
+  .deliv-card .top{display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;}
+  .deliv-card .em{font-size:18px;}
+  .deliv-card .spd{font-size:9.5px; font-weight:700; letter-spacing:.04em; padding:3px 8px; border-radius:999px; color:#07120E;}
+  .deliv-card b{display:block; font-size:14px; margin-bottom:2px;}
+  .deliv-card span{display:block; font-size:11px; color:#AEB4B9; line-height:1.45;}
+  .deliv-card .aed-icon{display:inline-flex; margin-right:2px;}
+  .deliv-card .aed-icon svg{width:.75em; height:.75em;}
+  .free-meter .aed-icon svg{width:.8em; height:.8em;}
+  .deliv-perks{display:flex; flex-wrap:wrap; gap:8px 16px; margin-top:16px; font-size:11.5px; color:#C9CDD1; position:relative;}
+  .deliv-perks span::before{content:'✓'; color:var(--mint); font-weight:700; margin-right:6px;}
+
+  /* Cart delivery */
+  .d-city{
+    display:flex; align-items:center; gap:10px; background:var(--panel-soft); border:1px solid var(--stroke);
+    border-radius:14px; padding:10px 12px; margin-bottom:12px; font-size:12.5px;
+  }
+  .d-city svg{width:16px; height:16px; color:var(--mint-ink); flex:none;}
+  .d-city .t{flex:1; line-height:1.35;}
+  .d-city .t small{display:block; color:var(--muted); font-size:11px;}
+  .d-city button{border:none; background:none; color:var(--mint-ink); font-weight:700; font-size:12.5px; padding:4px;}
+  .free-meter{margin:0 0 14px;}
+  .free-meter .msg{font-size:12px; margin-bottom:6px; color:var(--text);}
+  .free-meter .msg b{color:var(--mint-ink);}
+  .free-meter .bar{height:7px; border-radius:999px; background:var(--panel-soft); overflow:hidden; border:1px solid var(--stroke);}
+  .free-meter .bar i{display:block; height:100%; width:0; border-radius:999px; background:linear-gradient(90deg,var(--mint-ink),var(--mint)); transition:width .6s cubic-bezier(.2,.8,.2,1);}
+  .d-row .free{color:var(--mint-ink); font-weight:700;}
+
+  @media (prefers-reduced-motion: reduce){
+    .city-pill .pin svg, .city-pill .pin::after, .deliv-road .truck, .deliv-road .truck svg, .deliv-road .puff{animation:none;}
+    .city-opt{opacity:1; transform:none;} .city-sheet.open .city-opt{animation:none;}
+  }
+  @media (min-width:960px){
+    .deliver-row{display:none;}
+    .desk-nav .city-pill{width:auto; max-width:250px; flex:none; padding:7px 12px 7px 8px; background:var(--panel); box-shadow:var(--shadow);}
+    .desk-nav .city-pill .pin{width:30px; height:30px;}
+    .deliv{margin:44px 0 0; padding:40px 44px 36px; border-radius:30px;}
+    .deliv h2{font-size:32px;}
+    .deliv > p{font-size:14px;}
+    .deliv-grid{grid-template-columns:repeat(4,1fr); gap:14px;}
+    .deliv-card{padding:16px;}
+    .deliv-card b{font-size:16px;}
+    .city-sheet{top:50%; bottom:auto; left:50%; right:auto; width:460px; border-radius:24px; transform:translate(-50%,-45%) scale(.96); opacity:0; pointer-events:none; transition:transform .35s cubic-bezier(.2,.8,.2,1), opacity .25s;}
+    .city-sheet.open{transform:translate(-50%,-50%); opacity:1; pointer-events:auto;}
+  }
+  @media (min-width:960px){
+    .desk-nav{gap:18px;}
+    .desk-nav .search-box{min-width:200px;}
+    .desk-nav .city-pill .txt small{display:none;}
+  }
+  @media (min-width:960px) and (max-width:1499px){ .desk-links [data-go="footer"]{display:none;} }
+
   /* ---------- WhatsApp chat widget ---------- */
   .wa{
     --wa:#25D366; --wa-dark:#128C7E; --wa-deep:#075E54;
@@ -662,7 +801,7 @@
       display:flex; align-items:center; justify-content:center;
     }
 
-    #shop, .promo, #footer{scroll-margin-top:96px;}
+    #shop, .promo, #delivery, #footer{scroll-margin-top:96px;}
 
     /* Hero */
     .banner-wrap{padding:0;}
@@ -756,11 +895,17 @@
       <button class="active" data-go="top">Home</button>
       <button data-go="shop">Shop</button>
       <button data-go="offers">Offers</button>
+      <button data-go="delivery">Delivery</button>
       <button data-go="footer">About</button>
     </nav>
+    <button class="city-pill" data-open-city>
+        <span class="pin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span>
+        <span class="txt"><small>Deliver to</small><b class="js-city">Dubai</b> · <span class="eta js-eta">Same day</span></span>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
     <div class="search-box">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
-      <input type="text" placeholder="Search flavors, pods, devices…" id="deskSearch">
+      <input type="text" placeholder="Search products…" id="deskSearch">
     </div>
     <div class="desk-actions">
       <button class="icon-btn" aria-label="Notifications">
@@ -805,6 +950,15 @@
     <button class="filter-btn" id="filterScrollBtn" aria-label="Filter">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
     </button>
+  </div>
+
+  <!-- Delivery location -->
+  <div class="deliver-row">
+      <button class="city-pill" data-open-city>
+        <span class="pin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span>
+        <span class="txt"><small>Deliver to</small><b class="js-city">Dubai</b> · <span class="eta js-eta">Same day</span></span>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
   </div>
 
   <!-- Hero banner -->
@@ -856,6 +1010,16 @@
   <div class="filters" id="filters"></div>
   <div class="grid" id="grid"></div>
 
+  <!-- Delivery -->
+  <section class="deliv" id="delivery">
+    <div class="deliv-eyebrow">DELIVERY ACROSS THE UAE</div>
+    <h2>Dubai today. Every emirate, fast.</h2>
+    <p>Same-day delivery in Dubai, Sharjah and Ajman, next-day to Abu Dhabi and beyond. Tap your city to see fees and timing.</p>
+    <div class="deliv-road" aria-hidden="true"><span class="puff"></span><span class="truck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 5h13v11H1z"/><path d="M14 9h4l3 3.5V16h-7z"/><circle cx="5.5" cy="17.5" r="2"/><circle cx="17.5" cy="17.5" r="2"/></svg></span></div>
+    <div class="deliv-grid" id="delivGrid"></div>
+    <div class="deliv-perks"><span>Discreet packaging</span><span>Cash or card on delivery</span><span>Age check (18+) at the door</span><span>Live updates on WhatsApp</span></div>
+  </section>
+
   <!-- Footer -->
   <div class="footer-note" id="footer">
     <div class="fn-brand">SMOKING UAE</div>
@@ -901,13 +1065,29 @@
   </div>
   <div class="drawer-items" id="drawerItems"></div>
   <div class="drawer-foot" id="drawerFoot" style="display:none;">
+    <div class="d-city">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+      <div class="t">Deliver to <b class="js-city">Dubai</b><small class="js-eta-long">Same day</small></div>
+      <button data-open-city>Change</button>
+    </div>
+    <div class="free-meter"><div class="msg" id="freeMsg"></div><div class="bar"><i id="freeBar"></i></div></div>
     <div class="d-row"><span>Subtotal</span><span id="subtotal">0</span></div>
+    <div class="d-row"><span>Delivery</span><span id="delivFee">0</span></div>
     <div class="d-row"><span>VAT (5%)</span><span id="tax">0</span></div>
     <div class="d-row total"><span>Total</span><span id="total">0</span></div>
     <button class="checkout-btn">Checkout</button>
     <button class="wa-order-btn" id="waOrderBtn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.05 4.91A9.82 9.82 0 0 0 12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01zm-7.01 15.24c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.26 8.26 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c.02 4.54-3.68 8.23-8.22 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43s.17-.25.25-.41c.08-.17.04-.31-.02-.43s-.56-1.34-.76-1.84c-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18s-.22-.16-.47-.28z"/></svg> Order via WhatsApp</button>
   </div>
 </aside>
+
+<!-- City picker -->
+<div class="city-back" id="cityBack"></div>
+<div class="city-sheet" id="citySheet" role="dialog" aria-label="Choose delivery city">
+  <div class="drawer-handle"></div>
+  <h3>Where should we deliver?</h3>
+  <p class="lead">Fees and timing update in your cart automatically.</p>
+  <div class="city-list" id="cityList"></div>
+</div>
 
 <!-- WhatsApp chat widget -->
 <div class="wa" id="wa">
@@ -1020,6 +1200,31 @@ let activeCat = 'all';
 let cart = {};
 let favorites = new Set();
 let searchQuery = '';
+
+/* ---------------- Delivery zones ---------------- */
+// Fees (AED), timing and free-delivery thresholds per city. Adjust to your real rates.
+const DELIVERY = [
+  {id:'dubai',     name:'Dubai',          emoji:'🏙️', fee:15, freeOver:150, eta:'Same day',   etaLong:'Same day · 2–4 hours',          speed:'SAME DAY'},
+  {id:'sharjah',   name:'Sharjah',        emoji:'🕌', fee:20, freeOver:200, eta:'Same day',   etaLong:'Same day · order before 6 PM',  speed:'SAME DAY'},
+  {id:'ajman',     name:'Ajman',          emoji:'⛵', fee:20, freeOver:200, eta:'Same day',   etaLong:'Same day · order before 6 PM',  speed:'SAME DAY'},
+  {id:'abudhabi',  name:'Abu Dhabi',      emoji:'🏛️', fee:25, freeOver:250, eta:'Next day',   etaLong:'Next day · order before 8 PM',  speed:'NEXT DAY'},
+  {id:'alain',     name:'Al Ain',         emoji:'🌴', fee:25, freeOver:250, eta:'Next day',   etaLong:'Next day',                      speed:'NEXT DAY'},
+  {id:'uaq',       name:'Umm Al Quwain',  emoji:'🏖️', fee:30, freeOver:300, eta:'1–2 days',   etaLong:'1–2 working days',              speed:'1–2 DAYS'},
+  {id:'rak',       name:'Ras Al Khaimah', emoji:'⛰️', fee:30, freeOver:300, eta:'1–2 days',   etaLong:'1–2 working days',              speed:'1–2 DAYS'},
+  {id:'fujairah',  name:'Fujairah',       emoji:'🌊', fee:30, freeOver:300, eta:'1–2 days',   etaLong:'1–2 working days',              speed:'1–2 DAYS'},
+];
+const SPEED_COLOR = {'SAME DAY':'var(--mint)', 'NEXT DAY':'var(--violet)', '1–2 DAYS':'var(--amber)'};
+let cityId = 'dubai';
+try{ const saved = localStorage.getItem('deliveryCity'); if(DELIVERY.some(c=>c.id===saved)) cityId = saved; }catch(e){}
+function currentCity(){ return DELIVERY.find(c=>c.id===cityId); }
+function deliveryFee(subtotal){ const c = currentCity(); return subtotal >= c.freeOver ? 0 : c.fee; }
+function cartTotals(){
+  let subtotal = 0;
+  for(const id in cart){ subtotal += PRODUCTS.find(p=>p.id===Number(id)).price * cart[id]; }
+  const delivery = deliveryFee(subtotal);
+  const tax = (subtotal + delivery) * 0.05;
+  return {subtotal, delivery, tax, total: subtotal + delivery + tax};
+}
 
 /* ---------------- Category rail ---------------- */
 const catRail = document.getElementById('catRail');
@@ -1159,11 +1364,9 @@ function updateCartUI(){
     return;
   }
   drawerFoot.style.display = 'block';
-  let subtotal = 0;
   drawerItems.innerHTML = ids.map(id=>{
     const p = PRODUCTS.find(pr=>pr.id===Number(id));
     const qty = cart[id];
-    subtotal += p.price * qty;
     return `
       <div class="d-item">
         <div class="d-icon" style="background:${mediaBg(p)}; color:${CAT_COLOR[p.cat]};">${mediaHTML(p)}</div>
@@ -1179,10 +1382,17 @@ function updateCartUI(){
       </div>
     `;
   }).join('');
-  const tax = subtotal * 0.05;
+  const {subtotal, delivery, tax, total} = cartTotals();
+  const city = currentCity();
   document.getElementById('subtotal').innerHTML = money(subtotal.toFixed(2));
+  document.getElementById('delivFee').innerHTML = delivery ? money(delivery.toFixed(2)) : '<span class="free">FREE</span>';
   document.getElementById('tax').innerHTML = money(tax.toFixed(2));
-  document.getElementById('total').innerHTML = money((subtotal+tax).toFixed(2));
+  document.getElementById('total').innerHTML = money(total.toFixed(2));
+  const left = city.freeOver - subtotal;
+  document.getElementById('freeMsg').innerHTML = left > 0
+    ? `Add <b>${money(left.toFixed(0))}</b> more for free delivery to ${city.name}`
+    : `🎉 You've unlocked <b>free delivery</b> to ${city.name}`;
+  document.getElementById('freeBar').style.width = Math.min(100, subtotal / city.freeOver * 100) + '%';
 }
 drawerItems.addEventListener('click', e=>{
   const btn = e.target.closest('[data-qty]');
@@ -1214,7 +1424,7 @@ searchInputs.forEach(inp=>{
 
 /* ---------------- Desktop nav links ---------------- */
 const deskLinks = document.querySelector('.desk-links');
-const DESK_TARGET = { shop:()=>document.getElementById('shop'), offers:()=>document.querySelector('.promo'), footer:()=>document.getElementById('footer') };
+const DESK_TARGET = { shop:()=>document.getElementById('shop'), offers:()=>document.querySelector('.promo'), delivery:()=>document.getElementById('delivery'), footer:()=>document.getElementById('footer') };
 deskLinks.addEventListener('click', e=>{
   const b = e.target.closest('[data-go]');
   if(!b) return;
@@ -1233,6 +1443,50 @@ document.getElementById('tabMenu').addEventListener('click', function(){ documen
 document.getElementById('tabOffers').addEventListener('click', function(){ document.querySelector('.promo').scrollIntoView({behavior:'smooth'}); setActiveTab(this); });
 document.getElementById('tabProfile').addEventListener('click', function(){ document.getElementById('footer').scrollIntoView({behavior:'smooth'}); setActiveTab(this); });
 document.getElementById('filterScrollBtn').addEventListener('click', ()=> catRail.scrollIntoView({behavior:'smooth', block:'center'}));
+
+/* ---------------- Delivery city UI ---------------- */
+const citySheet = document.getElementById('citySheet');
+const cityBack = document.getElementById('cityBack');
+const cityList = document.getElementById('cityList');
+const delivGrid = document.getElementById('delivGrid');
+function feeLabel(c){ return `${money(c.fee)} · free over ${money(c.freeOver)}`; }
+function renderCityUI(){
+  const c = currentCity();
+  document.querySelectorAll('.js-city').forEach(el=>el.textContent = c.name);
+  document.querySelectorAll('.js-eta').forEach(el=>el.textContent = c.eta);
+  document.querySelectorAll('.js-eta-long').forEach(el=>el.textContent = c.etaLong);
+  cityList.innerHTML = DELIVERY.map((d,i)=>`
+    <button class="city-opt ${d.id===cityId?'active':''}" data-city="${d.id}" style="animation-delay:${i*35}ms">
+      <span class="ico">${d.emoji}</span>
+      <span class="nm"><b>${d.name}</b><span>${d.etaLong}</span></span>
+      <span class="fee">${money(d.fee)}<small>free over ${d.freeOver}</small></span>
+    </button>`).join('');
+  delivGrid.innerHTML = DELIVERY.map(d=>`
+    <button class="deliv-card ${d.id===cityId?'active':''}" data-city="${d.id}">
+      <span class="top"><span class="em">${d.emoji}</span><span class="spd" style="background:${SPEED_COLOR[d.speed]}">${d.speed}</span></span>
+      <b>${d.name}</b>
+      <span>${d.etaLong}</span>
+      <span>${feeLabel(d)}</span>
+    </button>`).join('');
+}
+function setCity(id){
+  cityId = id;
+  try{ localStorage.setItem('deliveryCity', id); }catch(e){}
+  renderCityUI();
+  updateCartUI();
+}
+function openCity(){ citySheet.classList.add('open'); cityBack.classList.add('open'); }
+function closeCity(){ citySheet.classList.remove('open'); cityBack.classList.remove('open'); }
+document.addEventListener('click', e=>{
+  if(e.target.closest('[data-open-city]')){ openCity(); return; }
+  const opt = e.target.closest('.city-opt');
+  if(opt){ setCity(opt.dataset.city); setTimeout(closeCity, 220); return; }
+  const card = e.target.closest('.deliv-card');
+  if(card) setCity(card.dataset.city);
+});
+cityBack.addEventListener('click', closeCity);
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeCity(); });
+renderCityUI();
 
 /* ---------------- WhatsApp chat ---------------- */
 // TODO: replace with the shop's WhatsApp number — international format, digits only (e.g. 971501234567).
@@ -1311,14 +1565,13 @@ function openWhatsApp(text){
   document.getElementById('waOrderBtn').addEventListener('click', ()=>{
     const ids = Object.keys(cart);
     if(!ids.length) return;
-    let subtotal = 0;
     const lines = ids.map(id=>{
       const p = PRODUCTS.find(pr=>pr.id===Number(id));
-      subtotal += p.price * cart[id];
       return `• ${cart[id]} × ${p.name} — AED ${p.price * cart[id]}`;
     });
-    const total = (subtotal * 1.05).toFixed(2);
-    openWhatsApp(`Hi Smoking UAE! I'd like to order:\n${lines.join('\n')}\n\nTotal incl. VAT: AED ${total}`);
+    const {subtotal, delivery, total} = cartTotals();
+    const city = currentCity();
+    openWhatsApp(`Hi Smoking UAE! I'd like to order:\n${lines.join('\n')}\n\nSubtotal: AED ${subtotal.toFixed(2)}\nDelivery to ${city.name} (${city.etaLong}): ${delivery ? 'AED ' + delivery.toFixed(2) : 'FREE'}\nTotal incl. VAT: AED ${total.toFixed(2)}\n\nDelivery address: `);
   });
 })();
 
