@@ -1259,14 +1259,14 @@ let searchQuery = '';
 /* ---------------- Delivery zones ---------------- */
 // Fees (AED), timing and free-delivery thresholds per city. Adjust to your real rates.
 const DELIVERY = [
-  {id:'dubai',     name:'Dubai',          emoji:'🏙️', fee:15, freeOver:150, eta:'Same day',   etaLong:'Same day · 2–4 hours',          speed:'SAME DAY'},
-  {id:'sharjah',   name:'Sharjah',        emoji:'🕌', fee:20, freeOver:200, eta:'Same day',   etaLong:'Same day · order before 6 PM',  speed:'SAME DAY'},
-  {id:'ajman',     name:'Ajman',          emoji:'⛵', fee:20, freeOver:200, eta:'Same day',   etaLong:'Same day · order before 6 PM',  speed:'SAME DAY'},
-  {id:'abudhabi',  name:'Abu Dhabi',      emoji:'🏛️', fee:25, freeOver:250, eta:'Next day',   etaLong:'Next day · order before 8 PM',  speed:'NEXT DAY'},
-  {id:'alain',     name:'Al Ain',         emoji:'🌴', fee:25, freeOver:250, eta:'Next day',   etaLong:'Next day',                      speed:'NEXT DAY'},
-  {id:'uaq',       name:'Umm Al Quwain',  emoji:'🏖️', fee:30, freeOver:300, eta:'1–2 days',   etaLong:'1–2 working days',              speed:'1–2 DAYS'},
-  {id:'rak',       name:'Ras Al Khaimah', emoji:'⛰️', fee:30, freeOver:300, eta:'1–2 days',   etaLong:'1–2 working days',              speed:'1–2 DAYS'},
-  {id:'fujairah',  name:'Fujairah',       emoji:'🌊', fee:30, freeOver:300, eta:'1–2 days',   etaLong:'1–2 working days',              speed:'1–2 DAYS'},
+  {id:'dubai',     name:'Dubai',          emoji:'🏙️', fee:45, freeOver:150, eta:'Same day',   etaLong:'Same day · 2–4 hours',          speed:'SAME DAY'},
+  {id:'sharjah',   name:'Sharjah',        emoji:'🕌', fee:50, freeOver:200, eta:'Same day',   etaLong:'Same day · order before 6 PM',  speed:'SAME DAY'},
+  {id:'ajman',     name:'Ajman',          emoji:'⛵', fee:50, freeOver:200, eta:'Same day',   etaLong:'Same day · order before 6 PM',  speed:'SAME DAY'},
+  {id:'abudhabi',  name:'Abu Dhabi',      emoji:'🏛️', fee:50, freeOver:250, eta:'Next day',   etaLong:'Next day · order before 8 PM',  speed:'NEXT DAY'},
+  {id:'alain',     name:'Al Ain',         emoji:'🌴', fee:50, freeOver:250, eta:'Next day',   etaLong:'Next day',                      speed:'NEXT DAY'},
+  {id:'uaq',       name:'Umm Al Quwain',  emoji:'🏖️', fee:50, freeOver:300, eta:'1–2 days',   etaLong:'1–2 working days',              speed:'1–2 DAYS'},
+  {id:'rak',       name:'Ras Al Khaimah', emoji:'⛰️', fee:50, freeOver:300, eta:'1–2 days',   etaLong:'1–2 working days',              speed:'1–2 DAYS'},
+  {id:'fujairah',  name:'Fujairah',       emoji:'🌊', fee:50, freeOver:300, eta:'1–2 days',   etaLong:'1–2 working days',              speed:'1–2 DAYS'},
 ];
 const SPEED_COLOR = {'SAME DAY':'var(--mint)', 'NEXT DAY':'var(--violet)', '1–2 DAYS':'var(--amber)'};
 let cityId = 'dubai';
@@ -1586,8 +1586,8 @@ document.querySelectorAll('.js-pay-logos').forEach(el=> el.insertAdjacentHTML('b
 renderPayments();
 
 /* ---------------- WhatsApp chat ---------------- */
-// TODO: replace with the shop's WhatsApp number — international format, digits only (e.g. 971501234567).
-const WHATSAPP_NUMBER = '971500000000';
+// Shop WhatsApp number: international format, digits only.
+const WHATSAPP_NUMBER = '971523504089';
 function openWhatsApp(text){
   window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
 }
