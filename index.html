@@ -429,7 +429,8 @@
   .drawer-head h3{font-size:17px; font-weight:600; margin:0;}
   .drawer-close{width:30px;height:30px;border-radius:50%; border:none; background:var(--panel-soft); color:var(--text); display:flex;align-items:center;justify-content:center;}
   .drawer-close svg{width:13px;height:13px;}
-  .drawer-items{flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:12px;}
+  .drawer-items{flex:none; display:flex; flex-direction:column; gap:12px;}
+  .drawer{overflow-y:auto; overscroll-behavior:contain;}
   .drawer-empty{color:var(--muted); font-size:13px; text-align:center; margin:40px 0; line-height:1.6;}
   .d-item{display:flex; gap:12px; align-items:center; background:var(--panel-soft); border:1px solid var(--stroke); border-radius:14px; padding:11px;}
   .d-icon{width:38px;height:38px;border-radius:10px; flex:none; display:flex;align-items:center;justify-content:center; overflow:hidden;}
@@ -443,7 +444,365 @@
   .drawer-foot{border-top:1px solid var(--stroke); padding-top:16px; margin-top:14px;}
   .d-row{display:flex; justify-content:space-between; align-items:center; font-size:13px; color:var(--muted); margin-bottom:8px;}
   .d-row.total{color:var(--text); font-size:15.5px; font-weight:700; font-family:'Space Grotesk';}
-  .checkout-btn{width:100%; background:var(--mint); color:#07120E; border:none; border-radius:999px; padding:14px; font-size:14px; font-weight:700; margin-top:12px;}
+
+  /* ---------- Delivery ---------- */
+  .deliver-row{padding:0 20px 16px; margin-top:-6px;}
+  .city-pill{
+    display:flex; align-items:center; gap:10px; width:100%;
+    background:linear-gradient(120deg, rgba(87,230,201,.16), rgba(183,156,255,.12));
+    border:1px solid var(--stroke); border-radius:16px; padding:10px 14px;
+    color:var(--text); text-align:left; font-size:12.5px;
+    transition:transform .2s, box-shadow .2s;
+  }
+  .city-pill:hover{transform:translateY(-1px); box-shadow:var(--shadow);}
+  .city-pill .pin{
+    flex:none; width:32px; height:32px; border-radius:10px; background:var(--mint); color:#07120E;
+    display:flex; align-items:center; justify-content:center; position:relative;
+  }
+  .city-pill .pin svg{width:16px; height:16px; animation:pinBob 2.4s ease-in-out infinite;}
+  .city-pill .pin::after{
+    content:''; position:absolute; inset:0; border-radius:10px; border:2px solid var(--mint);
+    animation:pinPulse 2.4s ease-out infinite;
+  }
+  .city-pill .txt{flex:1; min-width:0; line-height:1.3;}
+  .city-pill .txt small{display:block; color:var(--muted); font-size:11px;}
+  .city-pill .txt b{font-weight:700;}
+  .city-pill .eta{color:var(--mint-ink); font-weight:600;}
+  .city-pill .chev{width:16px; height:16px; color:var(--muted); flex:none;}
+  @keyframes pinBob{0%,100%{transform:translateY(0);}50%{transform:translateY(-2px);}}
+  @keyframes pinPulse{0%{transform:scale(1); opacity:.8;}100%{transform:scale(1.45); opacity:0;}}
+
+  /* City picker sheet */
+  .city-back{position:fixed; inset:0; z-index:96; background:rgba(3,4,5,.55); backdrop-filter:blur(4px); opacity:0; pointer-events:none; transition:opacity .25s;}
+  .city-back.open{opacity:1; pointer-events:auto;}
+  .city-sheet{
+    position:fixed; z-index:97; left:0; right:0; bottom:0; margin:0 auto; max-width:460px;
+    background:var(--panel); border-radius:24px 24px 0 0; padding:14px 20px calc(20px + env(safe-area-inset-bottom,0px));
+    transform:translateY(100%); transition:transform .35s cubic-bezier(.2,.8,.2,1);
+    max-height:86vh; overflow-y:auto;
+  }
+  .city-sheet.open{transform:none;}
+  .city-sheet h3{font-size:18px; margin:4px 0 2px;}
+  .city-sheet .lead{font-size:12.5px; color:var(--muted); margin:0 0 14px;}
+  .city-list{display:flex; flex-direction:column; gap:8px;}
+  .city-opt{
+    display:flex; align-items:center; gap:12px; width:100%; text-align:left;
+    background:var(--panel-soft); border:1.5px solid transparent; border-radius:14px; padding:11px 13px; color:var(--text);
+    opacity:0; transform:translateY(8px);
+    transition:border-color .2s, background .2s;
+  }
+  .city-sheet.open .city-opt{animation:cityIn .35s cubic-bezier(.34,1.4,.64,1) forwards;}
+  .city-opt.active{border-color:var(--mint-ink); background:rgba(14,169,136,.08);}
+  .city-opt .ico{flex:none; width:38px; height:38px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:18px; background:var(--panel); box-shadow:var(--shadow);}
+  .city-opt .nm{flex:1; min-width:0;}
+  .city-opt .nm b{display:block; font-size:14px;}
+  .city-opt .nm span{font-size:11.5px; color:var(--muted);}
+  .city-opt .fee{font-size:12.5px; font-weight:700; text-align:right; font-family:'Space Grotesk',sans-serif;}
+  .city-opt .fee small{display:block; font-weight:500; color:var(--muted); font-size:10.5px; font-family:'Inter',sans-serif;}
+  .city-opt .aed-icon svg{width:.75em; height:.75em;}
+  @keyframes cityIn{to{opacity:1; transform:none;}}
+
+  /* Delivery section on the home page */
+  .deliv{
+    margin:28px 20px 0; border-radius:26px; overflow:hidden; position:relative;
+    background:linear-gradient(135deg,#0F1F1B 0%, #10161C 60%, #1A1530 100%); color:#F4F2ED;
+    padding:24px 20px 20px;
+  }
+  .deliv::before{
+    content:''; position:absolute; right:-60px; top:-80px; width:240px; height:240px; border-radius:50%;
+    background:radial-gradient(circle, rgba(87,230,201,.28), transparent 70%);
+  }
+  .deliv-eyebrow{font-size:10.5px; letter-spacing:.08em; font-weight:700; color:var(--mint); margin-bottom:6px; position:relative;}
+  .deliv h2{font-size:22px; line-height:1.15; margin:0 0 6px; position:relative;}
+  .deliv > p{font-size:12.5px; color:#AEB4B9; margin:0 0 16px; position:relative; max-width:420px;}
+  .deliv-road{position:relative; height:34px; margin:0 0 16px; border-bottom:2px dashed rgba(255,255,255,.18);}
+  .deliv-road .truck{
+    position:absolute; bottom:2px; left:-40px; width:34px; height:34px; color:var(--mint);
+    animation:truckDrive 7s linear infinite;
+  }
+  .deliv-road .truck svg{width:100%; height:100%; animation:truckBump .35s ease-in-out infinite alternate;}
+  .deliv-road .puff{position:absolute; bottom:8px; width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,.25); animation:truckDrive 7s linear infinite, puffFade .7s ease-out infinite;}
+  @keyframes truckDrive{from{left:-40px;} to{left:calc(100% + 10px);}}
+  @keyframes truckBump{from{transform:translateY(0);} to{transform:translateY(-1.5px);}}
+  @keyframes puffFade{0%{opacity:.6; transform:translate(-6px,0) scale(.6);}100%{opacity:0; transform:translate(-20px,-6px) scale(1.4);}}
+  .deliv-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px; position:relative;}
+  .deliv-card{
+    text-align:left; color:inherit; border:1px solid rgba(255,255,255,.1);
+    background:rgba(255,255,255,.05); border-radius:16px; padding:12px;
+    transition:transform .2s, background .2s, border-color .2s;
+  }
+  .deliv-card:hover{transform:translateY(-2px); background:rgba(255,255,255,.09);}
+  .deliv-card.active{border-color:var(--mint); background:rgba(87,230,201,.12);}
+  .deliv-card .top{display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;}
+  .deliv-card .em{font-size:18px;}
+  .deliv-card .spd{font-size:9.5px; font-weight:700; letter-spacing:.04em; padding:3px 8px; border-radius:999px; color:#07120E;}
+  .deliv-card b{display:block; font-size:14px; margin-bottom:2px;}
+  .deliv-card span{display:block; font-size:11px; color:#AEB4B9; line-height:1.45;}
+  .deliv-card .aed-icon{display:inline-flex; margin-right:2px;}
+  .deliv-card .aed-icon svg{width:.75em; height:.75em;}
+  .free-meter .aed-icon svg{width:.8em; height:.8em;}
+  .deliv-perks{display:flex; flex-wrap:wrap; gap:8px 16px; margin-top:16px; font-size:11.5px; color:#C9CDD1; position:relative;}
+  .deliv-perks span::before{content:'✓'; color:var(--mint); font-weight:700; margin-right:6px;}
+
+  /* Cart delivery */
+  .d-city{
+    display:flex; align-items:center; gap:10px; background:var(--panel-soft); border:1px solid var(--stroke);
+    border-radius:14px; padding:10px 12px; margin-bottom:12px; font-size:12.5px;
+  }
+  .d-city svg{width:16px; height:16px; color:var(--mint-ink); flex:none;}
+  .d-city .t{flex:1; line-height:1.35;}
+  .d-city .t small{display:block; color:var(--muted); font-size:11px;}
+  .d-city button{border:none; background:none; color:var(--mint-ink); font-weight:700; font-size:12.5px; padding:4px;}
+  .free-meter{margin:0 0 14px;}
+  .free-meter .msg{font-size:12px; margin-bottom:6px; color:var(--text);}
+  .free-meter .msg b{color:var(--mint-ink);}
+  .free-meter .bar{height:7px; border-radius:999px; background:var(--panel-soft); overflow:hidden; border:1px solid var(--stroke);}
+  .free-meter .bar i{display:block; height:100%; width:0; border-radius:999px; background:linear-gradient(90deg,var(--mint-ink),var(--mint)); transition:width .6s cubic-bezier(.2,.8,.2,1);}
+  .d-row .free{color:var(--mint-ink); font-weight:700;}
+
+  @media (prefers-reduced-motion: reduce){
+    .city-pill .pin svg, .city-pill .pin::after, .deliv-road .truck, .deliv-road .truck svg, .deliv-road .puff{animation:none;}
+    .city-opt{opacity:1; transform:none;} .city-sheet.open .city-opt{animation:none;}
+  }
+  @media (min-width:960px){
+    .deliver-row{display:none;}
+    .desk-nav .city-pill{width:auto; max-width:250px; flex:none; padding:7px 12px 7px 8px; background:var(--panel); box-shadow:var(--shadow);}
+    .desk-nav .city-pill .pin{width:30px; height:30px;}
+    .deliv{margin:44px 0 0; padding:40px 44px 36px; border-radius:30px;}
+    .deliv h2{font-size:32px;}
+    .deliv > p{font-size:14px;}
+    .deliv-grid{grid-template-columns:repeat(4,1fr); gap:14px;}
+    .deliv-card{padding:16px;}
+    .deliv-card b{font-size:16px;}
+    .city-sheet{top:50%; bottom:auto; left:50%; right:auto; width:460px; border-radius:24px; transform:translate(-50%,-45%) scale(.96); opacity:0; pointer-events:none; transition:transform .35s cubic-bezier(.2,.8,.2,1), opacity .25s;}
+    .city-sheet.open{transform:translate(-50%,-50%); opacity:1; pointer-events:auto;}
+  }
+  @media (min-width:960px){
+    .desk-nav{gap:18px;}
+    .desk-nav .search-box{min-width:200px;}
+    .desk-nav .city-pill .txt small{display:none;}
+  }
+  @media (min-width:960px) and (max-width:1499px){ .desk-links [data-go="footer"]{display:none;} }
+
+  /* ---------- Payment methods ---------- */
+  .pm-logo{display:inline-block; width:38px; height:24px; flex:none; border-radius:5px; box-shadow:0 0 0 1px rgba(20,22,26,.1); overflow:hidden;}
+  .pm-logo svg{display:block; width:100%; height:100%;}
+  .pay-block{margin:0 0 14px;}
+  .pay-block .lbl{font-size:12px; font-weight:600; color:var(--text); margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;}
+  .pay-block .lbl span{font-weight:500; color:var(--muted); font-size:11px;}
+  .pay-grid{display:grid; grid-template-columns:1fr 1fr; gap:8px;}
+  .pay-opt{
+    position:relative; text-align:left; color:var(--text);
+    background:var(--panel-soft); border:1.5px solid transparent; border-radius:14px;
+    padding:10px 10px 9px; display:flex; flex-direction:column; gap:7px;
+    transition:border-color .2s, background .2s, transform .15s;
+  }
+  .pay-opt:active{transform:scale(.97);}
+  .pay-opt .logos{display:flex; gap:4px; flex-wrap:wrap;}
+  .pay-opt .logos .pm-logo{width:30px; height:19px; border-radius:4px;}
+  .pay-opt b{font-size:12px; font-weight:600; line-height:1.25;}
+  .pay-opt::after{
+    content:''; position:absolute; top:9px; right:9px; width:16px; height:16px; border-radius:50%;
+    border:1.5px solid var(--stroke); background:var(--panel);
+    transition:all .2s;
+  }
+  .pay-opt.active{border-color:var(--mint-ink); background:rgba(14,169,136,.08);}
+  .pay-opt.active::after{
+    border-color:var(--mint-ink); background:var(--mint-ink);
+    box-shadow:inset 0 0 0 3px var(--panel);
+    animation:payTick .35s cubic-bezier(.34,1.56,.64,1);
+  }
+  @keyframes payTick{from{transform:scale(.4);} to{transform:scale(1);}}
+  .pay-note{font-size:11.5px; color:var(--muted); margin-top:8px; display:flex; gap:6px; align-items:flex-start; line-height:1.4;}
+  .pay-note svg{width:14px; height:14px; flex:none; color:var(--mint-ink); margin-top:1px;}
+  .place-btn{
+    width:100%; margin-top:12px; border:none; border-radius:999px; padding:14px;
+    background:var(--text); color:var(--void); font-size:14px; font-weight:700;
+    display:flex; align-items:center; justify-content:center; gap:9px;
+    position:relative; overflow:hidden;
+  }
+  .place-btn svg{width:18px; height:18px; color:#25D366;}
+  .place-btn::after{
+    content:''; position:absolute; top:0; left:-60%; width:40%; height:100%;
+    background:linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent);
+    transform:skewX(-20deg); animation:placeShine 3.2s ease-in-out infinite;
+  }
+  @keyframes placeShine{0%,60%{left:-60%;} 100%{left:130%;}}
+  .secure-line{display:flex; align-items:center; justify-content:center; gap:6px; font-size:10.5px; color:var(--muted); margin-top:9px;}
+  .secure-line svg{width:12px; height:12px;}
+  .pay-row{display:flex; align-items:center; flex-wrap:wrap; gap:6px; margin:12px 0 4px;}
+  .pay-row .t{font-size:11px; color:var(--muted); margin-right:4px; font-weight:600; letter-spacing:.03em;}
+  .deliv-pay{display:flex; flex-wrap:wrap; gap:6px; margin-top:14px; position:relative;}
+  .deliv-pay .pm-logo{box-shadow:none;}
+  @media (prefers-reduced-motion: reduce){ .place-btn::after, .pay-opt.active::after{animation:none;} }
+  @media (min-width:960px){
+    .footer-note > :not(.fn-brand){grid-column:2;}
+    .footer-note .fn-brand{grid-row:span 3;}
+  }
+
+  /* ---------- WhatsApp chat widget ---------- */
+  .wa{
+    --wa:#25D366; --wa-dark:#128C7E; --wa-deep:#075E54;
+    position:fixed; z-index:85;
+    right:max(16px, calc(50vw - 230px + 16px));
+    bottom:calc(96px + env(safe-area-inset-bottom,0px));
+    display:flex; flex-direction:column; align-items:flex-end; gap:12px;
+    pointer-events:none;
+  }
+  .wa > *{pointer-events:auto;}
+  .wa-fab{
+    position:relative; width:58px; height:58px; border-radius:50%; border:none;
+    background:linear-gradient(145deg,#2FE57A 0%, var(--wa) 45%, var(--wa-dark) 100%);
+    color:#fff; display:flex; align-items:center; justify-content:center;
+    box-shadow:0 12px 28px -8px rgba(18,140,126,.65), inset 0 1px 0 rgba(255,255,255,.35);
+    animation:waPop .7s cubic-bezier(.34,1.56,.64,1) .8s both;
+    transition:transform .25s cubic-bezier(.34,1.56,.64,1);
+  }
+  .wa-fab:hover{transform:scale(1.08) rotate(-6deg);}
+  .wa-fab:active{transform:scale(.94);}
+  .wa-fab svg{width:30px; height:30px; position:relative; z-index:1; transition:transform .35s cubic-bezier(.34,1.56,.64,1), opacity .2s;}
+  .wa-fab .ic-close{position:absolute; opacity:0; transform:rotate(-90deg) scale(.5); width:22px; height:22px;}
+  .wa.open .wa-fab .ic-wa{opacity:0; transform:rotate(90deg) scale(.5);}
+  .wa.open .wa-fab .ic-close{opacity:1; transform:none;}
+  .wa-fab::before, .wa-fab::after{
+    content:''; position:absolute; inset:0; border-radius:50%;
+    border:2px solid var(--wa); opacity:0;
+    animation:waRing 2.6s cubic-bezier(.2,.6,.3,1) 1.6s infinite;
+  }
+  .wa-fab::after{animation-delay:2.9s;}
+  .wa.open .wa-fab::before, .wa.open .wa-fab::after{animation:none;}
+  .wa-fab .wa-badge{
+    position:absolute; top:-3px; right:-3px; z-index:2;
+    min-width:20px; height:20px; border-radius:999px; padding:0 5px;
+    background:#FF3B30; color:#fff; font-size:11px; font-weight:700;
+    display:flex; align-items:center; justify-content:center;
+    border:2px solid var(--void);
+    transform:scale(0); animation:waPop .45s cubic-bezier(.34,1.56,.64,1) 3.2s forwards;
+  }
+  .wa.seen .wa-badge{display:none;}
+
+  /* Teaser bubble */
+  .wa-teaser{
+    position:relative; max-width:230px;
+    background:var(--panel); color:var(--text);
+    border:1px solid var(--stroke); border-radius:18px 18px 4px 18px;
+    padding:11px 34px 11px 14px; font-size:12.5px; line-height:1.4;
+    box-shadow:0 14px 34px -12px rgba(20,22,26,.35);
+    opacity:0; transform:translateY(10px) scale(.9); transform-origin:bottom right;
+    transition:opacity .35s, transform .45s cubic-bezier(.34,1.56,.64,1);
+    cursor:pointer;
+  }
+  .wa-teaser.show{opacity:1; transform:none;}
+  .wa-teaser strong{display:block; font-size:13px; margin-bottom:1px;}
+  .wa-teaser-x{
+    position:absolute; top:6px; right:6px; width:20px; height:20px; border-radius:50%;
+    border:none; background:var(--panel-soft); color:var(--muted); font-size:13px; line-height:1;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .wa.open .wa-teaser{display:none;}
+
+  /* Chat panel */
+  .wa-panel{
+    width:min(340px, calc(100vw - 32px));
+    background:#EFE7DD; border-radius:22px; overflow:hidden;
+    box-shadow:0 30px 70px -20px rgba(7,94,84,.55), 0 0 0 1px rgba(20,22,26,.06);
+    transform-origin:bottom right;
+    opacity:0; transform:translateY(16px) scale(.85); visibility:hidden;
+    transition:opacity .25s, transform .45s cubic-bezier(.34,1.56,.64,1), visibility 0s .45s;
+  }
+  .wa.open .wa-panel{opacity:1; transform:none; visibility:visible; transition:opacity .25s, transform .45s cubic-bezier(.34,1.56,.64,1), visibility 0s;}
+  .wa-head{
+    position:relative; overflow:hidden;
+    background:linear-gradient(135deg, var(--wa-deep) 0%, var(--wa-dark) 100%);
+    color:#fff; padding:16px 16px 18px; display:flex; align-items:center; gap:12px;
+  }
+  .wa-head::after{
+    content:''; position:absolute; right:-40px; top:-60px; width:160px; height:160px; border-radius:50%;
+    background:radial-gradient(circle, rgba(255,255,255,.18), transparent 70%);
+  }
+  .wa-avatar{
+    position:relative; flex:none; width:44px; height:44px; border-radius:50%;
+    background:linear-gradient(145deg,#57E6C9,#0EA988);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:15px; color:#07120E;
+    border:2px solid rgba(255,255,255,.5);
+  }
+  .wa-avatar::after{
+    content:''; position:absolute; right:0; bottom:0; width:11px; height:11px; border-radius:50%;
+    background:#2FE57A; border:2px solid var(--wa-deep);
+    animation:waOnline 2s ease-in-out infinite;
+  }
+  .wa-who{flex:1; min-width:0;}
+  .wa-who strong{display:block; font-size:15px; font-weight:600;}
+  .wa-who span{font-size:11.5px; opacity:.85;}
+  .wa-body{
+    padding:16px 14px 6px; min-height:170px; max-height:260px; overflow-y:auto;
+    display:flex; flex-direction:column; gap:8px;
+    background-color:#EFE7DD;
+    background-image:radial-gradient(rgba(7,94,84,.07) 1.2px, transparent 1.2px);
+    background-size:14px 14px;
+  }
+  .wa-day{align-self:center; font-size:10.5px; color:#54656F; background:rgba(255,255,255,.75); padding:3px 10px; border-radius:8px; margin-bottom:2px;}
+  .wa-msg{
+    align-self:flex-start; max-width:85%;
+    background:#fff; color:#111B21; font-size:13px; line-height:1.45;
+    padding:8px 11px 6px; border-radius:4px 14px 14px 14px;
+    box-shadow:0 1px 1px rgba(0,0,0,.08);
+    animation:waMsgIn .4s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  .wa-msg.me{align-self:flex-end; background:#D9FDD3; border-radius:14px 4px 14px 14px;}
+  .wa-msg time{display:block; text-align:right; font-size:10px; color:#667781; margin-top:2px;}
+  .wa-typing{
+    align-self:flex-start; background:#fff; border-radius:4px 14px 14px 14px;
+    padding:11px 13px; display:flex; gap:4px; box-shadow:0 1px 1px rgba(0,0,0,.08);
+    animation:waMsgIn .3s ease both;
+  }
+  .wa-typing i{width:7px; height:7px; border-radius:50%; background:#8696A0; animation:waDot 1.2s infinite ease-in-out;}
+  .wa-typing i:nth-child(2){animation-delay:.15s;}
+  .wa-typing i:nth-child(3){animation-delay:.3s;}
+  .wa-quick{display:flex; flex-wrap:wrap; gap:6px; padding:6px 14px 10px; background:#EFE7DD;}
+  .wa-quick button{
+    border:1px solid rgba(18,140,126,.35); background:rgba(255,255,255,.85); color:var(--wa-deep);
+    font-size:12px; font-weight:600; padding:7px 11px; border-radius:999px;
+    opacity:0; transform:translateY(6px);
+    transition:background .2s, transform .2s;
+  }
+  .wa-quick.show button{animation:waChip .4s cubic-bezier(.34,1.56,.64,1) forwards;}
+  .wa-quick.show button:nth-child(2){animation-delay:.08s;}
+  .wa-quick.show button:nth-child(3){animation-delay:.16s;}
+  .wa-quick.show button:nth-child(4){animation-delay:.24s;}
+  .wa-quick button:hover{background:#fff;}
+  .wa-form{display:flex; gap:8px; align-items:center; padding:10px 12px 12px; background:#F0F2F5;}
+  .wa-form input{
+    flex:1; border:none; outline:none; background:#fff; border-radius:999px;
+    padding:11px 15px; font-size:13.5px; font-family:inherit; color:#111B21;
+  }
+  .wa-send{
+    flex:none; width:42px; height:42px; border-radius:50%; border:none;
+    background:var(--wa-dark); color:#fff; display:flex; align-items:center; justify-content:center;
+    transition:transform .2s, background .2s;
+  }
+  .wa-send:hover{background:var(--wa-deep); transform:scale(1.06);}
+  .wa-send svg{width:18px; height:18px; margin-left:2px;}
+  .wa-note{text-align:center; font-size:10.5px; color:#667781; background:#F0F2F5; padding:0 12px 10px;}
+
+
+  @keyframes waPop{ from{transform:scale(0) rotate(-30deg);} to{transform:scale(1) rotate(0);} }
+  @keyframes waRing{ 0%{transform:scale(1); opacity:.7;} 100%{transform:scale(1.75); opacity:0;} }
+  @keyframes waOnline{ 0%,100%{box-shadow:0 0 0 0 rgba(47,229,122,.6);} 50%{box-shadow:0 0 0 5px rgba(47,229,122,0);} }
+  @keyframes waMsgIn{ from{opacity:0; transform:translateY(8px) scale(.94);} to{opacity:1; transform:none;} }
+  @keyframes waDot{ 0%,60%,100%{transform:translateY(0); opacity:.5;} 30%{transform:translateY(-4px); opacity:1;} }
+  @keyframes waChip{ to{opacity:1; transform:none;} }
+  @media (prefers-reduced-motion: reduce){
+    .wa-fab, .wa-fab::before, .wa-fab::after, .wa-avatar::after, .wa-msg, .wa-typing i{animation:none !important;}
+    .wa-fab .wa-badge{animation:none; transform:scale(1);}
+    .wa-quick button{opacity:1; transform:none; animation:none !important;}
+  }
+  @media (min-width:960px){
+    .wa{right:28px; bottom:28px;}
+    .wa-fab{width:64px; height:64px;}
+    .wa-panel{width:370px;}
+  }
 
   /* ---------- Desktop nav (hidden on mobile) ---------- */
   .desk-nav{display:none;}
@@ -490,7 +849,7 @@
       display:flex; align-items:center; justify-content:center;
     }
 
-    #shop, .promo, #footer{scroll-margin-top:96px;}
+    #shop, .promo, #delivery, #footer{scroll-margin-top:96px;}
 
     /* Hero */
     .banner-wrap{padding:0;}
@@ -584,11 +943,17 @@
       <button class="active" data-go="top">Home</button>
       <button data-go="shop">Shop</button>
       <button data-go="offers">Offers</button>
+      <button data-go="delivery">Delivery</button>
       <button data-go="footer">About</button>
     </nav>
+    <button class="city-pill" data-open-city>
+        <span class="pin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span>
+        <span class="txt"><small>Deliver to</small><b class="js-city">Dubai</b> · <span class="eta js-eta">Same day</span></span>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
     <div class="search-box">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
-      <input type="text" placeholder="Search flavors, pods, devices…" id="deskSearch">
+      <input type="text" placeholder="Search products…" id="deskSearch">
     </div>
     <div class="desk-actions">
       <button class="icon-btn" aria-label="Notifications">
@@ -633,6 +998,15 @@
     <button class="filter-btn" id="filterScrollBtn" aria-label="Filter">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
     </button>
+  </div>
+
+  <!-- Delivery location -->
+  <div class="deliver-row">
+      <button class="city-pill" data-open-city>
+        <span class="pin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span>
+        <span class="txt"><small>Deliver to</small><b class="js-city">Dubai</b> · <span class="eta js-eta">Same day</span></span>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
   </div>
 
   <!-- Hero banner -->
@@ -684,10 +1058,22 @@
   <div class="filters" id="filters"></div>
   <div class="grid" id="grid"></div>
 
+  <!-- Delivery -->
+  <section class="deliv" id="delivery">
+    <div class="deliv-eyebrow">DELIVERY ACROSS THE UAE</div>
+    <h2>Dubai today. Every emirate, fast.</h2>
+    <p>Same-day delivery in Dubai, Sharjah and Ajman, next-day to Abu Dhabi and beyond. Tap your city to see fees and timing.</p>
+    <div class="deliv-road" aria-hidden="true"><span class="puff"></span><span class="truck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 5h13v11H1z"/><path d="M14 9h4l3 3.5V16h-7z"/><circle cx="5.5" cy="17.5" r="2"/><circle cx="17.5" cy="17.5" r="2"/></svg></span></div>
+    <div class="deliv-grid" id="delivGrid"></div>
+    <div class="deliv-perks"><span>Discreet packaging</span><span>Cash, card or Apple Pay on delivery</span><span>Age check (18+) at the door</span><span>Live updates on WhatsApp</span></div>
+    <div class="deliv-pay js-pay-logos"></div>
+  </section>
+
   <!-- Footer -->
   <div class="footer-note" id="footer">
     <div class="fn-brand">SMOKING UAE</div>
     <p>Independent vapor shop, based in the United Arab Emirates. Prices shown in AED.</p>
+    <div class="pay-row js-pay-logos"><span class="t">WE ACCEPT</span></div>
     <p>Nicotine is an addictive chemical. Intended for existing adult smokers and vapers, 18 years or older. Not sold to minors.</p>
   </div>
 
@@ -729,12 +1115,71 @@
   </div>
   <div class="drawer-items" id="drawerItems"></div>
   <div class="drawer-foot" id="drawerFoot" style="display:none;">
+    <div class="d-city">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+      <div class="t">Deliver to <b class="js-city">Dubai</b><small class="js-eta-long">Same day</small></div>
+      <button data-open-city>Change</button>
+    </div>
+    <div class="free-meter"><div class="msg" id="freeMsg"></div><div class="bar"><i id="freeBar"></i></div></div>
+    <div class="pay-block">
+      <div class="lbl">Payment method <span>Pay on delivery</span></div>
+      <div class="pay-grid" id="payGrid"></div>
+      <div class="pay-note" id="payNote"></div>
+    </div>
     <div class="d-row"><span>Subtotal</span><span id="subtotal">0</span></div>
+    <div class="d-row"><span>Delivery</span><span id="delivFee">0</span></div>
     <div class="d-row"><span>VAT (5%)</span><span id="tax">0</span></div>
     <div class="d-row total"><span>Total</span><span id="total">0</span></div>
-    <button class="checkout-btn">Checkout</button>
+    <button class="place-btn" id="waOrderBtn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.05 4.91A9.82 9.82 0 0 0 12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01zm-7.01 15.24c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.26 8.26 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c.02 4.54-3.68 8.23-8.22 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43s.17-.25.25-.41c.08-.17.04-.31-.02-.43s-.56-1.34-.76-1.84c-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18s-.22-.16-.47-.28z"/></svg> <span id="placeLabel">Place order</span></button>
+    <div class="secure-line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> Pay when your order arrives · no card details needed now</div>
   </div>
 </aside>
+
+<!-- City picker -->
+<div class="city-back" id="cityBack"></div>
+<div class="city-sheet" id="citySheet" role="dialog" aria-label="Choose delivery city">
+  <div class="drawer-handle"></div>
+  <h3>Where should we deliver?</h3>
+  <p class="lead">Fees and timing update in your cart automatically.</p>
+  <div class="city-list" id="cityList"></div>
+</div>
+
+<!-- WhatsApp chat widget -->
+<div class="wa" id="wa">
+  <div class="wa-panel" id="waPanel" role="dialog" aria-label="Chat on WhatsApp">
+    <div class="wa-head">
+      <div class="wa-avatar">SU</div>
+      <div class="wa-who">
+        <strong>Smoking UAE</strong>
+        <span id="waStatus">Online · replies in minutes</span>
+      </div>
+    </div>
+    <div class="wa-body" id="waBody"></div>
+    <div class="wa-quick" id="waQuick">
+      <button data-q="Hi! Is this in stock?">📦 Check stock</button>
+      <button data-q="Hi! How long does delivery take to my area?">🚚 Delivery times</button>
+      <button data-q="Hi! I'd like to place an order.">🛒 Place an order</button>
+      <button data-q="Hi! What are today's offers?">🔥 Today's offers</button>
+    </div>
+    <form class="wa-form" id="waForm">
+      <input id="waInput" type="text" placeholder="Type a message…" autocomplete="off">
+      <button class="wa-send" type="submit" aria-label="Send on WhatsApp">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.4 20.4 21 12 3.4 3.6 3.4 10l12.6 2-12.6 2z"/></svg>
+      </button>
+    </form>
+    <div class="wa-note">Opens WhatsApp to continue the chat</div>
+  </div>
+  <div class="wa-teaser" id="waTeaser">
+    <button class="wa-teaser-x" id="waTeaserX" aria-label="Dismiss">×</button>
+    <strong>Need help choosing? 💨</strong>
+    Chat with us on WhatsApp.
+  </div>
+  <button class="wa-fab" id="waFab" aria-label="Chat on WhatsApp" aria-expanded="false" aria-controls="waPanel">
+    <svg class="ic-wa" viewBox="0 0 24 24" fill="currentColor"><path d="M19.05 4.91A9.82 9.82 0 0 0 12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01zm-7.01 15.24c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.26 8.26 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c.02 4.54-3.68 8.23-8.22 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43s.17-.25.25-.41c.08-.17.04-.31-.02-.43s-.56-1.34-.76-1.84c-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18s-.22-.16-.47-.28z"/></svg>
+    <svg class="ic-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    <span class="wa-badge">1</span>
+  </button>
+</div>
 
 <script>
 /* ---------------- Icons ---------------- */
@@ -810,6 +1255,31 @@ let activeCat = 'all';
 let cart = {};
 let favorites = new Set();
 let searchQuery = '';
+
+/* ---------------- Delivery zones ---------------- */
+// Fees (AED), timing and free-delivery thresholds per city. Adjust to your real rates.
+const DELIVERY = [
+  {id:'dubai',     name:'Dubai',          emoji:'🏙️', fee:45, freeOver:150, eta:'Same day',   etaLong:'Same day · 2–4 hours',          speed:'SAME DAY'},
+  {id:'sharjah',   name:'Sharjah',        emoji:'🕌', fee:50, freeOver:200, eta:'Same day',   etaLong:'Same day · order before 6 PM',  speed:'SAME DAY'},
+  {id:'ajman',     name:'Ajman',          emoji:'⛵', fee:50, freeOver:200, eta:'Same day',   etaLong:'Same day · order before 6 PM',  speed:'SAME DAY'},
+  {id:'abudhabi',  name:'Abu Dhabi',      emoji:'🏛️', fee:50, freeOver:250, eta:'Next day',   etaLong:'Next day · order before 8 PM',  speed:'NEXT DAY'},
+  {id:'alain',     name:'Al Ain',         emoji:'🌴', fee:50, freeOver:250, eta:'Next day',   etaLong:'Next day',                      speed:'NEXT DAY'},
+  {id:'uaq',       name:'Umm Al Quwain',  emoji:'🏖️', fee:50, freeOver:300, eta:'1–2 days',   etaLong:'1–2 working days',              speed:'1–2 DAYS'},
+  {id:'rak',       name:'Ras Al Khaimah', emoji:'⛰️', fee:50, freeOver:300, eta:'1–2 days',   etaLong:'1–2 working days',              speed:'1–2 DAYS'},
+  {id:'fujairah',  name:'Fujairah',       emoji:'🌊', fee:50, freeOver:300, eta:'1–2 days',   etaLong:'1–2 working days',              speed:'1–2 DAYS'},
+];
+const SPEED_COLOR = {'SAME DAY':'var(--mint)', 'NEXT DAY':'var(--violet)', '1–2 DAYS':'var(--amber)'};
+let cityId = 'dubai';
+try{ const saved = localStorage.getItem('deliveryCity'); if(DELIVERY.some(c=>c.id===saved)) cityId = saved; }catch(e){}
+function currentCity(){ return DELIVERY.find(c=>c.id===cityId); }
+function deliveryFee(subtotal){ const c = currentCity(); return subtotal >= c.freeOver ? 0 : c.fee; }
+function cartTotals(){
+  let subtotal = 0;
+  for(const id in cart){ subtotal += PRODUCTS.find(p=>p.id===Number(id)).price * cart[id]; }
+  const delivery = deliveryFee(subtotal);
+  const tax = (subtotal + delivery) * 0.05;
+  return {subtotal, delivery, tax, total: subtotal + delivery + tax};
+}
 
 /* ---------------- Category rail ---------------- */
 const catRail = document.getElementById('catRail');
@@ -949,11 +1419,9 @@ function updateCartUI(){
     return;
   }
   drawerFoot.style.display = 'block';
-  let subtotal = 0;
   drawerItems.innerHTML = ids.map(id=>{
     const p = PRODUCTS.find(pr=>pr.id===Number(id));
     const qty = cart[id];
-    subtotal += p.price * qty;
     return `
       <div class="d-item">
         <div class="d-icon" style="background:${mediaBg(p)}; color:${CAT_COLOR[p.cat]};">${mediaHTML(p)}</div>
@@ -969,10 +1437,17 @@ function updateCartUI(){
       </div>
     `;
   }).join('');
-  const tax = subtotal * 0.05;
+  const {subtotal, delivery, tax, total} = cartTotals();
+  const city = currentCity();
   document.getElementById('subtotal').innerHTML = money(subtotal.toFixed(2));
+  document.getElementById('delivFee').innerHTML = delivery ? money(delivery.toFixed(2)) : '<span class="free">FREE</span>';
   document.getElementById('tax').innerHTML = money(tax.toFixed(2));
-  document.getElementById('total').innerHTML = money((subtotal+tax).toFixed(2));
+  document.getElementById('total').innerHTML = money(total.toFixed(2));
+  const left = city.freeOver - subtotal;
+  document.getElementById('freeMsg').innerHTML = left > 0
+    ? `Add <b>${money(left.toFixed(0))}</b> more for free delivery to ${city.name}`
+    : `🎉 You've unlocked <b>free delivery</b> to ${city.name}`;
+  document.getElementById('freeBar').style.width = Math.min(100, subtotal / city.freeOver * 100) + '%';
 }
 drawerItems.addEventListener('click', e=>{
   const btn = e.target.closest('[data-qty]');
@@ -1004,7 +1479,7 @@ searchInputs.forEach(inp=>{
 
 /* ---------------- Desktop nav links ---------------- */
 const deskLinks = document.querySelector('.desk-links');
-const DESK_TARGET = { shop:()=>document.getElementById('shop'), offers:()=>document.querySelector('.promo'), footer:()=>document.getElementById('footer') };
+const DESK_TARGET = { shop:()=>document.getElementById('shop'), offers:()=>document.querySelector('.promo'), delivery:()=>document.getElementById('delivery'), footer:()=>document.getElementById('footer') };
 deskLinks.addEventListener('click', e=>{
   const b = e.target.closest('[data-go]');
   if(!b) return;
@@ -1023,6 +1498,179 @@ document.getElementById('tabMenu').addEventListener('click', function(){ documen
 document.getElementById('tabOffers').addEventListener('click', function(){ document.querySelector('.promo').scrollIntoView({behavior:'smooth'}); setActiveTab(this); });
 document.getElementById('tabProfile').addEventListener('click', function(){ document.getElementById('footer').scrollIntoView({behavior:'smooth'}); setActiveTab(this); });
 document.getElementById('filterScrollBtn').addEventListener('click', ()=> catRail.scrollIntoView({behavior:'smooth', block:'center'}));
+
+/* ---------------- Delivery city UI ---------------- */
+const citySheet = document.getElementById('citySheet');
+const cityBack = document.getElementById('cityBack');
+const cityList = document.getElementById('cityList');
+const delivGrid = document.getElementById('delivGrid');
+function feeLabel(c){ return `${money(c.fee)} · free over ${money(c.freeOver)}`; }
+function renderCityUI(){
+  const c = currentCity();
+  document.querySelectorAll('.js-city').forEach(el=>el.textContent = c.name);
+  document.querySelectorAll('.js-eta').forEach(el=>el.textContent = c.eta);
+  document.querySelectorAll('.js-eta-long').forEach(el=>el.textContent = c.etaLong);
+  cityList.innerHTML = DELIVERY.map((d,i)=>`
+    <button class="city-opt ${d.id===cityId?'active':''}" data-city="${d.id}" style="animation-delay:${i*35}ms">
+      <span class="ico">${d.emoji}</span>
+      <span class="nm"><b>${d.name}</b><span>${d.etaLong}</span></span>
+      <span class="fee">${money(d.fee)}<small>free over ${d.freeOver}</small></span>
+    </button>`).join('');
+  delivGrid.innerHTML = DELIVERY.map(d=>`
+    <button class="deliv-card ${d.id===cityId?'active':''}" data-city="${d.id}">
+      <span class="top"><span class="em">${d.emoji}</span><span class="spd" style="background:${SPEED_COLOR[d.speed]}">${d.speed}</span></span>
+      <b>${d.name}</b>
+      <span>${d.etaLong}</span>
+      <span>${feeLabel(d)}</span>
+    </button>`).join('');
+}
+function setCity(id){
+  cityId = id;
+  try{ localStorage.setItem('deliveryCity', id); }catch(e){}
+  renderCityUI();
+  updateCartUI();
+}
+function openCity(){ citySheet.classList.add('open'); cityBack.classList.add('open'); }
+function closeCity(){ citySheet.classList.remove('open'); cityBack.classList.remove('open'); }
+document.addEventListener('click', e=>{
+  if(e.target.closest('[data-open-city]')){ openCity(); return; }
+  const opt = e.target.closest('.city-opt');
+  if(opt){ setCity(opt.dataset.city); setTimeout(closeCity, 220); return; }
+  const card = e.target.closest('.deliv-card');
+  if(card) setCity(card.dataset.city);
+});
+cityBack.addEventListener('click', closeCity);
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeCity(); });
+renderCityUI();
+
+/* ---------------- Payment methods ---------------- */
+const PM_LOGOS = {
+  cash: `<svg viewBox="0 0 38 24"><rect width="38" height="24" fill="#1F9D55"/><rect x="6" y="6" width="26" height="12" rx="2" fill="none" stroke="#fff" stroke-width="1.5"/><circle cx="19" cy="12" r="3.2" fill="none" stroke="#fff" stroke-width="1.5"/></svg>`,
+  visa: `<svg viewBox="0 0 38 24"><rect width="38" height="24" fill="#fff"/><text x="19" y="16.2" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="10.5" font-weight="900" font-style="italic" fill="#1A1F71" letter-spacing=".3">VISA</text></svg>`,
+  mastercard: `<svg viewBox="0 0 38 24"><rect width="38" height="24" fill="#16181D"/><circle cx="15.5" cy="12" r="6.5" fill="#EB001B"/><circle cx="22.5" cy="12" r="6.5" fill="#F79E1B"/><path d="M19 6.5a6.5 6.5 0 0 1 0 11 6.5 6.5 0 0 1 0-11z" fill="#FF5F00"/></svg>`,
+  amex: `<svg viewBox="0 0 38 24"><rect width="38" height="24" fill="#2E77BC"/><text x="19" y="15.4" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="8" font-weight="900" fill="#fff" letter-spacing=".4">AMEX</text></svg>`,
+  applepay: `<svg viewBox="0 0 38 24"><rect width="38" height="24" fill="#000"/><path d="M11.9 8.1c.4-.5.7-1.2.6-1.9-.6 0-1.3.4-1.7.9-.4.4-.7 1.1-.6 1.8.7.1 1.3-.3 1.7-.8zm.6 1c-.9-.1-1.7.5-2.2.5-.4 0-1.1-.5-1.9-.5-1 0-1.9.6-2.4 1.5-1 1.8-.3 4.4.7 5.8.5.7 1 1.4 1.8 1.4.7 0 1-.5 1.9-.5s1.1.5 1.9.5c.8 0 1.3-.7 1.7-1.4.5-.8.8-1.6.8-1.6s-1.5-.6-1.5-2.3c0-1.4 1.2-2.1 1.2-2.1-.6-1-1.7-1.1-2-1.3z" fill="#fff"/><text x="25.5" y="15.6" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="8.5" font-weight="700" fill="#fff">Pay</text></svg>`,
+  googlepay: `<svg viewBox="0 0 38 24"><rect width="38" height="24" fill="#fff"/><text x="7" y="15.8" font-family="Arial,Helvetica,sans-serif" font-size="9.5" font-weight="700"><tspan fill="#4285F4">G</tspan></text><text x="16.5" y="15.6" font-family="Arial,Helvetica,sans-serif" font-size="8.5" font-weight="700" fill="#5F6368">Pay</text></svg>`,
+  bank: `<svg viewBox="0 0 38 24"><rect width="38" height="24" fill="#EEF1F4"/><path d="M19 4.5 11 8.5h16zM12.5 10v6M16.5 10v6M21.5 10v6M25.5 10v6M10.5 18h17" fill="none" stroke="#3B4550" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+};
+const pmLogo = k => `<span class="pm-logo" title="${k}">${PM_LOGOS[k]}</span>`;
+const PAYMENTS = [
+  {id:'cod',      name:'Cash on delivery',   logos:['cash'],                     note:'Pay the driver in cash (AED). Exact change appreciated.'},
+  {id:'card',     name:'Card on delivery',   logos:['visa','mastercard','amex'], note:'Visa, Mastercard or Amex — tap, insert or swipe on the driver’s card machine.'},
+  {id:'wallet',   name:'Apple / Google Pay', logos:['applepay','googlepay'],     note:'Tap your phone or watch on the driver’s card machine.'},
+  {id:'transfer', name:'Bank transfer',      logos:['bank'],                     note:'We’ll send our bank details on WhatsApp. Order ships once payment is received.'},
+];
+let payId = 'cod';
+try{ const saved = localStorage.getItem('paymentMethod'); if(PAYMENTS.some(m=>m.id===saved)) payId = saved; }catch(e){}
+const currentPayment = () => PAYMENTS.find(m=>m.id===payId);
+const INFO_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>`;
+function renderPayments(){
+  const m = currentPayment();
+  document.getElementById('payGrid').innerHTML = PAYMENTS.map(x=>`
+    <button class="pay-opt ${x.id===payId?'active':''}" data-pay="${x.id}" aria-pressed="${x.id===payId}">
+      <span class="logos">${x.logos.map(pmLogo).join('')}</span>
+      <b>${x.name}</b>
+    </button>`).join('');
+  document.getElementById('payNote').innerHTML = INFO_ICON + `<span>${m.note}</span>`;
+  document.getElementById('placeLabel').textContent = `Place order · ${m.name}`;
+}
+document.getElementById('payGrid').addEventListener('click', e=>{
+  const b = e.target.closest('[data-pay]');
+  if(!b) return;
+  payId = b.dataset.pay;
+  try{ localStorage.setItem('paymentMethod', payId); }catch(e){}
+  renderPayments();
+});
+const ALL_LOGOS = ['cash','visa','mastercard','amex','applepay','googlepay'];
+document.querySelectorAll('.js-pay-logos').forEach(el=> el.insertAdjacentHTML('beforeend', ALL_LOGOS.map(pmLogo).join('')));
+renderPayments();
+
+/* ---------------- WhatsApp chat ---------------- */
+// Shop WhatsApp number: international format, digits only.
+const WHATSAPP_NUMBER = '971523504089';
+function openWhatsApp(text){
+  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
+}
+(function(){
+  const wa = document.getElementById('wa');
+  const fab = document.getElementById('waFab');
+  const body = document.getElementById('waBody');
+  const quick = document.getElementById('waQuick');
+  const teaser = document.getElementById('waTeaser');
+  const form = document.getElementById('waForm');
+  const input = document.getElementById('waInput');
+  const now = ()=> new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+  const GREETING = [
+    "Marhaba! 👋 Welcome to Smoking UAE.",
+    "Ask us about flavors, stock or same-day delivery — we usually reply within minutes."
+  ];
+  let greeted = false, timers = [];
+
+  function addMsg(text, me){
+    const m = document.createElement('div');
+    m.className = 'wa-msg' + (me ? ' me' : '');
+    m.textContent = text;
+    const t = document.createElement('time'); t.textContent = now();
+    m.appendChild(t);
+    body.appendChild(m);
+    body.scrollTop = body.scrollHeight;
+  }
+  function typeThen(text, delay){
+    return new Promise(res=>{
+      const typing = document.createElement('div');
+      typing.className = 'wa-typing'; typing.innerHTML = '<i></i><i></i><i></i>';
+      body.appendChild(typing); body.scrollTop = body.scrollHeight;
+      timers.push(setTimeout(()=>{ typing.remove(); addMsg(text); res(); }, delay));
+    });
+  }
+  async function greet(){
+    greeted = true;
+    body.innerHTML = '<div class="wa-day">Today</div>';
+    for(const [i, line] of GREETING.entries()) await typeThen(line, i===0 ? 900 : 1300);
+    quick.classList.add('show');
+  }
+  function setOpen(open){
+    wa.classList.toggle('open', open);
+    wa.classList.add('seen');
+    fab.setAttribute('aria-expanded', open);
+    teaser.classList.remove('show');
+    if(open && !greeted) greet();
+    if(open) setTimeout(()=>input.focus({preventScroll:true}), 450);
+  }
+  function send(text){
+    text = text.trim();
+    if(!text) return;
+    addMsg(text, true);
+    input.value = '';
+    setTimeout(()=>openWhatsApp(text), 500);
+  }
+
+  fab.addEventListener('click', ()=> setOpen(!wa.classList.contains('open')));
+  teaser.addEventListener('click', e=>{
+    if(e.target.closest('#waTeaserX')){ teaser.classList.remove('show'); wa.classList.add('seen'); return; }
+    setOpen(true);
+  });
+  quick.addEventListener('click', e=>{ const b = e.target.closest('[data-q]'); if(b) send(b.dataset.q); });
+  form.addEventListener('submit', e=>{ e.preventDefault(); send(input.value); });
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape' && wa.classList.contains('open')) setOpen(false); });
+  document.addEventListener('click', e=>{ if(wa.classList.contains('open') && !wa.contains(e.target)) setOpen(false); });
+
+  // Friendly nudge a few seconds after load
+  setTimeout(()=>{ if(!wa.classList.contains('seen')) teaser.classList.add('show'); }, 3500);
+
+  // Send the current cart as an order message
+  document.getElementById('waOrderBtn').addEventListener('click', ()=>{
+    const ids = Object.keys(cart);
+    if(!ids.length) return;
+    const lines = ids.map(id=>{
+      const p = PRODUCTS.find(pr=>pr.id===Number(id));
+      return `• ${cart[id]} × ${p.name} — AED ${p.price * cart[id]}`;
+    });
+    const {subtotal, delivery, total} = cartTotals();
+    const city = currentCity();
+    openWhatsApp(`Hi Smoking UAE! I'd like to order:\n${lines.join('\n')}\n\nSubtotal: AED ${subtotal.toFixed(2)}\nDelivery to ${city.name} (${city.etaLong}): ${delivery ? 'AED ' + delivery.toFixed(2) : 'FREE'}\nTotal incl. VAT: AED ${total.toFixed(2)}\nPayment: ${currentPayment().name}\n\nDelivery address: `);
+  });
+})();
 
 /* ---------------- Banner carousel ---------------- */
 const SLIDES = [
