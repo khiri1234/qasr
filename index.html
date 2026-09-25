@@ -445,6 +445,178 @@
   .d-row.total{color:var(--text); font-size:15.5px; font-weight:700; font-family:'Space Grotesk';}
   .checkout-btn{width:100%; background:var(--mint); color:#07120E; border:none; border-radius:999px; padding:14px; font-size:14px; font-weight:700; margin-top:12px;}
 
+  /* ---------- WhatsApp chat widget ---------- */
+  .wa{
+    --wa:#25D366; --wa-dark:#128C7E; --wa-deep:#075E54;
+    position:fixed; z-index:85;
+    right:max(16px, calc(50vw - 230px + 16px));
+    bottom:calc(96px + env(safe-area-inset-bottom,0px));
+    display:flex; flex-direction:column; align-items:flex-end; gap:12px;
+    pointer-events:none;
+  }
+  .wa > *{pointer-events:auto;}
+  .wa-fab{
+    position:relative; width:58px; height:58px; border-radius:50%; border:none;
+    background:linear-gradient(145deg,#2FE57A 0%, var(--wa) 45%, var(--wa-dark) 100%);
+    color:#fff; display:flex; align-items:center; justify-content:center;
+    box-shadow:0 12px 28px -8px rgba(18,140,126,.65), inset 0 1px 0 rgba(255,255,255,.35);
+    animation:waPop .7s cubic-bezier(.34,1.56,.64,1) .8s both;
+    transition:transform .25s cubic-bezier(.34,1.56,.64,1);
+  }
+  .wa-fab:hover{transform:scale(1.08) rotate(-6deg);}
+  .wa-fab:active{transform:scale(.94);}
+  .wa-fab svg{width:30px; height:30px; position:relative; z-index:1; transition:transform .35s cubic-bezier(.34,1.56,.64,1), opacity .2s;}
+  .wa-fab .ic-close{position:absolute; opacity:0; transform:rotate(-90deg) scale(.5); width:22px; height:22px;}
+  .wa.open .wa-fab .ic-wa{opacity:0; transform:rotate(90deg) scale(.5);}
+  .wa.open .wa-fab .ic-close{opacity:1; transform:none;}
+  .wa-fab::before, .wa-fab::after{
+    content:''; position:absolute; inset:0; border-radius:50%;
+    border:2px solid var(--wa); opacity:0;
+    animation:waRing 2.6s cubic-bezier(.2,.6,.3,1) 1.6s infinite;
+  }
+  .wa-fab::after{animation-delay:2.9s;}
+  .wa.open .wa-fab::before, .wa.open .wa-fab::after{animation:none;}
+  .wa-fab .wa-badge{
+    position:absolute; top:-3px; right:-3px; z-index:2;
+    min-width:20px; height:20px; border-radius:999px; padding:0 5px;
+    background:#FF3B30; color:#fff; font-size:11px; font-weight:700;
+    display:flex; align-items:center; justify-content:center;
+    border:2px solid var(--void);
+    transform:scale(0); animation:waPop .45s cubic-bezier(.34,1.56,.64,1) 3.2s forwards;
+  }
+  .wa.seen .wa-badge{display:none;}
+
+  /* Teaser bubble */
+  .wa-teaser{
+    position:relative; max-width:230px;
+    background:var(--panel); color:var(--text);
+    border:1px solid var(--stroke); border-radius:18px 18px 4px 18px;
+    padding:11px 34px 11px 14px; font-size:12.5px; line-height:1.4;
+    box-shadow:0 14px 34px -12px rgba(20,22,26,.35);
+    opacity:0; transform:translateY(10px) scale(.9); transform-origin:bottom right;
+    transition:opacity .35s, transform .45s cubic-bezier(.34,1.56,.64,1);
+    cursor:pointer;
+  }
+  .wa-teaser.show{opacity:1; transform:none;}
+  .wa-teaser strong{display:block; font-size:13px; margin-bottom:1px;}
+  .wa-teaser-x{
+    position:absolute; top:6px; right:6px; width:20px; height:20px; border-radius:50%;
+    border:none; background:var(--panel-soft); color:var(--muted); font-size:13px; line-height:1;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .wa.open .wa-teaser{display:none;}
+
+  /* Chat panel */
+  .wa-panel{
+    width:min(340px, calc(100vw - 32px));
+    background:#EFE7DD; border-radius:22px; overflow:hidden;
+    box-shadow:0 30px 70px -20px rgba(7,94,84,.55), 0 0 0 1px rgba(20,22,26,.06);
+    transform-origin:bottom right;
+    opacity:0; transform:translateY(16px) scale(.85); visibility:hidden;
+    transition:opacity .25s, transform .45s cubic-bezier(.34,1.56,.64,1), visibility 0s .45s;
+  }
+  .wa.open .wa-panel{opacity:1; transform:none; visibility:visible; transition:opacity .25s, transform .45s cubic-bezier(.34,1.56,.64,1), visibility 0s;}
+  .wa-head{
+    position:relative; overflow:hidden;
+    background:linear-gradient(135deg, var(--wa-deep) 0%, var(--wa-dark) 100%);
+    color:#fff; padding:16px 16px 18px; display:flex; align-items:center; gap:12px;
+  }
+  .wa-head::after{
+    content:''; position:absolute; right:-40px; top:-60px; width:160px; height:160px; border-radius:50%;
+    background:radial-gradient(circle, rgba(255,255,255,.18), transparent 70%);
+  }
+  .wa-avatar{
+    position:relative; flex:none; width:44px; height:44px; border-radius:50%;
+    background:linear-gradient(145deg,#57E6C9,#0EA988);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:15px; color:#07120E;
+    border:2px solid rgba(255,255,255,.5);
+  }
+  .wa-avatar::after{
+    content:''; position:absolute; right:0; bottom:0; width:11px; height:11px; border-radius:50%;
+    background:#2FE57A; border:2px solid var(--wa-deep);
+    animation:waOnline 2s ease-in-out infinite;
+  }
+  .wa-who{flex:1; min-width:0;}
+  .wa-who strong{display:block; font-size:15px; font-weight:600;}
+  .wa-who span{font-size:11.5px; opacity:.85;}
+  .wa-body{
+    padding:16px 14px 6px; min-height:170px; max-height:260px; overflow-y:auto;
+    display:flex; flex-direction:column; gap:8px;
+    background-color:#EFE7DD;
+    background-image:radial-gradient(rgba(7,94,84,.07) 1.2px, transparent 1.2px);
+    background-size:14px 14px;
+  }
+  .wa-day{align-self:center; font-size:10.5px; color:#54656F; background:rgba(255,255,255,.75); padding:3px 10px; border-radius:8px; margin-bottom:2px;}
+  .wa-msg{
+    align-self:flex-start; max-width:85%;
+    background:#fff; color:#111B21; font-size:13px; line-height:1.45;
+    padding:8px 11px 6px; border-radius:4px 14px 14px 14px;
+    box-shadow:0 1px 1px rgba(0,0,0,.08);
+    animation:waMsgIn .4s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  .wa-msg.me{align-self:flex-end; background:#D9FDD3; border-radius:14px 4px 14px 14px;}
+  .wa-msg time{display:block; text-align:right; font-size:10px; color:#667781; margin-top:2px;}
+  .wa-typing{
+    align-self:flex-start; background:#fff; border-radius:4px 14px 14px 14px;
+    padding:11px 13px; display:flex; gap:4px; box-shadow:0 1px 1px rgba(0,0,0,.08);
+    animation:waMsgIn .3s ease both;
+  }
+  .wa-typing i{width:7px; height:7px; border-radius:50%; background:#8696A0; animation:waDot 1.2s infinite ease-in-out;}
+  .wa-typing i:nth-child(2){animation-delay:.15s;}
+  .wa-typing i:nth-child(3){animation-delay:.3s;}
+  .wa-quick{display:flex; flex-wrap:wrap; gap:6px; padding:6px 14px 10px; background:#EFE7DD;}
+  .wa-quick button{
+    border:1px solid rgba(18,140,126,.35); background:rgba(255,255,255,.85); color:var(--wa-deep);
+    font-size:12px; font-weight:600; padding:7px 11px; border-radius:999px;
+    opacity:0; transform:translateY(6px);
+    transition:background .2s, transform .2s;
+  }
+  .wa-quick.show button{animation:waChip .4s cubic-bezier(.34,1.56,.64,1) forwards;}
+  .wa-quick.show button:nth-child(2){animation-delay:.08s;}
+  .wa-quick.show button:nth-child(3){animation-delay:.16s;}
+  .wa-quick.show button:nth-child(4){animation-delay:.24s;}
+  .wa-quick button:hover{background:#fff;}
+  .wa-form{display:flex; gap:8px; align-items:center; padding:10px 12px 12px; background:#F0F2F5;}
+  .wa-form input{
+    flex:1; border:none; outline:none; background:#fff; border-radius:999px;
+    padding:11px 15px; font-size:13.5px; font-family:inherit; color:#111B21;
+  }
+  .wa-send{
+    flex:none; width:42px; height:42px; border-radius:50%; border:none;
+    background:var(--wa-dark); color:#fff; display:flex; align-items:center; justify-content:center;
+    transition:transform .2s, background .2s;
+  }
+  .wa-send:hover{background:var(--wa-deep); transform:scale(1.06);}
+  .wa-send svg{width:18px; height:18px; margin-left:2px;}
+  .wa-note{text-align:center; font-size:10.5px; color:#667781; background:#F0F2F5; padding:0 12px 10px;}
+
+  /* Order-on-WhatsApp button in the cart */
+  .wa-order-btn{
+    width:100%; margin-top:10px; border:none; border-radius:999px; padding:13px;
+    background:#25D366; color:#fff; font-size:14px; font-weight:700;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    box-shadow:0 10px 22px -10px rgba(18,140,126,.7);
+  }
+  .wa-order-btn svg{width:18px; height:18px;}
+
+  @keyframes waPop{ from{transform:scale(0) rotate(-30deg);} to{transform:scale(1) rotate(0);} }
+  @keyframes waRing{ 0%{transform:scale(1); opacity:.7;} 100%{transform:scale(1.75); opacity:0;} }
+  @keyframes waOnline{ 0%,100%{box-shadow:0 0 0 0 rgba(47,229,122,.6);} 50%{box-shadow:0 0 0 5px rgba(47,229,122,0);} }
+  @keyframes waMsgIn{ from{opacity:0; transform:translateY(8px) scale(.94);} to{opacity:1; transform:none;} }
+  @keyframes waDot{ 0%,60%,100%{transform:translateY(0); opacity:.5;} 30%{transform:translateY(-4px); opacity:1;} }
+  @keyframes waChip{ to{opacity:1; transform:none;} }
+  @media (prefers-reduced-motion: reduce){
+    .wa-fab, .wa-fab::before, .wa-fab::after, .wa-avatar::after, .wa-msg, .wa-typing i{animation:none !important;}
+    .wa-fab .wa-badge{animation:none; transform:scale(1);}
+    .wa-quick button{opacity:1; transform:none; animation:none !important;}
+  }
+  @media (min-width:960px){
+    .wa{right:28px; bottom:28px;}
+    .wa-fab{width:64px; height:64px;}
+    .wa-panel{width:370px;}
+  }
+
   /* ---------- Desktop nav (hidden on mobile) ---------- */
   .desk-nav{display:none;}
 
@@ -733,8 +905,46 @@
     <div class="d-row"><span>VAT (5%)</span><span id="tax">0</span></div>
     <div class="d-row total"><span>Total</span><span id="total">0</span></div>
     <button class="checkout-btn">Checkout</button>
+    <button class="wa-order-btn" id="waOrderBtn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.05 4.91A9.82 9.82 0 0 0 12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01zm-7.01 15.24c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.26 8.26 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c.02 4.54-3.68 8.23-8.22 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43s.17-.25.25-.41c.08-.17.04-.31-.02-.43s-.56-1.34-.76-1.84c-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18s-.22-.16-.47-.28z"/></svg> Order via WhatsApp</button>
   </div>
 </aside>
+
+<!-- WhatsApp chat widget -->
+<div class="wa" id="wa">
+  <div class="wa-panel" id="waPanel" role="dialog" aria-label="Chat on WhatsApp">
+    <div class="wa-head">
+      <div class="wa-avatar">SU</div>
+      <div class="wa-who">
+        <strong>Smoking UAE</strong>
+        <span id="waStatus">Online · replies in minutes</span>
+      </div>
+    </div>
+    <div class="wa-body" id="waBody"></div>
+    <div class="wa-quick" id="waQuick">
+      <button data-q="Hi! Is this in stock?">📦 Check stock</button>
+      <button data-q="Hi! How long does delivery take to my area?">🚚 Delivery times</button>
+      <button data-q="Hi! I'd like to place an order.">🛒 Place an order</button>
+      <button data-q="Hi! What are today's offers?">🔥 Today's offers</button>
+    </div>
+    <form class="wa-form" id="waForm">
+      <input id="waInput" type="text" placeholder="Type a message…" autocomplete="off">
+      <button class="wa-send" type="submit" aria-label="Send on WhatsApp">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.4 20.4 21 12 3.4 3.6 3.4 10l12.6 2-12.6 2z"/></svg>
+      </button>
+    </form>
+    <div class="wa-note">Opens WhatsApp to continue the chat</div>
+  </div>
+  <div class="wa-teaser" id="waTeaser">
+    <button class="wa-teaser-x" id="waTeaserX" aria-label="Dismiss">×</button>
+    <strong>Need help choosing? 💨</strong>
+    Chat with us on WhatsApp.
+  </div>
+  <button class="wa-fab" id="waFab" aria-label="Chat on WhatsApp" aria-expanded="false" aria-controls="waPanel">
+    <svg class="ic-wa" viewBox="0 0 24 24" fill="currentColor"><path d="M19.05 4.91A9.82 9.82 0 0 0 12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01zm-7.01 15.24c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.26 8.26 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c.02 4.54-3.68 8.23-8.22 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43s.17-.25.25-.41c.08-.17.04-.31-.02-.43s-.56-1.34-.76-1.84c-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18s-.22-.16-.47-.28z"/></svg>
+    <svg class="ic-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    <span class="wa-badge">1</span>
+  </button>
+</div>
 
 <script>
 /* ---------------- Icons ---------------- */
@@ -1023,6 +1233,94 @@ document.getElementById('tabMenu').addEventListener('click', function(){ documen
 document.getElementById('tabOffers').addEventListener('click', function(){ document.querySelector('.promo').scrollIntoView({behavior:'smooth'}); setActiveTab(this); });
 document.getElementById('tabProfile').addEventListener('click', function(){ document.getElementById('footer').scrollIntoView({behavior:'smooth'}); setActiveTab(this); });
 document.getElementById('filterScrollBtn').addEventListener('click', ()=> catRail.scrollIntoView({behavior:'smooth', block:'center'}));
+
+/* ---------------- WhatsApp chat ---------------- */
+// TODO: replace with the shop's WhatsApp number — international format, digits only (e.g. 971501234567).
+const WHATSAPP_NUMBER = '971500000000';
+function openWhatsApp(text){
+  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
+}
+(function(){
+  const wa = document.getElementById('wa');
+  const fab = document.getElementById('waFab');
+  const body = document.getElementById('waBody');
+  const quick = document.getElementById('waQuick');
+  const teaser = document.getElementById('waTeaser');
+  const form = document.getElementById('waForm');
+  const input = document.getElementById('waInput');
+  const now = ()=> new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+  const GREETING = [
+    "Marhaba! 👋 Welcome to Smoking UAE.",
+    "Ask us about flavors, stock or same-day delivery — we usually reply within minutes."
+  ];
+  let greeted = false, timers = [];
+
+  function addMsg(text, me){
+    const m = document.createElement('div');
+    m.className = 'wa-msg' + (me ? ' me' : '');
+    m.textContent = text;
+    const t = document.createElement('time'); t.textContent = now();
+    m.appendChild(t);
+    body.appendChild(m);
+    body.scrollTop = body.scrollHeight;
+  }
+  function typeThen(text, delay){
+    return new Promise(res=>{
+      const typing = document.createElement('div');
+      typing.className = 'wa-typing'; typing.innerHTML = '<i></i><i></i><i></i>';
+      body.appendChild(typing); body.scrollTop = body.scrollHeight;
+      timers.push(setTimeout(()=>{ typing.remove(); addMsg(text); res(); }, delay));
+    });
+  }
+  async function greet(){
+    greeted = true;
+    body.innerHTML = '<div class="wa-day">Today</div>';
+    for(const [i, line] of GREETING.entries()) await typeThen(line, i===0 ? 900 : 1300);
+    quick.classList.add('show');
+  }
+  function setOpen(open){
+    wa.classList.toggle('open', open);
+    wa.classList.add('seen');
+    fab.setAttribute('aria-expanded', open);
+    teaser.classList.remove('show');
+    if(open && !greeted) greet();
+    if(open) setTimeout(()=>input.focus({preventScroll:true}), 450);
+  }
+  function send(text){
+    text = text.trim();
+    if(!text) return;
+    addMsg(text, true);
+    input.value = '';
+    setTimeout(()=>openWhatsApp(text), 500);
+  }
+
+  fab.addEventListener('click', ()=> setOpen(!wa.classList.contains('open')));
+  teaser.addEventListener('click', e=>{
+    if(e.target.closest('#waTeaserX')){ teaser.classList.remove('show'); wa.classList.add('seen'); return; }
+    setOpen(true);
+  });
+  quick.addEventListener('click', e=>{ const b = e.target.closest('[data-q]'); if(b) send(b.dataset.q); });
+  form.addEventListener('submit', e=>{ e.preventDefault(); send(input.value); });
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape' && wa.classList.contains('open')) setOpen(false); });
+  document.addEventListener('click', e=>{ if(wa.classList.contains('open') && !wa.contains(e.target)) setOpen(false); });
+
+  // Friendly nudge a few seconds after load
+  setTimeout(()=>{ if(!wa.classList.contains('seen')) teaser.classList.add('show'); }, 3500);
+
+  // Send the current cart as an order message
+  document.getElementById('waOrderBtn').addEventListener('click', ()=>{
+    const ids = Object.keys(cart);
+    if(!ids.length) return;
+    let subtotal = 0;
+    const lines = ids.map(id=>{
+      const p = PRODUCTS.find(pr=>pr.id===Number(id));
+      subtotal += p.price * cart[id];
+      return `• ${cart[id]} × ${p.name} — AED ${p.price * cart[id]}`;
+    });
+    const total = (subtotal * 1.05).toFixed(2);
+    openWhatsApp(`Hi Smoking UAE! I'd like to order:\n${lines.join('\n')}\n\nTotal incl. VAT: AED ${total}`);
+  });
+})();
 
 /* ---------------- Banner carousel ---------------- */
 const SLIDES = [
