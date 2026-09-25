@@ -444,10 +444,163 @@
   .d-row{display:flex; justify-content:space-between; align-items:center; font-size:13px; color:var(--muted); margin-bottom:8px;}
   .d-row.total{color:var(--text); font-size:15.5px; font-weight:700; font-family:'Space Grotesk';}
   .checkout-btn{width:100%; background:var(--mint); color:#07120E; border:none; border-radius:999px; padding:14px; font-size:14px; font-weight:700; margin-top:12px;}
+
+  /* ---------- Desktop nav (hidden on mobile) ---------- */
+  .desk-nav{display:none;}
+
+  /* ================= Desktop layout ================= */
+  @media (min-width:960px){
+    body{padding:0; background:var(--void); overflow-x:clip;}
+    .app{
+      max-width:1240px; padding:0 32px 56px;
+      border-radius:0; overflow:visible; box-shadow:none; border:none;
+    }
+    .topbar, .search-row, .tabbar{display:none;}
+
+    .desk-nav{
+      display:flex; align-items:center; gap:28px;
+      position:sticky; top:0; z-index:70;
+      margin:0 calc(50% - 50vw) 24px; padding:16px max(32px, calc(50vw - 588px));
+      background:rgba(247,244,238,0.86);
+      backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+      border-bottom:1px solid var(--stroke);
+    }
+    .desk-brand{display:flex; flex-direction:column; flex:none;}
+    .desk-brand .brand-name{font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:21px; letter-spacing:.02em; color:var(--mint-ink); line-height:1.1;}
+    .desk-brand .tag{font-size:11.5px; color:var(--muted);}
+    .desk-links{display:flex; gap:4px;}
+    .desk-links button{
+      background:none; border:none; color:var(--muted);
+      font-size:14px; font-weight:500; padding:9px 14px; border-radius:999px;
+      transition:background .2s, color .2s;
+    }
+    .desk-links button:hover{background:var(--panel-soft); color:var(--text);}
+    .desk-links button.active{color:var(--text); background:var(--panel); box-shadow:var(--shadow); font-weight:600;}
+    .desk-nav .search-box{flex:1; max-width:420px; margin-left:auto; padding:11px 16px;}
+    .desk-actions{display:flex; gap:10px;}
+    .desk-cart{
+      display:flex; align-items:center; gap:9px;
+      background:var(--text); color:var(--void); border:none;
+      font-weight:600; font-size:13.5px; padding:0 18px; height:44px; border-radius:999px;
+    }
+    .desk-cart svg{width:17px; height:17px;}
+    .desk-cart .count{
+      background:var(--mint); color:#07120E; font-size:11px; font-weight:700;
+      min-width:20px; height:20px; border-radius:999px; padding:0 6px;
+      display:flex; align-items:center; justify-content:center;
+    }
+
+    #shop, .promo, #footer{scroll-margin-top:96px;}
+
+    /* Hero */
+    .banner-wrap{padding:0;}
+    .banner{min-height:470px; padding:56px 60px; border-radius:32px; justify-content:center;}
+    .banner-content{max-width:48%;}
+    .banner.no-photo .banner-content{max-width:55%;}
+    .banner-eyebrow{font-size:11.5px; padding:6px 13px 6px 11px; margin-bottom:18px;}
+    .banner-head{font-size:64px; line-height:.98; margin-bottom:18px; letter-spacing:-.01em;}
+    .banner-sub{font-size:15.5px; max-width:420px; margin-bottom:28px;}
+    .banner-cta{font-size:15px; padding:14px 10px 14px 22px;}
+    .banner-cta .arrow{width:30px; height:30px;}
+    .banner-cta:hover{background:#fff;}
+    .banner-product{width:min(34%,360px); right:9%; top:50%; margin-top:calc(min(34%,360px) * -0.55); border-radius:30px; padding:14px;}
+    .banner-tag{font-size:15px; padding:8px 15px; right:14px; bottom:14px;}
+    .banner-fig{width:340px; height:340px; right:6%; top:50%; margin-top:-170px;}
+    .dots{padding-top:18px;}
+
+    /* Category rail */
+    .cat-rail{padding:32px 0 6px; gap:0; justify-content:space-between; overflow:visible;}
+    .cat-item{flex:1;}
+    .cat-circle{width:72px; height:72px;}
+    .cat-circle svg{width:28px; height:28px;}
+    .cat-item span{font-size:13px;}
+    .cat-item:hover .cat-circle{border-color:var(--mint-ink);}
+
+    /* Section heads */
+    .sec-head{padding:44px 0 18px;}
+    .sec-head h2{font-size:26px;}
+    .sec-head a{cursor:pointer; font-size:13.5px;}
+
+    /* Popular -> grid */
+    .pop-scroll{display:grid; grid-template-columns:repeat(4,1fr); gap:18px; padding:0; overflow:visible;}
+    .pop-card{width:auto; padding:16px; transition:transform .2s, box-shadow .2s;}
+    .pop-card:hover{transform:translateY(-4px); box-shadow:0 18px 40px -18px rgba(20,22,26,0.28);}
+    .pop-icon-wrap{height:170px;}
+    .pop-icon-wrap img{object-fit:contain !important; background:#fff;}
+    .pop-card h4{font-size:15px;}
+    .pop-card .sub{font-size:12.5px;}
+    .pop-price{font-size:17px;}
+    .pop-add{width:36px; height:36px;}
+
+    /* Promo */
+    .promo{margin:44px 0 0; padding:34px 40px; border-radius:28px;}
+    .promo h3{font-size:32px;}
+    .promo p{font-size:14px;}
+    .promo-badge{width:110px; height:110px;}
+    .promo-badge strong{font-size:28px;}
+    .promo-badge span{font-size:11px;}
+
+    /* Full menu -> multi-column */
+    .filters{padding:0; flex-wrap:wrap; overflow:visible;}
+    .filter-chip{font-size:13.5px; padding:10px 18px;}
+    .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(340px,1fr)); gap:16px; padding:22px 0 0;}
+    .g-card{padding:16px; transition:transform .2s, box-shadow .2s;}
+    .g-card:hover{transform:translateY(-2px); box-shadow:0 14px 30px -16px rgba(20,22,26,0.25);}
+    .g-icon{width:76px; height:76px;}
+    .g-icon img{object-fit:contain !important; background:#fff;}
+    .g-info h4{font-size:15px;}
+
+    .footer-note{padding:48px 0 0; margin-top:40px; border-top:1px solid var(--stroke); display:grid; grid-template-columns:220px 1fr; gap:4px 40px;}
+    .footer-note .fn-brand{grid-row:span 2;}
+
+    /* Cart: right-side panel instead of bottom sheet */
+    .drawer{
+      left:auto; right:0; top:0; bottom:0; margin:0;
+      width:420px; max-width:100%; max-height:none; height:100vh;
+      border-radius:28px 0 0 28px; border:1px solid var(--stroke); border-right:none;
+      transform:translateX(100%); padding:26px 28px 28px;
+    }
+    .drawer.open{transform:translateX(0);}
+    .drawer-handle{display:none;}
+    .drawer-head h3{font-size:20px;}
+    .d-icon{width:48px; height:48px;}
+  }
+  @media (min-width:960px) and (max-width:1180px){
+    .desk-links{display:none;}
+    .banner-head{font-size:52px;}
+  }
 </style>
 </head>
 <body>
 <div class="app">
+
+  <!-- Desktop nav -->
+  <header class="desk-nav">
+    <div class="desk-brand">
+      <div class="brand-name">SMOKING UAE</div>
+      <div class="tag">Pure clouds. Every time.</div>
+    </div>
+    <nav class="desk-links" aria-label="Sections">
+      <button class="active" data-go="top">Home</button>
+      <button data-go="shop">Shop</button>
+      <button data-go="offers">Offers</button>
+      <button data-go="footer">About</button>
+    </nav>
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input type="text" placeholder="Search flavors, pods, devices…" id="deskSearch">
+    </div>
+    <div class="desk-actions">
+      <button class="icon-btn" aria-label="Notifications">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+        <span class="badge-dot">2</span>
+      </button>
+      <button class="desk-cart" id="deskCartBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        Cart <span class="count" id="deskCartCount">0</span>
+      </button>
+    </div>
+  </header>
 
   <!-- Top bar -->
   <div class="topbar">
@@ -656,6 +809,7 @@ const PRODUCTS = [
 let activeCat = 'all';
 let cart = {};
 let favorites = new Set();
+let searchQuery = '';
 
 /* ---------------- Category rail ---------------- */
 const catRail = document.getElementById('catRail');
@@ -729,9 +883,14 @@ document.getElementById('viewAllPop').addEventListener('click', ()=> document.ge
 const gridEl = document.getElementById('grid');
 const countEl = document.getElementById('resultCount');
 function renderGrid(){
-  const filtered = activeCat==='all' ? PRODUCTS : PRODUCTS.filter(p=>p.cat===activeCat);
+  const q = searchQuery.trim().toLowerCase();
+  const filtered = PRODUCTS.filter(p=>
+    (activeCat==='all' || p.cat===activeCat) &&
+    (!q || `${p.name} ${p.desc} ${p.tags.join(' ')} ${CAT_LABEL[p.cat]}`.toLowerCase().includes(q))
+  );
   const list = imagesFirst(filtered);
   countEl.textContent = `${list.length} item${list.length!==1?'s':''}`;
+  if(!list.length){ gridEl.innerHTML = `<div class="drawer-empty">No matches${q?` for “${q.replace(/[<>&]/g,'')}”`:''}.</div>`; return; }
   gridEl.innerHTML = list.map(p=>`
     <div class="g-card">
       <div class="g-icon" style="background:${mediaBg(p)}; color:${CAT_COLOR[p.cat]};">${mediaHTML(p)}</div>
@@ -781,6 +940,7 @@ function updateCartUI(){
   topCartBadge.textContent = count;
   fabBadge.style.display = count>0 ? 'flex' : 'none';
   fabBadge.textContent = count;
+  document.getElementById('deskCartCount').textContent = count;
 
   const ids = Object.keys(cart);
   if(ids.length===0){
@@ -828,6 +988,30 @@ function openDrawer(){ drawer.classList.add('open'); overlay.classList.add('open
 function closeDrawer(){ drawer.classList.remove('open'); overlay.classList.remove('open'); }
 document.getElementById('cartTopBtn').addEventListener('click', openDrawer);
 document.getElementById('tabCart').addEventListener('click', openDrawer);
+document.getElementById('deskCartBtn').addEventListener('click', openDrawer);
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeDrawer(); });
+
+/* ---------------- Search (mobile + desktop boxes stay in sync) ---------------- */
+const searchInputs = [document.getElementById('searchInput'), document.getElementById('deskSearch')];
+searchInputs.forEach(inp=>{
+  inp.addEventListener('input', ()=>{
+    searchQuery = inp.value;
+    searchInputs.forEach(o=>{ if(o!==inp) o.value = inp.value; });
+    renderGrid();
+  });
+  inp.addEventListener('keydown', e=>{ if(e.key==='Enter') document.getElementById('shop').scrollIntoView({behavior:'smooth'}); });
+});
+
+/* ---------------- Desktop nav links ---------------- */
+const deskLinks = document.querySelector('.desk-links');
+const DESK_TARGET = { shop:()=>document.getElementById('shop'), offers:()=>document.querySelector('.promo'), footer:()=>document.getElementById('footer') };
+deskLinks.addEventListener('click', e=>{
+  const b = e.target.closest('[data-go]');
+  if(!b) return;
+  [...deskLinks.children].forEach(x=>x.classList.toggle('active', x===b));
+  if(b.dataset.go==='top') window.scrollTo({top:0, behavior:'smooth'});
+  else DESK_TARGET[b.dataset.go]().scrollIntoView({behavior:'smooth', block:'start'});
+});
 document.getElementById('drawerClose').addEventListener('click', closeDrawer);
 overlay.addEventListener('click', closeDrawer);
 
