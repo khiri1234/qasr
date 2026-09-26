@@ -540,7 +540,6 @@
   .deliv-card span{display:block; font-size:11px; color:#AEB4B9; line-height:1.45;}
   .deliv-card .aed-icon{display:inline-flex; margin-right:2px;}
   .deliv-card .aed-icon svg{width:.75em; height:.75em;}
-  .free-meter .aed-icon svg{width:.8em; height:.8em;}
   .deliv-perks{display:flex; flex-wrap:wrap; gap:8px 16px; margin-top:16px; font-size:11.5px; color:#C9CDD1; position:relative;}
   .deliv-perks span::before{content:'✓'; color:var(--mint); font-weight:700; margin-right:6px;}
 
@@ -553,12 +552,6 @@
   .d-city .t{flex:1; line-height:1.35;}
   .d-city .t small{display:block; color:var(--muted); font-size:11px;}
   .d-city button{border:none; background:none; color:var(--mint-ink); font-weight:700; font-size:12.5px; padding:4px;}
-  .free-meter{margin:0 0 14px;}
-  .free-meter .msg{font-size:12px; margin-bottom:6px; color:var(--text);}
-  .free-meter .msg b{color:var(--mint-ink);}
-  .free-meter .bar{height:7px; border-radius:999px; background:var(--panel-soft); overflow:hidden; border:1px solid var(--stroke);}
-  .free-meter .bar i{display:block; height:100%; width:0; border-radius:999px; background:linear-gradient(90deg,var(--mint-ink),var(--mint)); transition:width .6s cubic-bezier(.2,.8,.2,1);}
-  .d-row .free{color:var(--mint-ink); font-weight:700;}
 
   @media (prefers-reduced-motion: reduce){
     .city-pill .pin svg, .city-pill .pin::after, .deliv-road .truck, .deliv-road .truck svg, .deliv-road .puff{animation:none;}
@@ -1120,7 +1113,6 @@
       <div class="t">Deliver to <b class="js-city">Dubai</b><small class="js-eta-long">Same day</small></div>
       <button data-open-city>Change</button>
     </div>
-    <div class="free-meter"><div class="msg" id="freeMsg"></div><div class="bar"><i id="freeBar"></i></div></div>
     <div class="pay-block">
       <div class="lbl">Payment method <span>Pay on delivery</span></div>
       <div class="pay-grid" id="payGrid"></div>
@@ -1257,26 +1249,26 @@ let favorites = new Set();
 let searchQuery = '';
 
 /* ---------------- Delivery zones ---------------- */
-// Fees (AED), timing and free-delivery thresholds per city. Adjust to your real rates.
+// Delivery fee (AED) and timing per city.
 const DELIVERY = [
-  {id:'dubai',     name:'Dubai',          emoji:'🏙️', fee:45, freeOver:150, eta:'Same day',   etaLong:'Same day · 2–4 hours',          speed:'SAME DAY'},
-  {id:'sharjah',   name:'Sharjah',        emoji:'🕌', fee:50, freeOver:200, eta:'Same day',   etaLong:'Same day · order before 6 PM',  speed:'SAME DAY'},
-  {id:'ajman',     name:'Ajman',          emoji:'⛵', fee:50, freeOver:200, eta:'Same day',   etaLong:'Same day · order before 6 PM',  speed:'SAME DAY'},
-  {id:'abudhabi',  name:'Abu Dhabi',      emoji:'🏛️', fee:50, freeOver:250, eta:'Next day',   etaLong:'Next day · order before 8 PM',  speed:'NEXT DAY'},
-  {id:'alain',     name:'Al Ain',         emoji:'🌴', fee:50, freeOver:250, eta:'Next day',   etaLong:'Next day',                      speed:'NEXT DAY'},
-  {id:'uaq',       name:'Umm Al Quwain',  emoji:'🏖️', fee:50, freeOver:300, eta:'1–2 days',   etaLong:'1–2 working days',              speed:'1–2 DAYS'},
-  {id:'rak',       name:'Ras Al Khaimah', emoji:'⛰️', fee:50, freeOver:300, eta:'1–2 days',   etaLong:'1–2 working days',              speed:'1–2 DAYS'},
-  {id:'fujairah',  name:'Fujairah',       emoji:'🌊', fee:50, freeOver:300, eta:'1–2 days',   etaLong:'1–2 working days',              speed:'1–2 DAYS'},
+  {id:'dubai',     name:'Dubai',          emoji:'🏙️', fee:45, eta:'Same day',   etaLong:'Same day · 2–4 hours',          speed:'SAME DAY'},
+  {id:'sharjah',   name:'Sharjah',        emoji:'🕌', fee:50, eta:'Same day',   etaLong:'Same day · order before 6 PM',  speed:'SAME DAY'},
+  {id:'ajman',     name:'Ajman',          emoji:'⛵', fee:50, eta:'Same day',   etaLong:'Same day · order before 6 PM',  speed:'SAME DAY'},
+  {id:'abudhabi',  name:'Abu Dhabi',      emoji:'🏛️', fee:50, eta:'Next day',   etaLong:'Next day · order before 8 PM',  speed:'NEXT DAY'},
+  {id:'alain',     name:'Al Ain',         emoji:'🌴', fee:50, eta:'Next day',   etaLong:'Next day',                      speed:'NEXT DAY'},
+  {id:'uaq',       name:'Umm Al Quwain',  emoji:'🏖️', fee:50, eta:'1–2 days',   etaLong:'1–2 working days',              speed:'1–2 DAYS'},
+  {id:'rak',       name:'Ras Al Khaimah', emoji:'⛰️', fee:50, eta:'1–2 days',   etaLong:'1–2 working days',              speed:'1–2 DAYS'},
+  {id:'fujairah',  name:'Fujairah',       emoji:'🌊', fee:50, eta:'1–2 days',   etaLong:'1–2 working days',              speed:'1–2 DAYS'},
 ];
 const SPEED_COLOR = {'SAME DAY':'var(--mint)', 'NEXT DAY':'var(--violet)', '1–2 DAYS':'var(--amber)'};
 let cityId = 'dubai';
 try{ const saved = localStorage.getItem('deliveryCity'); if(DELIVERY.some(c=>c.id===saved)) cityId = saved; }catch(e){}
 function currentCity(){ return DELIVERY.find(c=>c.id===cityId); }
-function deliveryFee(subtotal){ const c = currentCity(); return subtotal >= c.freeOver ? 0 : c.fee; }
+function deliveryFee(){ return currentCity().fee; }
 function cartTotals(){
   let subtotal = 0;
   for(const id in cart){ subtotal += PRODUCTS.find(p=>p.id===Number(id)).price * cart[id]; }
-  const delivery = deliveryFee(subtotal);
+  const delivery = deliveryFee();
   const tax = (subtotal + delivery) * 0.05;
   return {subtotal, delivery, tax, total: subtotal + delivery + tax};
 }
@@ -1438,16 +1430,10 @@ function updateCartUI(){
     `;
   }).join('');
   const {subtotal, delivery, tax, total} = cartTotals();
-  const city = currentCity();
   document.getElementById('subtotal').innerHTML = money(subtotal.toFixed(2));
-  document.getElementById('delivFee').innerHTML = delivery ? money(delivery.toFixed(2)) : '<span class="free">FREE</span>';
+  document.getElementById('delivFee').innerHTML = money(delivery.toFixed(2));
   document.getElementById('tax').innerHTML = money(tax.toFixed(2));
   document.getElementById('total').innerHTML = money(total.toFixed(2));
-  const left = city.freeOver - subtotal;
-  document.getElementById('freeMsg').innerHTML = left > 0
-    ? `Add <b>${money(left.toFixed(0))}</b> more for free delivery to ${city.name}`
-    : `🎉 You've unlocked <b>free delivery</b> to ${city.name}`;
-  document.getElementById('freeBar').style.width = Math.min(100, subtotal / city.freeOver * 100) + '%';
 }
 drawerItems.addEventListener('click', e=>{
   const btn = e.target.closest('[data-qty]');
@@ -1504,7 +1490,7 @@ const citySheet = document.getElementById('citySheet');
 const cityBack = document.getElementById('cityBack');
 const cityList = document.getElementById('cityList');
 const delivGrid = document.getElementById('delivGrid');
-function feeLabel(c){ return `${money(c.fee)} · free over ${money(c.freeOver)}`; }
+function feeLabel(c){ return `Delivery ${money(c.fee)}`; }
 function renderCityUI(){
   const c = currentCity();
   document.querySelectorAll('.js-city').forEach(el=>el.textContent = c.name);
@@ -1514,7 +1500,7 @@ function renderCityUI(){
     <button class="city-opt ${d.id===cityId?'active':''}" data-city="${d.id}" style="animation-delay:${i*35}ms">
       <span class="ico">${d.emoji}</span>
       <span class="nm"><b>${d.name}</b><span>${d.etaLong}</span></span>
-      <span class="fee">${money(d.fee)}<small>free over ${d.freeOver}</small></span>
+      <span class="fee">${money(d.fee)}<small>delivery</small></span>
     </button>`).join('');
   delivGrid.innerHTML = DELIVERY.map(d=>`
     <button class="deliv-card ${d.id===cityId?'active':''}" data-city="${d.id}">
@@ -1668,7 +1654,7 @@ function openWhatsApp(text){
     });
     const {subtotal, delivery, total} = cartTotals();
     const city = currentCity();
-    openWhatsApp(`Hi Smoking UAE! I'd like to order:\n${lines.join('\n')}\n\nSubtotal: AED ${subtotal.toFixed(2)}\nDelivery to ${city.name} (${city.etaLong}): ${delivery ? 'AED ' + delivery.toFixed(2) : 'FREE'}\nTotal incl. VAT: AED ${total.toFixed(2)}\nPayment: ${currentPayment().name}\n\nDelivery address: `);
+    openWhatsApp(`Hi Smoking UAE! I'd like to order:\n${lines.join('\n')}\n\nSubtotal: AED ${subtotal.toFixed(2)}\nDelivery to ${city.name} (${city.etaLong}): AED ${delivery.toFixed(2)}\nTotal incl. VAT: AED ${total.toFixed(2)}\nPayment: ${currentPayment().name}\n\nDelivery address: `);
   });
 })();
 
