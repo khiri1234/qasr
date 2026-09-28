@@ -87,13 +87,13 @@ window.SITE_DATA = {
       "productId": 22
     },
     {
-      "eyebrow": "LIMITED DROP",
+      "eyebrow": "LIMITED TIME ONLY",
       "lines": [
-        "PURE.",
-        "BOLD.",
-        "UNCUT."
+        "SELECT.",
+        "ORDER.",
+        "ENJOY."
       ],
-      "sub": "Lab-tested salts, UAE-compliant batches, flavor that holds past the first pull.",
+      "sub": "JUST ORDER YOUR DESIRE FLAVOURS AND GET IT AT DOOR.",
       "accent": "#57E6C9"
     },
     {
