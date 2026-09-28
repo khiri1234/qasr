@@ -1275,6 +1275,7 @@ function t(key, vars){
   return s;
 }
 const tp = text => I18N.phrases[lang]?.[text] ?? text;   // text that comes from the store data
+const pDesc = p => p.descI18n?.[lang] || p.desc;         // product description in the current language, English as fallback
 function tItems(n){
   const form = new Intl.PluralRules(lang === 'fil' ? 'en' : lang).select(n);
   const key = I18N.strings[lang]?.['items_'+form] !== undefined ? 'items_'+form : 'items_other';
@@ -1395,7 +1396,7 @@ function renderPopular(){
       </button>
       <div class="pop-icon-wrap" style="background:${mediaBg(p)}; color:${CAT_COLOR[p.cat]};">${mediaHTML(p)}</div>
       <h4>${esc(p.name)}</h4>
-      <p class="sub">${esc(p.desc)}</p>
+      <p class="sub">${esc(pDesc(p))}</p>
       ${p.rating ? `<div class="pop-rating">${STAR} ${esc(p.rating)} (${esc(p.reviews)})</div>` : ''}
       <div class="pop-bottom">
         <div class="pop-price">${money(p.price)}</div>
@@ -1422,7 +1423,7 @@ function renderGrid(){
   const q = searchQuery.trim().toLowerCase();
   const filtered = PRODUCTS.filter(p=>
     (activeCat==='all' || p.cat===activeCat) &&
-    (!q || `${p.name} ${p.desc} ${p.tags.join(' ')} ${CAT_LABEL[p.cat]} ${t('cat_'+p.cat)}`.toLowerCase().includes(q))
+    (!q || `${p.name} ${p.desc} ${pDesc(p)} ${p.tags.join(' ')} ${CAT_LABEL[p.cat]} ${t('cat_'+p.cat)}`.toLowerCase().includes(q))
   );
   const list = imagesFirst(filtered);
   countEl.textContent = tItems(list.length);
@@ -1432,7 +1433,7 @@ function renderGrid(){
       <div class="g-icon" style="background:${mediaBg(p)}; color:${CAT_COLOR[p.cat]};">${mediaHTML(p)}</div>
       <div class="g-info">
         <h4>${esc(p.name)}</h4>
-        <p class="sub">${esc(p.desc)}</p>
+        <p class="sub">${esc(pDesc(p))}</p>
         ${p.rating ? `<div class="g-rating">${STAR} ${esc(p.rating)} (${esc(p.reviews)})</div>` : ''}
       </div>
       <div class="g-right">

@@ -365,6 +365,11 @@
       <div class="field"><label for="pPrice">Price (AED) *</label><input class="input" id="pPrice" type="number" min="0" step="0.5" inputmode="decimal"></div>
     </div>
     <div class="field"><label for="pDesc">Short description</label><textarea class="input" id="pDesc" maxlength="160" placeholder="One line about the flavor or device"></textarea></div>
+    <details class="field" id="descTr" style="margin-top:-4px;">
+      <summary style="cursor:pointer; font-size:12.5px; font-weight:600; color:var(--mint-ink);">Description in other languages <span id="descTrCount" style="color:var(--muted); font-weight:500;"></span></summary>
+      <p class="hint" style="margin:8px 0 10px;">Shown when a customer picks that language. Leave a box empty to show the English description. If you change the English text, update these too.</p>
+      <div id="descTrFields" style="display:flex; flex-direction:column; gap:8px;"></div>
+    </details>
     <div class="field"><label for="pTags">Tags</label><input class="input" id="pTags" placeholder="e.g. 5000 puffs, Watermelon, Ice"><span class="hint">Separate with commas. Used for search.</span></div>
     <div class="row">
       <div class="field"><label for="pBadge">Badge</label>
@@ -871,12 +876,42 @@ function openProduct(id){
   $('prodErr').hidden = true;
   $('pName').value = editing.name; $('pCat').value = editing.cat; $('pPrice').value = editing.price;
   $('pDesc').value = editing.desc || ''; $('pTags').value = (editing.tags||[]).join(', ');
+  renderDescTr(editing.descI18n || {});
   $('pBadge').value = editing.badge || ''; $('pRating').value = editing.rating || ''; $('pReviews').value = editing.reviews || '';
   $('pHidden').checked = !!editing.hidden;
   showPhoto();
   openModal('prodModal');
   setTimeout(()=>$('pName').focus(), 50);
 }
+
+/* Description translations (shown on the store for each language) */
+const DESC_LANGS = [
+  { code:'ar',  name:'العربية',  english:'Arabic',   dir:'rtl' },
+  { code:'ru',  name:'Русский',  english:'Russian',  dir:'ltr' },
+  { code:'fil', name:'Filipino', english:'Filipino', dir:'ltr' },
+  { code:'hi',  name:'हिन्दी',    english:'Hindi',    dir:'ltr' },
+  { code:'ur',  name:'اردو',     english:'Urdu',     dir:'rtl' },
+  { code:'fa',  name:'فارسی',    english:'Persian',  dir:'rtl' },
+];
+function renderDescTr(values){
+  $('descTrFields').innerHTML = DESC_LANGS.map(l=>`
+    <label style="display:grid; grid-template-columns:92px 1fr; gap:10px; align-items:center; font-size:12px; font-weight:600;">
+      <span>${l.english}<br><span style="font-weight:500; color:var(--muted);">${l.name}</span></span>
+      <input class="input" data-desc-lang="${l.code}" dir="${l.dir}" lang="${l.code}" maxlength="160" value="${esc(values[l.code] || '')}">
+    </label>`).join('');
+  updateDescTrCount();
+  $('descTr').open = false;
+}
+function readDescTr(){
+  const out = {};
+  document.querySelectorAll('[data-desc-lang]').forEach(inp=>{ const v = inp.value.trim(); if(v) out[inp.dataset.descLang] = v; });
+  return out;
+}
+function updateDescTrCount(){
+  const n = Object.keys(readDescTr()).length;
+  $('descTrCount').textContent = `(${n} of ${DESC_LANGS.length} filled)`;
+}
+$('descTrFields').addEventListener('input', updateDescTrCount);
 
 /* Photo picking + resizing */
 $('drop').addEventListener('click', e=>{ if(!e.target.closest('#removePhotoBtn')) $('photoInput').click(); });
@@ -937,6 +972,7 @@ $('prodForm').addEventListener('submit', e=>{
     hidden: $('pHidden').checked,
   };
   const badge = $('pBadge').value; if(badge) p.badge = badge;
+  const descI18n = readDescTr(); if(Object.keys(descI18n).length) p.descI18n = descI18n;
   if(editPhoto && editPhoto.base64) pendingPhotos[editPhoto.path] = { dataUrl: editPhoto.dataUrl, base64: editPhoto.base64 };
   if(oldImage && oldImage !== p.image) delete pendingPhotos[oldImage];   // replaced before publishing
 
