@@ -3,10 +3,11 @@ window.SITE_DATA = {
   "whatsapp": "971523504089",
   "promo": {
     "eyebrow": "EXCLUSIVE OFFER",
-    "title": "Up to 20% off",
+    "title": "Up to 30% off",
     "text": "On selected disposables, this week only",
-    "badge": "20%",
-    "category": "disposable"
+    "badge": "30%",
+    "category": "eliquid",
+    "hidden": false
   },
   "slides": [
     {
