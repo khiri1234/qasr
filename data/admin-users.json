@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "token": {
+    "iv": "w3/JOkDxoQ32Z1ds",
+    "ct": "fJBrQ1Hvg2CJn0tC5d3YeqUrtEMktnXs2O5iCuVLsUoL+plI1EQnJB0iJfoD7RDR1X+qcLmN/HqMwPV8N8A+RGzUVl62uNd2Lvj66RyIb5heuKVD8T28jjts4gJhvEyKuOwhd3gxDjdvZAyoUw=="
+  },
+  "users": [
+    {
+      "username": "hatef",
+      "salt": "v0X01Txl33WJ0Kl4FNphvw==",
+      "iterations": 600000,
+      "iv": "+TSk6l74cBd/T2m4",
+      "ct": "/V0Fwn27CX+YTacetoac4OsKKGIA9qtkPpeBPU8PAH9vf0zQ6+9LZqHIBHEhA2FD",
+      "created": "2026-09-28"
+    }
+  ]
+}
