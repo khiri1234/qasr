@@ -24,6 +24,12 @@ Each publish is one commit to `main`; the live store updates within 1–3 minute
 2. On the admin sign-in page choose *First-time setup: sign in with a GitHub token* and paste it.
 3. In the **Team** tab, create your username and password. Add staff accounts there too.
 
+**Roles:** *Admin* can do everything. *Staff* can manage products, photos, the hero banner and the
+offer, and change their own password; the Delivery & WhatsApp settings and team management are
+hidden from them. Admins change a member's role in the Team tab. Accounts created before roles
+existed count as admin. Roles control what the admin page shows: every account unlocks the same
+GitHub token, so only give accounts to people you trust.
+
 **When the GitHub token expires:** sign in with your password as usual; the page asks for a new
 token and saves it for everyone. Or replace it any time under **Team → GitHub token**.
 

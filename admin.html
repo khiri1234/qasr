@@ -277,7 +277,7 @@
 
     <!-- Team -->
     <section data-panel="team" hidden>
-      <div class="panel-head"><div><h2>Team</h2><p>Usernames and passwords for the admin page. Changes here are saved straight away.</p></div></div>
+      <div class="panel-head"><div><h2 id="teamTitle">Team</h2><p id="teamIntro">Usernames and passwords for the admin page. Changes here are saved straight away.</p></div></div>
 
       <!-- Signed in with a token and no accounts exist yet -->
       <div class="card" id="teamSetup" style="max-width:620px;" hidden>
@@ -295,14 +295,17 @@
       </div>
 
       <div id="teamMain" hidden>
-        <div class="card" style="max-width:620px; margin-bottom:16px;">
+        <div class="card" id="membersCard" style="max-width:620px; margin-bottom:16px;">
           <h3 style="margin:0 0 4px; font-size:17px;">Team members</h3>
-          <p style="margin:0 0 12px; color:var(--muted); font-size:13px;" id="meLine"></p>
+          <p style="margin:0 0 12px; color:var(--muted); font-size:13px; line-height:1.55;" id="meLine"></p>
           <div id="userList" style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px;"></div>
           <details>
             <summary style="cursor:pointer; font-weight:600; color:var(--mint-ink); font-size:13.5px;">+ Add a team member</summary>
             <form id="addUserForm" autocomplete="off" style="margin-top:14px;">
-              <div class="field"><label for="newUser">Username</label><input class="input" id="newUser" autocapitalize="none" spellcheck="false"></div>
+              <div class="row">
+                <div class="field"><label for="newUser">Username</label><input class="input" id="newUser" autocapitalize="none" spellcheck="false"></div>
+                <div class="field"><label for="newRole">Role</label><select class="input" id="newRole"><option value="staff" selected>Staff</option><option value="admin">Admin</option></select></div>
+              </div>
               <div class="row">
                 <div class="field"><label for="newPass">Password</label><input class="input" id="newPass" type="password" autocomplete="new-password"></div>
                 <div class="field"><label for="newPass2">Repeat password</label><input class="input" id="newPass2" type="password" autocomplete="new-password"></div>
@@ -323,7 +326,7 @@
           </form>
         </div>
 
-        <div class="card" style="max-width:620px;">
+        <div class="card" id="tokenCard" style="max-width:620px;">
           <h3 style="margin:0 0 4px; font-size:17px;">GitHub token</h3>
           <p style="margin:0 0 12px; color:var(--muted); font-size:13px; line-height:1.55;">Everyone’s sign-in unlocks one shared GitHub token, stored encrypted. When it expires, create a new one and paste it here — nobody needs a new password.</p>
           <form id="tokenForm" autocomplete="off">
@@ -489,10 +492,10 @@ async function seal(key, bytes){
 async function unseal(key, box){
   return new Uint8Array(await crypto.subtle.decrypt({ name:'AES-GCM', iv: fromB64(box.iv) }, key, fromB64(box.ct)));
 }
-async function makeAccount(username, password, master){
+async function makeAccount(username, password, master, role){
   const salt = rand(16);
   const box = await seal(await passwordKey(password, salt, KDF_ITERATIONS), master);
-  return { username, salt: toB64(salt), iterations: KDF_ITERATIONS, ...box, created: new Date().toISOString().slice(0,10) };
+  return { username, role: role === 'staff' ? 'staff' : 'admin', salt: toB64(salt), iterations: KDF_ITERATIONS, ...box, created: new Date().toISOString().slice(0,10) };
 }
 const cleanUser = u => String(u || '').trim().toLowerCase();
 function checkNewAccount(username, p1, p2){
@@ -505,6 +508,22 @@ function checkNewAccount(username, p1, p2){
 let master = storeGet('adminMaster') ? fromB64(storeGet('adminMaster')) : null;   // team key, only after a password sign-in
 let currentUser = storeGet('adminUser');
 let team = null, teamSha = null;
+
+/* Roles. Admin: everything. Staff: products, photos, hero banner, offer, own password.
+   Accounts saved before roles existed count as admin. Roles decide what this page shows;
+   every account unlocks the same GitHub token, so only give accounts to people you trust. */
+const ROLE_LABEL = { admin:'Admin', staff:'Staff' };
+const roleOf = name => (team?.users.find(u=>u.username===name)?.role) || 'admin';
+const isAdmin = () => !currentUser || roleOf(currentUser) === 'admin';   // token sign-in = owner
+const STAFF_HIDDEN_TABS = ['settings'];
+function applyRole(){
+  const admin = isAdmin();
+  document.querySelectorAll('.tab').forEach(t=>{ t.hidden = !admin && STAFF_HIDDEN_TABS.includes(t.dataset.tab); });
+  document.querySelector('.tab[data-tab="team"]').textContent = admin ? 'Team' : 'My account';
+  $('teamTitle').textContent = admin ? 'Team' : 'My account';
+  $('teamIntro').textContent = admin ? 'Usernames, passwords and roles for the admin page. Changes here are saved straight away.' : `Signed in as ${currentUser} (staff). You can manage products, photos, the hero banner and the offer.`;
+  if(!admin && STAFF_HIDDEN_TABS.includes(currentTab)) showTab('products');
+}
 
 // Read the accounts file without signing in (the repository is public).
 async function fetchTeamPublic(){
@@ -568,7 +587,7 @@ function setLoginMode(mode){
     : 'First-time setup only. After signing in, create a username and password under the <b>Team</b> tab.';
   $('modeLink').textContent = mode === 'password' ? 'First-time setup: sign in with a GitHub token' : 'Sign in with username and password';
   $('loginErr').hidden = true;
-  setTimeout(()=>$(mode === 'password' ? 'userInput' : 'tokenInput').focus(), 30);
+  setTimeout(()=>{ if(!document.activeElement || document.activeElement === document.body) $(mode === 'password' ? 'userInput' : 'tokenInput').focus(); }, 30);
 }
 $('modeLink').addEventListener('click', e=>{ e.preventDefault(); pendingUnlock = null; setLoginMode(loginMode === 'password' ? 'token' : 'password'); });
 function showLogin(err){
@@ -646,13 +665,25 @@ function renderTeam(){
     return;
   }
   setup.hidden = true; main.hidden = false;
-  $('meLine').textContent = `Signed in as ${currentUser}. Everyone listed can sign in and publish changes.`;
-  $('userList').innerHTML = team.users.map(u=>`
-    <div style="display:flex; align-items:center; gap:10px; padding:10px 12px; border:1px solid var(--stroke); border-radius:12px;">
-      <div style="width:32px; height:32px; border-radius:50%; background:var(--mint); color:#07120E; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px;">${esc(u.username[0].toUpperCase())}</div>
-      <div style="flex:1;"><b style="font-size:13.5px;">${esc(u.username)}</b>${u.username===currentUser?' <span class="chip">YOU</span>':''}<div style="font-size:11.5px; color:var(--muted);">Added ${esc(u.created || '')}</div></div>
-      ${u.username!==currentUser ? `<button class="btn small danger" data-rmuser="${esc(u.username)}">Remove</button>` : ''}
-    </div>`).join('');
+  const admin = isAdmin();
+  $('membersCard').hidden = !admin;
+  $('tokenCard').hidden = !admin;
+  applyRole();
+  if(!admin) return;
+  $('meLine').innerHTML = `Signed in as <b>${esc(currentUser)}</b>. <b>Admins</b> can do everything. <b>Staff</b> can manage products, photos, the hero banner and the offer — not delivery, WhatsApp or the team.`;
+  $('userList').innerHTML = team.users.map(u=>{
+    const role = u.role || 'admin', me = u.username===currentUser;
+    return `
+    <div style="display:flex; align-items:center; gap:10px; padding:10px 12px; border:1px solid var(--stroke); border-radius:12px; flex-wrap:wrap;">
+      <div style="width:32px; height:32px; border-radius:50%; background:${role==='admin'?'var(--mint)':'var(--violet)'}; color:#07120E; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; flex:none;">${esc(u.username[0].toUpperCase())}</div>
+      <div style="flex:1; min-width:120px;"><b style="font-size:13.5px;">${esc(u.username)}</b>${me?' <span class="chip">YOU</span>':''}<div style="font-size:11.5px; color:var(--muted);">Added ${esc(u.created || '')}</div></div>
+      ${me ? `<span class="chip b-Bestseller">${ROLE_LABEL[role].toUpperCase()}</span>` : `
+        <select class="input" data-role="${esc(u.username)}" style="width:auto; padding:6px 10px; font-size:12.5px;" aria-label="Role for ${esc(u.username)}">
+          <option value="admin" ${role==='admin'?'selected':''}>Admin</option>
+          <option value="staff" ${role==='staff'?'selected':''}>Staff</option>
+        </select>
+        <button class="btn small danger" data-rmuser="${esc(u.username)}">Remove</button>`}
+    </div>`; }).join('');
 }
 async function teamAction(btn, fn){
   const label = btn.textContent;
@@ -669,7 +700,7 @@ $('setupForm').addEventListener('submit', e=>{
   if(team && !confirm('This removes all existing accounts. Continue?')) return;
   teamAction($('setupBtn'), async ()=>{
     const newMaster = rand(32);
-    const next = { version:1, token: await seal(await teamKey(newMaster), te.encode(token)), users:[ await makeAccount(username, p1, newMaster) ] };
+    const next = { version:1, token: await seal(await teamKey(newMaster), te.encode(token)), users:[ await makeAccount(username, p1, newMaster, 'admin') ] };
     await saveTeam(next, team ? 'Reset admin accounts' : 'Create admin account');
     master = newMaster; currentUser = username; persistSession();
     $('setupForm').reset();
@@ -678,13 +709,15 @@ $('setupForm').addEventListener('submit', e=>{
 });
 $('addUserForm').addEventListener('submit', e=>{
   e.preventDefault();
+  if(!isAdmin()) return;
   const username = cleanUser($('newUser').value), p1 = $('newPass').value, p2 = $('newPass2').value;
   const problem = checkNewAccount(username, p1, p2) || (team.users.some(u=>u.username===username) ? 'That username is already taken.' : null);
   if(problem){ toast(problem, true); return; }
   teamAction(e.submitter || e.target.querySelector('button'), async ()=>{
-    await saveTeam({ ...team, users:[ ...team.users, await makeAccount(username, p1, master) ] }, `Add admin account ${username}`);
+    const role = $('newRole').value;
+    await saveTeam({ ...team, users:[ ...team.users, await makeAccount(username, p1, master, role) ] }, `Add ${role} account ${username}`);
     $('addUserForm').reset();
-    toast(`${username} can now sign in.`);
+    toast(`${username} can now sign in as ${ROLE_LABEL[role].toLowerCase()}.`);
   });
 });
 $('userList').addEventListener('click', e=>{
@@ -696,13 +729,26 @@ $('userList').addEventListener('click', e=>{
     toast(`${username} removed.`);
   });
 });
+$('userList').addEventListener('change', e=>{
+  const sel = e.target.closest('[data-role]'); if(!sel) return;
+  const username = sel.dataset.role, role = sel.value;
+  if(!confirm(`Make ${username} ${role === 'admin' ? 'an admin' : 'staff'}?`)){ renderTeam(); return; }
+  sel.disabled = true;
+  (async ()=>{
+    try{
+      await saveTeam({ ...team, users: team.users.map(u=>u.username===username ? { ...u, role } : u) }, `Make ${username} ${role}`);
+      toast(`${username} is now ${role === 'admin' ? 'an admin' : 'staff'}.`);
+    }catch(err){ toast(err.status === 409 ? 'Someone else just changed the team. Reload the page and try again.' : err.message, true); }
+    renderTeam();
+  })();
+});
 $('pwForm').addEventListener('submit', e=>{
   e.preventDefault();
   const p1 = $('pw1').value, p2 = $('pw2').value;
   const problem = checkNewAccount(currentUser, p1, p2);
   if(problem){ toast(problem, true); return; }
   teamAction(e.submitter || e.target.querySelector('button'), async ()=>{
-    const mine = await makeAccount(currentUser, p1, master);
+    const mine = await makeAccount(currentUser, p1, master, roleOf(currentUser));
     const old = team.users.find(u=>u.username===currentUser);
     if(old) mine.created = old.created;
     await saveTeam({ ...team, users: team.users.map(u=>u.username===currentUser ? mine : u) }, `Change password for ${currentUser}`);
@@ -742,6 +788,7 @@ async function start(){
     $('loadingView').hidden = true;
     currentTab = team ? 'products' : 'team';   // first sign-in with a token: set up a username and password
     showTab(currentTab);
+    applyRole();
     changed();
     renderTeam();
   }catch(err){
@@ -753,6 +800,7 @@ async function start(){
 /* ================= Tabs ================= */
 let currentTab = 'products';
 function showTab(name){
+  if(!isAdmin() && STAFF_HIDDEN_TABS.includes(name)) name = 'products';
   currentTab = name;
   document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active', t.dataset.tab===name));
   document.querySelectorAll('[data-panel]').forEach(p=>p.hidden = p.dataset.panel !== name);
@@ -912,6 +960,16 @@ $('deleteProdBtn').addEventListener('click', ()=>{
 function slideProduct(s){ return s.productId ? data.products.find(p=>p.id===s.productId) : null; }
 function renderSlides(){
   $('slideList').innerHTML = data.slides.length ? data.slides.map((s,i)=>{
+    if(s.bannerImage) return `
+    <div class="card slide">
+      <div class="sv"><img src="${esc(s.bannerImage)}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:0;background:none;"></div>
+      <div class="st"><b>Image slide</b><span>${esc(s.alt || s.bannerImage)}</span></div>
+      <div class="sa">
+        <button class="btn small" data-sup="${i}" ${i===0?'disabled':''} aria-label="Move up">↑</button>
+        <button class="btn small" data-sdown="${i}" ${i===data.slides.length-1?'disabled':''} aria-label="Move down">↓</button>
+        <button class="btn small danger" data-sdel="${i}">Delete</button>
+      </div>
+    </div>`;
     const p = slideProduct(s);
     const warn = s.productId && (!p || p.hidden || !p.image) ? `<br><span style="color:#B42318;">Not shown: linked product is ${!p ? 'deleted' : p.hidden ? 'hidden' : 'missing a photo'}.</span>` : '';
     return `
@@ -1034,6 +1092,7 @@ $('discardBtn').addEventListener('click', ()=>{
 });
 $('publishBtn').addEventListener('click', publish);
 async function publish(){
+  if(!isAdmin()){ data.whatsapp = saved.whatsapp; data.delivery = clone(saved.delivery); }
   const problem = validate();
   if(problem){ toast(problem, true); return; }
   const btn = $('publishBtn');

@@ -10,6 +10,12 @@ window.SITE_DATA = {
   },
   "slides": [
     {
+      "bannerImage": "images/hero-order-online-mobile.svg",
+      "bannerImageWide": "images/hero-order-online-desktop.svg",
+      "alt": "Tap. Order. Delivered. Order online with same-day delivery in Dubai and delivery to all 7 emirates. Pay on delivery.",
+      "accent": "#57E6C9"
+    },
+    {
       "eyebrow": "JUST IN",
       "lines": [
         "GOLD.",
