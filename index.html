@@ -179,6 +179,11 @@
   @media (prefers-reduced-motion: reduce){
     .banner-product.show, .banner-product.show::after{animation:none;}
   }
+  /* Full-image slides (a designed promo graphic fills the banner) */
+  .banner-full{position:absolute; inset:0; z-index:5; opacity:0; pointer-events:none; transition:opacity .45s; background:#101216;}
+  .banner-full img{display:block; width:100%; height:100%; object-fit:cover;}
+  .banner.is-image .banner-full{opacity:1; pointer-events:auto; cursor:pointer;}
+  .banner.is-image .banner-content{visibility:hidden;}
   .banner-fig{
     position:absolute; right:-10px; top:14px; width:200px; height:200px; z-index:1;
     opacity:.95; transition:opacity .35s;
@@ -1010,6 +1015,7 @@
       <div class="banner-glow"></div>
       <div class="banner-scrim" id="bannerScrim"></div>
       <div class="banner-grain"></div>
+      <picture class="banner-full" id="bannerFull"><source id="bannerFullWide" media="(min-width:960px)"><img id="bannerFullImg" alt=""></picture>
       <div class="banner-product" id="bannerProduct"><img id="bannerProductImg" alt=""><span class="banner-tag" id="bannerTag"></span></div>
       <div class="banner-fig" id="bannerFig"></div>
       <div class="banner-content">
@@ -1658,7 +1664,17 @@ function renderSlide(i){
   bannerSub.style.opacity = 0; bannerFig.style.opacity = 0;
   bannerProduct.classList.remove('show');
   setTimeout(()=>{
-    bannerEl.style.setProperty('--accent', s.accent);
+    bannerEl.style.setProperty('--accent', s.accent || '#57E6C9');
+    if(s.bannerImage){
+      document.getElementById('bannerFullWide').srcset = s.bannerImageWide || s.bannerImage;
+      const img = document.getElementById('bannerFullImg');
+      img.src = s.bannerImage; img.alt = s.alt || '';
+      bannerEl.classList.add('is-image');
+      bannerEl.setAttribute('aria-label', s.alt || '');
+      return;
+    }
+    bannerEl.classList.remove('is-image');
+    bannerEl.removeAttribute('aria-label');
     bannerEyebrow.textContent = s.eyebrow;
     bannerHead.innerHTML = `${esc(s.lines[0])}<div>${esc(s.lines[1])}</div><div class="accent">${esc(s.lines[2])}</div>`;
     bannerSub.textContent = s.sub;
@@ -1718,6 +1734,9 @@ function resetAutoplay(){
 }
 resetAutoplay();
 document.getElementById('bannerCta').addEventListener('click', ()=> document.getElementById('shop').scrollIntoView({behavior:'smooth'}));
+document.getElementById('bannerFull').addEventListener('click', ()=> document.getElementById('shop').scrollIntoView({behavior:'smooth'}));
+// Preload full-image slides so they appear instantly
+SLIDES.filter(sl=>sl.bannerImage).forEach(sl=>{ new Image().src = window.matchMedia('(min-width:960px)').matches ? (sl.bannerImageWide || sl.bannerImage) : sl.bannerImage; });
 /* Promo strip content */
 const PROMO = SITE.promo || {};
 const promoEl = document.querySelector('.promo');

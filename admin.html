@@ -912,6 +912,16 @@ $('deleteProdBtn').addEventListener('click', ()=>{
 function slideProduct(s){ return s.productId ? data.products.find(p=>p.id===s.productId) : null; }
 function renderSlides(){
   $('slideList').innerHTML = data.slides.length ? data.slides.map((s,i)=>{
+    if(s.bannerImage) return `
+    <div class="card slide">
+      <div class="sv"><img src="${esc(s.bannerImage)}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:0;background:none;"></div>
+      <div class="st"><b>Image slide</b><span>${esc(s.alt || s.bannerImage)}</span></div>
+      <div class="sa">
+        <button class="btn small" data-sup="${i}" ${i===0?'disabled':''} aria-label="Move up">↑</button>
+        <button class="btn small" data-sdown="${i}" ${i===data.slides.length-1?'disabled':''} aria-label="Move down">↓</button>
+        <button class="btn small danger" data-sdel="${i}">Delete</button>
+      </div>
+    </div>`;
     const p = slideProduct(s);
     const warn = s.productId && (!p || p.hidden || !p.image) ? `<br><span style="color:#B42318;">Not shown: linked product is ${!p ? 'deleted' : p.hidden ? 'hidden' : 'missing a photo'}.</span>` : '';
     return `
