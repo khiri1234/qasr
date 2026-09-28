@@ -164,13 +164,27 @@
     <h1>Store admin</h1>
     <p>Add products and photos, and manage the website. Changes are published to the live store within a few minutes.</p>
     <div class="msg err" id="loginErr" hidden></div>
-    <div class="field">
-      <label for="tokenInput">GitHub access token</label>
-      <input class="input" id="tokenInput" type="password" autocomplete="current-password" placeholder="github_pat_…" required>
+    <div id="pwFields">
+      <div class="field">
+        <label for="userInput">Username</label>
+        <input class="input" id="userInput" autocomplete="username" autocapitalize="none" spellcheck="false">
+      </div>
+      <div class="field">
+        <label for="passInput">Password</label>
+        <input class="input" id="passInput" type="password" autocomplete="current-password">
+      </div>
+    </div>
+    <div id="tokenFields" hidden>
+      <div class="field">
+        <label for="tokenInput" id="tokenLabel">GitHub access token</label>
+        <input class="input" id="tokenInput" type="password" autocomplete="off" placeholder="github_pat_…">
+        <span class="hint" id="tokenHint">First-time setup only. After signing in, create a username and password under the <b>Team</b> tab.</span>
+      </div>
     </div>
     <label class="check" style="margin-bottom:16px;"><input type="checkbox" id="rememberInput" checked> Keep me signed in on this device</label>
     <button class="btn primary" style="width:100%; justify-content:center; padding:12px;" id="loginBtn">Sign in</button>
-    <details>
+    <p style="text-align:center; margin:14px 0 0; font-size:12.5px;"><a href="#" id="modeLink" style="color:var(--mint-ink); font-weight:600;">First-time setup: sign in with a GitHub token</a></p>
+    <details id="tokenHelp" hidden>
       <summary>How do I get an access token?</summary>
       <ol>
         <li>Sign in to GitHub with an account that can edit the <b>khiri1234/qasr</b> repository.</li>
@@ -197,6 +211,7 @@
       <button class="tab" data-tab="hero">Hero banner</button>
       <button class="tab" data-tab="promo">Offer</button>
       <button class="tab" data-tab="settings">Delivery &amp; WhatsApp</button>
+      <button class="tab" data-tab="team">Team</button>
     </nav>
   </header>
 
@@ -258,6 +273,65 @@
         <thead><tr><th>City</th><th style="width:70px;">Icon</th><th style="width:110px;">Fee (AED)</th><th style="width:130px;">Speed</th><th>Short time</th><th>Full time</th><th></th></tr></thead>
         <tbody id="cityRows"></tbody>
       </table>
+    </section>
+
+    <!-- Team -->
+    <section data-panel="team" hidden>
+      <div class="panel-head"><div><h2>Team</h2><p>Usernames and passwords for the admin page. Changes here are saved straight away.</p></div></div>
+
+      <!-- Signed in with a token and no accounts exist yet -->
+      <div class="card" id="teamSetup" style="max-width:620px;" hidden>
+        <h3 style="margin:0 0 6px; font-size:17px;" id="setupTitle">Create your admin account</h3>
+        <p style="margin:0 0 16px; color:var(--muted); font-size:13px; line-height:1.55;" id="setupText">From now on you’ll sign in with this username and password instead of the GitHub token, on any device.</p>
+        <form id="setupForm" autocomplete="off">
+          <div class="field"><label for="setupUser">Username</label><input class="input" id="setupUser" autocapitalize="none" spellcheck="false" placeholder="e.g. owner"></div>
+          <div class="row">
+            <div class="field"><label for="setupPass">Password</label><input class="input" id="setupPass" type="password" autocomplete="new-password"></div>
+            <div class="field"><label for="setupPass2">Repeat password</label><input class="input" id="setupPass2" type="password" autocomplete="new-password"></div>
+          </div>
+          <p class="hint" style="margin:-6px 0 14px; font-size:11.5px; color:var(--muted);">At least 10 characters. A few random words work well, e.g. <i>camel-sunset-pepper-42</i>.</p>
+          <button class="btn primary" id="setupBtn">Create account</button>
+        </form>
+      </div>
+
+      <div id="teamMain" hidden>
+        <div class="card" style="max-width:620px; margin-bottom:16px;">
+          <h3 style="margin:0 0 4px; font-size:17px;">Team members</h3>
+          <p style="margin:0 0 12px; color:var(--muted); font-size:13px;" id="meLine"></p>
+          <div id="userList" style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px;"></div>
+          <details>
+            <summary style="cursor:pointer; font-weight:600; color:var(--mint-ink); font-size:13.5px;">+ Add a team member</summary>
+            <form id="addUserForm" autocomplete="off" style="margin-top:14px;">
+              <div class="field"><label for="newUser">Username</label><input class="input" id="newUser" autocapitalize="none" spellcheck="false"></div>
+              <div class="row">
+                <div class="field"><label for="newPass">Password</label><input class="input" id="newPass" type="password" autocomplete="new-password"></div>
+                <div class="field"><label for="newPass2">Repeat password</label><input class="input" id="newPass2" type="password" autocomplete="new-password"></div>
+              </div>
+              <button class="btn primary">Add member</button>
+            </form>
+          </details>
+        </div>
+
+        <div class="card" style="max-width:620px; margin-bottom:16px;">
+          <h3 style="margin:0 0 12px; font-size:17px;">Change my password</h3>
+          <form id="pwForm" autocomplete="off">
+            <div class="row">
+              <div class="field"><label for="pw1">New password</label><input class="input" id="pw1" type="password" autocomplete="new-password"></div>
+              <div class="field"><label for="pw2">Repeat new password</label><input class="input" id="pw2" type="password" autocomplete="new-password"></div>
+            </div>
+            <button class="btn primary">Change password</button>
+          </form>
+        </div>
+
+        <div class="card" style="max-width:620px;">
+          <h3 style="margin:0 0 4px; font-size:17px;">GitHub token</h3>
+          <p style="margin:0 0 12px; color:var(--muted); font-size:13px; line-height:1.55;">Everyone’s sign-in unlocks one shared GitHub token, stored encrypted. When it expires, create a new one and paste it here — nobody needs a new password.</p>
+          <form id="tokenForm" autocomplete="off">
+            <div class="field"><label for="newToken">New token</label><input class="input" id="newToken" type="password" placeholder="github_pat_…"></div>
+            <button class="btn">Replace token</button>
+          </form>
+        </div>
+      </div>
     </section>
   </main>
 
@@ -392,31 +466,262 @@ function changed(){ refreshPubbar(); renderAll(); }
 window.addEventListener('beforeunload', e=>{ if(data && isDirty()){ e.preventDefault(); e.returnValue = ''; } });
 function photoSrc(path){ return pendingPhotos[path]?.dataUrl || photoCache[path] || (path ? path : ''); }
 
+/* ================= Accounts (username + password) =================
+   data/admin-users.json holds one shared GitHub token, encrypted with a random
+   "team key". Each account stores that team key encrypted with a key derived
+   from its password (PBKDF2-SHA256 → AES-GCM). Passwords are never stored. */
+const TEAM_PATH = 'data/admin-users.json';
+const KDF_ITERATIONS = 600000;
+const MIN_PASSWORD = 10;
+const te = new TextEncoder(), td = new TextDecoder();
+const toB64 = u8 => btoa(String.fromCharCode(...u8));
+const fromB64 = s => Uint8Array.from(atob(s), c=>c.charCodeAt(0));
+const rand = n => crypto.getRandomValues(new Uint8Array(n));
+async function passwordKey(password, salt, iterations){
+  const base = await crypto.subtle.importKey('raw', te.encode(password), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey({ name:'PBKDF2', salt, iterations, hash:'SHA-256' }, base, { name:'AES-GCM', length:256 }, false, ['encrypt','decrypt']);
+}
+const teamKey = raw => crypto.subtle.importKey('raw', raw, 'AES-GCM', false, ['encrypt','decrypt']);
+async function seal(key, bytes){
+  const iv = rand(12);
+  return { iv: toB64(iv), ct: toB64(new Uint8Array(await crypto.subtle.encrypt({ name:'AES-GCM', iv }, key, bytes))) };
+}
+async function unseal(key, box){
+  return new Uint8Array(await crypto.subtle.decrypt({ name:'AES-GCM', iv: fromB64(box.iv) }, key, fromB64(box.ct)));
+}
+async function makeAccount(username, password, master){
+  const salt = rand(16);
+  const box = await seal(await passwordKey(password, salt, KDF_ITERATIONS), master);
+  return { username, salt: toB64(salt), iterations: KDF_ITERATIONS, ...box, created: new Date().toISOString().slice(0,10) };
+}
+const cleanUser = u => String(u || '').trim().toLowerCase();
+function checkNewAccount(username, p1, p2){
+  if(!/^[a-z0-9._-]{3,30}$/.test(username)) return 'Username: 3–30 characters, letters, numbers, dots, dashes or underscores.';
+  if(p1.length < MIN_PASSWORD) return `Password must be at least ${MIN_PASSWORD} characters.`;
+  if(p1 !== p2) return 'The two passwords don’t match.';
+  return null;
+}
+
+let master = storeGet('adminMaster') ? fromB64(storeGet('adminMaster')) : null;   // team key, only after a password sign-in
+let currentUser = storeGet('adminUser');
+let team = null, teamSha = null;
+
+// Read the accounts file without signing in (the repository is public).
+async function fetchTeamPublic(){
+  try{
+    const r = await fetch(`https://api.github.com/repos/${REPO.owner}/${REPO.name}/contents/${TEAM_PATH}?ref=${REPO.branch}&t=${Date.now()}`, { headers:{ 'Accept':'application/vnd.github+json' } });
+    if(r.ok) return JSON.parse(b64ToUtf8((await r.json()).content));
+  }catch(e){}
+  const r = await fetch(`${TEAM_PATH}?t=${Date.now()}`, { cache:'no-store' });   // fallback: the published site copy
+  if(r.ok) return r.json();
+  if(r.status === 404) return null;
+  throw new Error('Couldn’t reach the store. Check your connection and try again.');
+}
+async function loadTeam(){
+  try{
+    const f = await gh(`/contents/${TEAM_PATH}?ref=${REPO.branch}&t=${Date.now()}`);
+    team = JSON.parse(b64ToUtf8(f.content)); teamSha = f.sha;
+  }catch(err){
+    if(err.status !== 404) throw err;
+    team = null; teamSha = null;
+  }
+}
+async function saveTeam(next, message){
+  const body = { message, branch: REPO.branch, content: btoa(unescape(encodeURIComponent(JSON.stringify(next, null, 2) + '\n'))) };
+  if(teamSha) body.sha = teamSha;
+  const res = await gh(`/contents/${TEAM_PATH}`, { method:'PUT', body: JSON.stringify(body) });
+  team = next; teamSha = res.content.sha;
+}
+function rememberSession(){
+  const persist = $('rememberInput').checked;
+  storeSet('adminToken', token, persist);
+  if(master){ storeSet('adminMaster', toB64(master), persist); storeSet('adminUser', currentUser, persist); }
+}
+function isRemembered(){ try{ return !!localStorage.getItem('adminToken'); }catch(e){ return false; } }
+function persistSession(){
+  const persist = isRemembered();
+  storeDel('adminToken'); storeDel('adminMaster'); storeDel('adminUser');
+  storeSet('adminToken', token, persist);
+  if(master){ storeSet('adminMaster', toB64(master), persist); storeSet('adminUser', currentUser, persist); }
+}
+function clearSession(){
+  storeDel('adminToken'); storeDel('adminMaster'); storeDel('adminUser');
+  token = null; master = null; currentUser = null; team = null; teamSha = null;
+}
+async function checkToken(){
+  const repo = await gh('');
+  if(!repo.permissions || !repo.permissions.push) throw new Error('This token can read the repository but not edit it. Give it “Contents: Read and write” permission.');
+}
+const tokenError = err => err.status === 401 ? 'That token is not valid or has expired.' : err.status === 404 ? `That token has no access to ${REPO.owner}/${REPO.name}.` : err.message;
+
 /* ================= Login ================= */
+let loginMode = 'password';   // 'password' | 'token' | 'renew'
+let pendingUnlock = null;     // { master, username } while renewing an expired token
+function setLoginMode(mode){
+  loginMode = mode;
+  $('pwFields').hidden = mode !== 'password';
+  $('tokenFields').hidden = mode === 'password';
+  $('tokenHelp').hidden = mode === 'password';
+  $('tokenLabel').textContent = mode === 'renew' ? 'New GitHub token' : 'GitHub access token';
+  $('tokenHint').innerHTML = mode === 'renew'
+    ? 'Your password is correct, but the store’s shared GitHub token has expired. Create a new one (steps below) and paste it here — it will be saved for the whole team.'
+    : 'First-time setup only. After signing in, create a username and password under the <b>Team</b> tab.';
+  $('modeLink').textContent = mode === 'password' ? 'First-time setup: sign in with a GitHub token' : 'Sign in with username and password';
+  $('loginErr').hidden = true;
+  setTimeout(()=>$(mode === 'password' ? 'userInput' : 'tokenInput').focus(), 30);
+}
+$('modeLink').addEventListener('click', e=>{ e.preventDefault(); pendingUnlock = null; setLoginMode(loginMode === 'password' ? 'token' : 'password'); });
 function showLogin(err){
   $('appView').hidden = true; $('loginView').hidden = false;
   $('loginErr').hidden = !err; if(err) $('loginErr').textContent = err;
 }
 $('loginForm').addEventListener('submit', async e=>{
   e.preventDefault();
-  token = $('tokenInput').value.trim();
   $('loginBtn').disabled = true; $('loginBtn').textContent = 'Checking…';
   try{
-    const repo = await gh('');
-    if(!repo.permissions || !repo.permissions.push) throw new Error('This token can read the repository but not edit it. Give it “Contents: Read and write” permission.');
-    storeSet('adminToken', token, $('rememberInput').checked);
+    if(loginMode === 'password'){
+      const username = cleanUser($('userInput').value), password = $('passInput').value;
+      if(!username || !password) throw new Error('Enter your username and password.');
+      const accounts = await fetchTeamPublic();
+      if(!accounts) throw new Error('No accounts have been set up yet. Use first-time setup below.');
+      const acct = accounts.users.find(u=>u.username === username);
+      let unlocked = null;
+      if(acct){
+        try{ unlocked = await unseal(await passwordKey(password, fromB64(acct.salt), acct.iterations), acct); }catch(e){}
+      }
+      if(!unlocked) throw new Error('Wrong username or password.');
+      token = td.decode(await unseal(await teamKey(unlocked), accounts.token));
+      try{ await checkToken(); }
+      catch(err){
+        if(err.status === 401){ pendingUnlock = { master: unlocked, username }; setLoginMode('renew'); showLogin('The store’s GitHub token has expired. Paste a new one to continue.'); return; }
+        throw err;
+      }
+      master = unlocked; currentUser = username;
+      $('passInput').value = '';
+    }else{
+      token = $('tokenInput').value.trim();
+      if(!token) throw new Error('Paste a GitHub access token.');
+      try{ await checkToken(); }catch(err){ throw new Error(tokenError(err)); }
+      if(loginMode === 'renew'){
+        master = pendingUnlock.master; currentUser = pendingUnlock.username; pendingUnlock = null;
+        await loadTeam();
+        if(team){ await saveTeam({ ...team, token: await seal(await teamKey(master), te.encode(token)) }, 'Update admin GitHub token'); }
+        toast('Token updated for the whole team.');
+      }else{
+        master = null; currentUser = null;
+      }
+      $('tokenInput').value = '';
+      setLoginMode('password');
+    }
+    rememberSession();
     await start();
   }catch(err){
-    token = null;
-    showLogin(err.status === 401 ? 'That token is not valid or has expired.' : err.status === 404 ? `The token has no access to ${REPO.owner}/${REPO.name}.` : err.message);
+    if(loginMode !== 'renew'){ token = null; }
+    showLogin(err.message);
   }finally{
     $('loginBtn').disabled = false; $('loginBtn').textContent = 'Sign in';
   }
 });
 $('logoutBtn').addEventListener('click', ()=>{
   if(isDirty() && !confirm('You have unpublished changes. Log out anyway?')) return;
-  storeDel('adminToken'); token = null; data = null; saved = null; pendingPhotos = {};
-  $('tokenInput').value = ''; refreshPubbar(); showLogin();
+  clearSession(); data = null; saved = null; pendingPhotos = {};
+  $('tokenInput').value = ''; $('passInput').value = ''; refreshPubbar();
+  setLoginMode('password'); showLogin();
+});
+
+/* ================= Team tab ================= */
+function renderTeam(){
+  const setup = $('teamSetup'), main = $('teamMain');
+  if(!team || !master){
+    setup.hidden = false; main.hidden = true;
+    if(!team){
+      $('setupTitle').textContent = 'Create your admin account';
+      $('setupText').textContent = 'From now on you’ll sign in with this username and password instead of the GitHub token, on any device.';
+      $('setupBtn').textContent = 'Create account';
+    }else{
+      $('setupTitle').textContent = 'Reset team accounts';
+      $('setupText').textContent = `You signed in with the GitHub token, so the existing accounts (${team.users.map(u=>u.username).join(', ')}) can’t be managed from here. Sign in with a username and password to manage them — or create a new account below, which REMOVES all existing accounts.`;
+      $('setupBtn').textContent = 'Reset and create account';
+    }
+    return;
+  }
+  setup.hidden = true; main.hidden = false;
+  $('meLine').textContent = `Signed in as ${currentUser}. Everyone listed can sign in and publish changes.`;
+  $('userList').innerHTML = team.users.map(u=>`
+    <div style="display:flex; align-items:center; gap:10px; padding:10px 12px; border:1px solid var(--stroke); border-radius:12px;">
+      <div style="width:32px; height:32px; border-radius:50%; background:var(--mint); color:#07120E; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px;">${esc(u.username[0].toUpperCase())}</div>
+      <div style="flex:1;"><b style="font-size:13.5px;">${esc(u.username)}</b>${u.username===currentUser?' <span class="chip">YOU</span>':''}<div style="font-size:11.5px; color:var(--muted);">Added ${esc(u.created || '')}</div></div>
+      ${u.username!==currentUser ? `<button class="btn small danger" data-rmuser="${esc(u.username)}">Remove</button>` : ''}
+    </div>`).join('');
+}
+async function teamAction(btn, fn){
+  const label = btn.textContent;
+  btn.disabled = true; btn.textContent = 'Saving…';
+  try{ await fn(); renderTeam(); }
+  catch(err){ toast(err.status === 409 ? 'Someone else just changed the team. Reload the page and try again.' : err.message, true); }
+  finally{ btn.disabled = false; btn.textContent = label; }
+}
+$('setupForm').addEventListener('submit', e=>{
+  e.preventDefault();
+  const username = cleanUser($('setupUser').value), p1 = $('setupPass').value, p2 = $('setupPass2').value;
+  const problem = checkNewAccount(username, p1, p2);
+  if(problem){ toast(problem, true); return; }
+  if(team && !confirm('This removes all existing accounts. Continue?')) return;
+  teamAction($('setupBtn'), async ()=>{
+    const newMaster = rand(32);
+    const next = { version:1, token: await seal(await teamKey(newMaster), te.encode(token)), users:[ await makeAccount(username, p1, newMaster) ] };
+    await saveTeam(next, team ? 'Reset admin accounts' : 'Create admin account');
+    master = newMaster; currentUser = username; persistSession();
+    $('setupForm').reset();
+    toast(`Account “${username}” created. Next time, sign in with your username and password.`);
+  });
+});
+$('addUserForm').addEventListener('submit', e=>{
+  e.preventDefault();
+  const username = cleanUser($('newUser').value), p1 = $('newPass').value, p2 = $('newPass2').value;
+  const problem = checkNewAccount(username, p1, p2) || (team.users.some(u=>u.username===username) ? 'That username is already taken.' : null);
+  if(problem){ toast(problem, true); return; }
+  teamAction(e.submitter || e.target.querySelector('button'), async ()=>{
+    await saveTeam({ ...team, users:[ ...team.users, await makeAccount(username, p1, master) ] }, `Add admin account ${username}`);
+    $('addUserForm').reset();
+    toast(`${username} can now sign in.`);
+  });
+});
+$('userList').addEventListener('click', e=>{
+  const b = e.target.closest('[data-rmuser]'); if(!b) return;
+  const username = b.dataset.rmuser;
+  if(!confirm(`Remove ${username}? They won’t be able to sign in any more.`)) return;
+  teamAction(b, async ()=>{
+    await saveTeam({ ...team, users: team.users.filter(u=>u.username!==username) }, `Remove admin account ${username}`);
+    toast(`${username} removed.`);
+  });
+});
+$('pwForm').addEventListener('submit', e=>{
+  e.preventDefault();
+  const p1 = $('pw1').value, p2 = $('pw2').value;
+  const problem = checkNewAccount(currentUser, p1, p2);
+  if(problem){ toast(problem, true); return; }
+  teamAction(e.submitter || e.target.querySelector('button'), async ()=>{
+    const mine = await makeAccount(currentUser, p1, master);
+    const old = team.users.find(u=>u.username===currentUser);
+    if(old) mine.created = old.created;
+    await saveTeam({ ...team, users: team.users.map(u=>u.username===currentUser ? mine : u) }, `Change password for ${currentUser}`);
+    $('pwForm').reset();
+    toast('Password changed.');
+  });
+});
+$('tokenForm').addEventListener('submit', e=>{
+  e.preventDefault();
+  const fresh = $('newToken').value.trim();
+  if(!fresh){ toast('Paste the new token first.', true); return; }
+  teamAction(e.submitter || e.target.querySelector('button'), async ()=>{
+    const old = token; token = fresh;
+    try{ await checkToken(); }catch(err){ token = old; throw new Error(tokenError(err)); }
+    await saveTeam({ ...team, token: await seal(await teamKey(master), te.encode(token)) }, 'Update admin GitHub token');
+    persistSession();
+    $('tokenForm').reset();
+    toast('Token replaced for the whole team.');
+  });
 });
 
 /* ================= Load ================= */
@@ -433,12 +738,14 @@ async function start(){
   $('loadingView').hidden = false;
   document.querySelectorAll('[data-panel]').forEach(p=>p.hidden = true);
   try{
-    await loadData();
+    await Promise.all([loadData(), loadTeam()]);
     $('loadingView').hidden = true;
+    currentTab = team ? 'products' : 'team';   // first sign-in with a token: set up a username and password
     showTab(currentTab);
     changed();
+    renderTeam();
   }catch(err){
-    if(err.status === 401){ storeDel('adminToken'); showLogin('Your session has expired. Please sign in again.'); return; }
+    if(err.status === 401){ clearSession(); setLoginMode('password'); showLogin('Your session has expired. Please sign in again.'); return; }
     $('loadingView').innerHTML = `Couldn’t load the store content.<br><small>${esc(err.message)}</small><br><br><button class="btn" onclick="start()">Try again</button>`;
   }
 }
@@ -774,7 +1081,11 @@ async function publish(){
 }
 
 /* ================= Boot ================= */
-if(token) start(); else showLogin();
+if(token) start();
+else{
+  setLoginMode('password'); showLogin();
+  fetchTeamPublic().then(t=>{ if(!t && loginMode === 'password') setLoginMode('token'); }).catch(()=>{});
+}
 </script>
 </body>
 </html>
