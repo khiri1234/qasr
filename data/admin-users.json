@@ -12,14 +12,6 @@
       "iv": "+TSk6l74cBd/T2m4",
       "ct": "/V0Fwn27CX+YTacetoac4OsKKGIA9qtkPpeBPU8PAH9vf0zQ6+9LZqHIBHEhA2FD",
       "created": "2026-09-28"
-    },
-    {
-      "username": "sohail",
-      "salt": "EBxoVI9u4rzvaBPrQ/T8GA==",
-      "iterations": 600000,
-      "iv": "9uBGFTdKtamVagmd",
-      "ct": "mAqzrQZzn3XY1KDfHjOtY8RQWWjEUvqhKKjS7AJ/syRsLnmpOwjXBgASoiS6nv96",
-      "created": "2026-09-28"
     }
   ]
 }
