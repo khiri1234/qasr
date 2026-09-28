@@ -1,25 +1,17 @@
 {
   "version": 1,
   "token": {
-    "iv": "w3/JOkDxoQ32Z1ds",
-    "ct": "fJBrQ1Hvg2CJn0tC5d3YeqUrtEMktnXs2O5iCuVLsUoL+plI1EQnJB0iJfoD7RDR1X+qcLmN/HqMwPV8N8A+RGzUVl62uNd2Lvj66RyIb5heuKVD8T28jjts4gJhvEyKuOwhd3gxDjdvZAyoUw=="
+    "iv": "UGfy1NWcdlRhbFvo",
+    "ct": "kX7edy/wKIRyXGQH8M9zFXPqQQliPjQYG6AwsIv3EVKD65m+6mkOXTrYeQSwMTeQngftJUvvpD6DYMxkXMwce1U18N+pjKZNUTOEA9IPK31vhyybSOzQGoBphM3oakOBIB5xSBsQw5dzTo/q6A=="
   },
   "users": [
     {
-      "username": "hatef",
-      "salt": "v0X01Txl33WJ0Kl4FNphvw==",
+      "username": "javad",
+      "role": "admin",
+      "salt": "qYuL7+NUQencNMUJA1Derw==",
       "iterations": 600000,
-      "iv": "+TSk6l74cBd/T2m4",
-      "ct": "/V0Fwn27CX+YTacetoac4OsKKGIA9qtkPpeBPU8PAH9vf0zQ6+9LZqHIBHEhA2FD",
-      "created": "2026-09-28"
-    },
-    {
-      "username": "sohail",
-      "role": "staff",
-      "salt": "uMwky6ytxYLWVXkShJax1A==",
-      "iterations": 600000,
-      "iv": "CeZ7SROj71yISZAX",
-      "ct": "hfI1WzU7+kLeW7I44C6j1U9cqXjJ1OPgESC2Q46dyG+8KYmpkXiGR961EnlPVTc7",
+      "iv": "e0m/u56r1lDo0YjN",
+      "ct": "mFdmmUbbATz6Mr8S3Oc76uJTSXgWIFOQMjdH9QL7tPVEcUVoRRr6G+DXJaN6NvWw",
       "created": "2026-09-28"
     }
   ]
