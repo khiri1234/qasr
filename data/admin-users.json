@@ -12,6 +12,15 @@
       "iv": "+TSk6l74cBd/T2m4",
       "ct": "/V0Fwn27CX+YTacetoac4OsKKGIA9qtkPpeBPU8PAH9vf0zQ6+9LZqHIBHEhA2FD",
       "created": "2026-09-28"
+    },
+    {
+      "username": "sohail",
+      "role": "staff",
+      "salt": "uMwky6ytxYLWVXkShJax1A==",
+      "iterations": 600000,
+      "iv": "CeZ7SROj71yISZAX",
+      "ct": "hfI1WzU7+kLeW7I44C6j1U9cqXjJ1OPgESC2Q46dyG+8KYmpkXiGR961EnlPVTc7",
+      "created": "2026-09-28"
     }
   ]
 }
