@@ -577,7 +577,7 @@
   }
   @media (min-width:960px){
     .desk-nav{gap:18px;}
-    .desk-nav .search-box{min-width:200px;}
+    .desk-nav .search-box{min-width:140px;}
     .desk-nav .city-pill .txt small{display:none;}
   }
   @media (min-width:960px) and (max-width:1499px){ .desk-links [data-go="footer"]{display:none;} }
@@ -637,6 +637,47 @@
     .footer-note > :not(.fn-brand){grid-column:2;}
     .footer-note .fn-brand{grid-row:span 3;}
   }
+
+  /* ---------- Language switcher ---------- */
+  .lang-code{position:absolute; bottom:-6px; left:50%; transform:translateX(-50%); background:var(--text); color:var(--void); font-size:8.5px; font-weight:700; letter-spacing:.04em; padding:1px 5px; border-radius:999px; border:2px solid var(--void); line-height:1.3;}
+  .lang-pill{display:flex; align-items:center; gap:7px; height:44px; padding:0 14px; border-radius:999px; background:var(--panel); border:1px solid var(--stroke); box-shadow:var(--shadow); color:var(--text); font-size:13px; font-weight:600;}
+  .lang-pill svg{width:17px; height:17px;}
+  .lang-pill .chev{width:13px; height:13px; color:var(--muted);}
+  .lang-opt .ico{font-size:12px !important; font-weight:700; color:var(--mint-ink);}
+
+  /* ---------- Right-to-left (Arabic, Urdu, Persian) ---------- */
+  html[dir="rtl"] .banner-product{right:auto; left:16px;}
+  html[dir="rtl"] .banner-tag{right:auto; left:10px;}
+  html[dir="rtl"] .banner-fig{right:auto; left:-10px;}
+  html[dir="rtl"] .banner-scrim{background:linear-gradient(260deg, rgba(10,11,14,0.88) 0%, rgba(10,11,14,0.62) 42%, rgba(10,11,14,0.05) 75%), linear-gradient(to top, rgba(10,11,14,0.7) 0%, transparent 45%);}
+  html[dir="rtl"] .banner-glow{background:radial-gradient(circle at 22% 30%, color-mix(in srgb, var(--accent) 55%, transparent) 0%, transparent 55%), radial-gradient(circle at 100% 100%, color-mix(in srgb, var(--accent) 22%, transparent) 0%, transparent 60%);}
+  html[dir="rtl"] .pop-badge{left:auto; right:12px;}
+  html[dir="rtl"] .pop-fav{right:auto; left:10px;}
+  html[dir="rtl"] .badge-dot{right:auto; left:-5px;}
+  html[dir="rtl"] .pay-opt::after{right:auto; left:9px;}
+  html[dir="rtl"] :is(.city-opt, .deliv-card, .pay-opt, .city-pill){text-align:right;}
+  html[dir="rtl"] :is(.banner-cta, .promo-cta, .sec-head a) svg{transform:scaleX(-1);}
+  html[dir="rtl"] .dot.active::after{transform-origin:right;}
+  html[dir="rtl"] .wa{align-items:flex-start;}
+  html[dir="rtl"] .wa-teaser{padding:11px 14px 11px 34px;}
+  html[dir="rtl"] .wa-teaser-x{right:auto; left:6px;}
+  html[dir="rtl"] .wa-send svg{transform:scaleX(-1);}
+  html[dir="rtl"] .aed-icon{margin-right:3px; margin-left:0;}
+  bdi[dir="ltr"]{display:inline-flex; align-items:center; white-space:nowrap;}
+  .d-info span > bdi{margin-inline-end:4px;}
+  /* Text typed in the admin (product names, hero and offer text) keeps its own direction */
+  html[dir="rtl"] :is(.pop-card h4, .pop-card .sub, .g-info h4, .g-info .sub, .d-info h5, .banner-eyebrow, .banner-head, .banner-head div, .banner-sub, .promo-eyebrow, .promo h3, .promo p){unicode-bidi:plaintext; text-align:right;}
+  @media (min-width:960px){
+    html[dir="rtl"] .banner-product{left:9%; right:auto;}
+    html[dir="rtl"] .banner-tag{left:14px; right:auto;}
+    html[dir="rtl"] .banner-fig{left:6%; right:auto;}
+    html[dir="rtl"] .desk-nav .search-box{margin-left:0; margin-right:auto;}
+  }
+  /* Scripts that must not be letter-spaced (joined letters), with fonts that include them */
+  html:is([lang="ar"],[lang="fa"],[lang="ur"]) body :not(svg, svg *){font-family:'Noto Sans Arabic','Inter',system-ui,sans-serif !important; letter-spacing:0 !important;}
+  html[lang="hi"] body :not(svg, svg *){font-family:'Inter','Noto Sans Devanagari',system-ui,sans-serif !important; letter-spacing:0 !important;}
+  html:is([lang="ar"],[lang="fa"],[lang="ur"],[lang="hi"]) .banner-head{line-height:1.3;}
+  html:is([lang="ar"],[lang="fa"],[lang="ur"],[lang="hi"]) :is(.deliv h2, .promo h3, .sec-head h2){line-height:1.4;}
 
   /* ---------- WhatsApp chat widget ---------- */
   .wa{
@@ -922,7 +963,7 @@
     .drawer-head h3{font-size:20px;}
     .d-icon{width:48px; height:48px;}
   }
-  @media (min-width:960px) and (max-width:1180px){
+  @media (min-width:960px) and (max-width:1339px){
     .desk-links{display:none;}
     .banner-head{font-size:52px;}
   }
@@ -935,52 +976,46 @@
   <header class="desk-nav">
     <div class="desk-brand">
       <div class="brand-name">SMOKING UAE</div>
-      <div class="tag">Pure clouds. Every time.</div>
+      <div class="tag" data-i18n="tagline">Pure clouds. Every time.</div>
     </div>
     <nav class="desk-links" aria-label="Sections">
-      <button class="active" data-go="top">Home</button>
-      <button data-go="shop">Shop</button>
-      <button data-go="offers">Offers</button>
-      <button data-go="delivery">Delivery</button>
-      <button data-go="footer">About</button>
+      <button class="active" data-go="top" data-i18n="home">Home</button>
+      <button data-go="shop" data-i18n="shop">Shop</button>
+      <button data-go="offers" data-i18n="offers">Offers</button>
+      <button data-go="delivery" data-i18n="delivery_nav">Delivery</button>
+      <button data-go="footer" data-i18n="about">About</button>
     </nav>
     <button class="city-pill" data-open-city>
         <span class="pin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span>
-        <span class="txt"><small>Deliver to</small><b class="js-city">Dubai</b> · <span class="eta js-eta">Same day</span></span>
+        <span class="txt"><small data-i18n="deliver_to">Deliver to</small><b class="js-city">Dubai</b> · <span class="eta js-eta">Same day</span></span>
         <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
       </button>
     <div class="search-box">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
-      <input type="text" placeholder="Search products…" id="deskSearch">
+      <input type="text" placeholder="Search products…" data-i18n-ph="search_short" id="deskSearch">
     </div>
     <div class="desk-actions">
-      <button class="icon-btn" aria-label="Notifications">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
-        <span class="badge-dot">2</span>
-      </button>
+      <button class="lang-pill" data-open-lang data-i18n-aria="aria_lang" aria-label="Choose language"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg><span class="js-lang-code">EN</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
       <button class="desk-cart" id="deskCartBtn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-        Cart <span class="count" id="deskCartCount">0</span>
+        <span data-i18n="cart">Cart</span> <span class="count" id="deskCartCount">0</span>
       </button>
     </div>
   </header>
 
   <!-- Top bar -->
   <div class="topbar">
-    <button class="icon-btn" id="menuBtn" aria-label="Menu">
+    <button class="icon-btn" id="menuBtn" aria-label="Menu" data-i18n-aria="aria_menu">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
     <div class="greet">
-      <div class="hi">Hello, Cloud Chaser 👋</div>
+      <div class="hi" data-i18n="hello">Hello, Cloud Chaser 👋</div>
       <div class="brand-name">SMOKING UAE</div>
-      <div class="tag">Pure clouds. Every time.</div>
+      <div class="tag" data-i18n="tagline">Pure clouds. Every time.</div>
     </div>
     <div class="topbar-actions">
-      <button class="icon-btn" id="bellBtn" aria-label="Notifications">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
-        <span class="badge-dot">2</span>
-      </button>
-      <button class="icon-btn" id="cartTopBtn" aria-label="Cart">
+      <button class="icon-btn" data-open-lang data-i18n-aria="aria_lang" aria-label="Choose language"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg><span class="lang-code js-lang-code">EN</span></button>
+      <button class="icon-btn" id="cartTopBtn" aria-label="Cart" data-i18n-aria="aria_cart">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
         <span class="badge-dot hide" id="topCartBadge">0</span>
       </button>
@@ -991,9 +1026,9 @@
   <div class="search-row">
     <div class="search-box">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
-      <input type="text" placeholder="Search flavors, pods, devices…" id="searchInput">
+      <input type="text" placeholder="Search flavors, pods, devices…" data-i18n-ph="search" id="searchInput">
     </div>
-    <button class="filter-btn" id="filterScrollBtn" aria-label="Filter">
+    <button class="filter-btn" id="filterScrollBtn" aria-label="Filter" data-i18n-aria="aria_filter">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
     </button>
   </div>
@@ -1002,7 +1037,7 @@
   <div class="deliver-row">
       <button class="city-pill" data-open-city>
         <span class="pin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span>
-        <span class="txt"><small>Deliver to</small><b class="js-city">Dubai</b> · <span class="eta js-eta">Same day</span></span>
+        <span class="txt"><small data-i18n="deliver_to">Deliver to</small><b class="js-city">Dubai</b> · <span class="eta js-eta">Same day</span></span>
         <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
       </button>
   </div>
@@ -1022,7 +1057,7 @@
         <div class="banner-eyebrow" id="bannerEyebrow">LIMITED DROP</div>
         <h1 class="banner-head" id="bannerHead">PURE.<div>BOLD.</div><div>UNCUT.</div></h1>
         <p class="banner-sub" id="bannerSub">Lab-tested salts, UAE-compliant batches, flavor that holds past the first pull.</p>
-        <button class="banner-cta" id="bannerCta">Shop now <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>
+        <button class="banner-cta" id="bannerCta"><span data-i18n="shop_now">Shop now</span> <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>
       </div>
     </div>
     <div class="dots" id="dots"></div>
@@ -1033,8 +1068,8 @@
 
   <!-- Popular picks -->
   <div class="sec-head">
-    <h2>Popular picks</h2>
-    <a id="viewAllPop">View all <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    <h2 data-i18n="popular">Popular picks</h2>
+    <a id="viewAllPop"><span data-i18n="view_all">View all</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
   </div>
   <div class="pop-scroll" id="popScroll"></div>
 
@@ -1044,14 +1079,14 @@
       <div class="promo-eyebrow" id="promoEyebrow">EXCLUSIVE OFFER</div>
       <h3 id="promoTitle">Up to 20% off</h3>
       <p id="promoText">On selected disposables, this week only</p>
-      <button class="promo-cta" id="promoCta">Shop now <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>
+      <button class="promo-cta" id="promoCta"><span data-i18n="shop_now">Shop now</span> <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>
     </div>
-    <div class="promo-badge" id="promoBadge"><strong>20%</strong><span>OFF</span></div>
+    <div class="promo-badge" id="promoBadge"><strong>20%</strong><span data-i18n="off">OFF</span></div>
   </div>
 
   <!-- Full menu -->
   <div class="sec-head" id="shop">
-    <h2>Full menu</h2>
+    <h2 data-i18n="full_menu">Full menu</h2>
     <span style="font-size:12px; color:var(--muted);" id="resultCount">12 items</span>
   </div>
   <div class="filters" id="filters"></div>
@@ -1059,44 +1094,44 @@
 
   <!-- Delivery -->
   <section class="deliv" id="delivery">
-    <div class="deliv-eyebrow">DELIVERY ACROSS THE UAE</div>
-    <h2>Dubai today. Every emirate, fast.</h2>
-    <p>Same-day delivery in Dubai, Sharjah and Ajman, next-day to Abu Dhabi and beyond. Tap your city to see fees and timing.</p>
+    <div class="deliv-eyebrow" data-i18n="deliv_eyebrow">DELIVERY ACROSS THE UAE</div>
+    <h2 data-i18n="deliv_title">Dubai today. Every emirate, fast.</h2>
+    <p data-i18n="deliv_text">Same-day delivery in Dubai, Sharjah and Ajman, next-day to Abu Dhabi and beyond. Tap your city to see fees and timing.</p>
     <div class="deliv-road" aria-hidden="true"><span class="puff"></span><span class="truck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 5h13v11H1z"/><path d="M14 9h4l3 3.5V16h-7z"/><circle cx="5.5" cy="17.5" r="2"/><circle cx="17.5" cy="17.5" r="2"/></svg></span></div>
     <div class="deliv-grid" id="delivGrid"></div>
-    <div class="deliv-perks"><span>Discreet packaging</span><span>Cash, card or Apple Pay on delivery</span><span>Age check (18+) at the door</span><span>Live updates on WhatsApp</span></div>
+    <div class="deliv-perks"><span data-i18n="perk1">Discreet packaging</span><span data-i18n="perk2">Cash, card or Apple Pay on delivery</span><span data-i18n="perk3">Age check (18+) at the door</span><span data-i18n="perk4">Live updates on WhatsApp</span></div>
     <div class="deliv-pay js-pay-logos"></div>
   </section>
 
   <!-- Footer -->
   <div class="footer-note" id="footer">
     <div class="fn-brand">SMOKING UAE</div>
-    <p>Independent vapor shop, based in the United Arab Emirates. Prices shown in AED.</p>
-    <div class="pay-row js-pay-logos"><span class="t">WE ACCEPT</span></div>
-    <p>Nicotine is an addictive chemical. Intended for existing adult smokers and vapers, 18 years or older. Not sold to minors.</p>
+    <p data-i18n="footer_about">Independent vapor shop, based in the United Arab Emirates. Prices shown in AED.</p>
+    <div class="pay-row js-pay-logos"><span class="t" data-i18n="we_accept">WE ACCEPT</span></div>
+    <p data-i18n="footer_warning">Nicotine is an addictive chemical. Intended for existing adult smokers and vapers, 18 years or older. Not sold to minors.</p>
   </div>
 
   <!-- Bottom tab bar -->
   <nav class="tabbar" aria-label="Primary">
     <button class="tab-btn active" id="tabHome">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
-      <span>Home</span>
+      <span data-i18n="home">Home</span>
     </button>
     <button class="tab-btn" id="tabMenu">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
-      <span>Menu</span>
+      <span data-i18n="menu">Menu</span>
     </button>
-    <button class="tab-fab" id="tabCart" aria-label="Cart">
+    <button class="tab-fab" id="tabCart" aria-label="Cart" data-i18n-aria="aria_cart">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
       <span class="fab-badge" id="fabBadge" style="display:none;">0</span>
     </button>
     <button class="tab-btn" id="tabOffers">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 12.6L12 21.2 2.8 12A2 2 0 0 1 2.2 10.5L3 4l6.5-.8a2 2 0 0 1 1.5.6l9.6 9.6a2 2 0 0 1 0 2.8z"/><circle cx="8" cy="8" r="1.4" fill="currentColor" stroke="none"/></svg>
-      <span>Offers</span>
+      <span data-i18n="offers">Offers</span>
     </button>
     <button class="tab-btn" id="tabProfile">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 5-6 8-6s6.5 2 8 6"/></svg>
-      <span>Profile</span>
+      <span data-i18n="profile">Profile</span>
     </button>
   </nav>
 
@@ -1107,8 +1142,8 @@
 <aside class="drawer" id="drawer">
   <div class="drawer-handle"></div>
   <div class="drawer-head">
-    <h3>Your order</h3>
-    <button class="drawer-close" id="drawerClose" aria-label="Close">
+    <h3 data-i18n="your_order">Your order</h3>
+    <button class="drawer-close" id="drawerClose" aria-label="Close" data-i18n-aria="aria_close">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
     </button>
   </div>
@@ -1116,69 +1151,78 @@
   <div class="drawer-foot" id="drawerFoot" style="display:none;">
     <div class="d-city">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
-      <div class="t">Deliver to <b class="js-city">Dubai</b><small class="js-eta-long">Same day</small></div>
-      <button data-open-city>Change</button>
+      <div class="t"><span data-i18n="deliver_to">Deliver to</span> <b class="js-city">Dubai</b><small class="js-eta-long">Same day</small></div>
+      <button data-open-city data-i18n="change">Change</button>
     </div>
     <div class="pay-block">
-      <div class="lbl">Payment method <span>Pay on delivery</span></div>
+      <div class="lbl"><span data-i18n="payment_method">Payment method</span> <span data-i18n="pay_on_delivery">Pay on delivery</span></div>
       <div class="pay-grid" id="payGrid"></div>
       <div class="pay-note" id="payNote"></div>
     </div>
-    <div class="d-row"><span>Subtotal</span><span id="subtotal">0</span></div>
-    <div class="d-row"><span>Delivery</span><span id="delivFee">0</span></div>
-    <div class="d-row"><span>VAT (5%)</span><span id="tax">0</span></div>
-    <div class="d-row total"><span>Total</span><span id="total">0</span></div>
+    <div class="d-row"><span data-i18n="subtotal">Subtotal</span><span id="subtotal">0</span></div>
+    <div class="d-row"><span data-i18n="delivery">Delivery</span><span id="delivFee">0</span></div>
+    <div class="d-row"><span data-i18n="vat">VAT (5%)</span><span id="tax">0</span></div>
+    <div class="d-row total"><span data-i18n="total">Total</span><span id="total">0</span></div>
     <button class="place-btn" id="waOrderBtn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.05 4.91A9.82 9.82 0 0 0 12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01zm-7.01 15.24c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.26 8.26 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c.02 4.54-3.68 8.23-8.22 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43s.17-.25.25-.41c.08-.17.04-.31-.02-.43s-.56-1.34-.76-1.84c-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18s-.22-.16-.47-.28z"/></svg> <span id="placeLabel">Place order</span></button>
-    <div class="secure-line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> Pay when your order arrives · no card details needed now</div>
+    <div class="secure-line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> <span data-i18n="secure">Pay when your order arrives · no card details needed now</span></div>
   </div>
 </aside>
 
+<!-- Language picker -->
+<div class="city-back" id="langBack"></div>
+<div class="city-sheet" id="langSheet" role="dialog" aria-label="Choose language" data-i18n-aria="aria_lang">
+  <div class="drawer-handle"></div>
+  <h3 data-i18n="language">Language</h3>
+  <div class="city-list" id="langList" style="margin-top:14px;"></div>
+</div>
+
 <!-- City picker -->
 <div class="city-back" id="cityBack"></div>
-<div class="city-sheet" id="citySheet" role="dialog" aria-label="Choose delivery city">
+<div class="city-sheet" id="citySheet" role="dialog" aria-label="Choose delivery city" data-i18n-aria="aria_city">
   <div class="drawer-handle"></div>
-  <h3>Where should we deliver?</h3>
-  <p class="lead">Fees and timing update in your cart automatically.</p>
+  <h3 data-i18n="city_title">Where should we deliver?</h3>
+  <p class="lead" data-i18n="city_lead">Fees and timing update in your cart automatically.</p>
   <div class="city-list" id="cityList"></div>
 </div>
 
 <!-- WhatsApp chat widget -->
 <div class="wa" id="wa">
-  <div class="wa-panel" id="waPanel" role="dialog" aria-label="Chat on WhatsApp">
+  <div class="wa-panel" id="waPanel" role="dialog" aria-label="Chat on WhatsApp" data-i18n-aria="aria_chat">
     <div class="wa-head">
       <div class="wa-avatar">SU</div>
       <div class="wa-who">
         <strong>Smoking UAE</strong>
-        <span id="waStatus">Online · replies in minutes</span>
+        <span id="waStatus" data-i18n="wa_status">Online · replies in minutes</span>
       </div>
     </div>
     <div class="wa-body" id="waBody"></div>
     <div class="wa-quick" id="waQuick">
-      <button data-q="Hi! Is this in stock?">📦 Check stock</button>
-      <button data-q="Hi! How long does delivery take to my area?">🚚 Delivery times</button>
-      <button data-q="Hi! I'd like to place an order.">🛒 Place an order</button>
-      <button data-q="Hi! What are today's offers?">🔥 Today's offers</button>
+      <button data-q="Hi! Is this in stock?" data-q-key="wa_q1_msg" data-i18n="wa_q1">📦 Check stock</button>
+      <button data-q="Hi! How long does delivery take to my area?" data-q-key="wa_q2_msg" data-i18n="wa_q2">🚚 Delivery times</button>
+      <button data-q="Hi! I'd like to place an order." data-q-key="wa_q3_msg" data-i18n="wa_q3">🛒 Place an order</button>
+      <button data-q="Hi! What are today's offers?" data-q-key="wa_q4_msg" data-i18n="wa_q4">🔥 Today's offers</button>
     </div>
     <form class="wa-form" id="waForm">
-      <input id="waInput" type="text" placeholder="Type a message…" autocomplete="off">
-      <button class="wa-send" type="submit" aria-label="Send on WhatsApp">
+      <input id="waInput" type="text" placeholder="Type a message…" data-i18n-ph="wa_ph" autocomplete="off">
+      <button class="wa-send" type="submit" aria-label="Send on WhatsApp" data-i18n-aria="aria_send">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.4 20.4 21 12 3.4 3.6 3.4 10l12.6 2-12.6 2z"/></svg>
       </button>
     </form>
-    <div class="wa-note">Opens WhatsApp to continue the chat</div>
+    <div class="wa-note" data-i18n="wa_note">Opens WhatsApp to continue the chat</div>
   </div>
   <div class="wa-teaser" id="waTeaser">
-    <button class="wa-teaser-x" id="waTeaserX" aria-label="Dismiss">×</button>
-    <strong>Need help choosing? 💨</strong>
-    Chat with us on WhatsApp.
+    <button class="wa-teaser-x" id="waTeaserX" aria-label="Dismiss" data-i18n-aria="aria_dismiss">×</button>
+    <strong data-i18n="wa_teaser_title">Need help choosing? 💨</strong>
+    <span data-i18n="wa_teaser_text">Chat with us on WhatsApp.</span>
   </div>
-  <button class="wa-fab" id="waFab" aria-label="Chat on WhatsApp" aria-expanded="false" aria-controls="waPanel">
+  <button class="wa-fab" id="waFab" aria-label="Chat on WhatsApp" data-i18n-aria="aria_chat" aria-expanded="false" aria-controls="waPanel">
     <svg class="ic-wa" viewBox="0 0 24 24" fill="currentColor"><path d="M19.05 4.91A9.82 9.82 0 0 0 12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01zm-7.01 15.24c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.26 8.26 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c.02 4.54-3.68 8.23-8.22 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43s.17-.25.25-.41c.08-.17.04-.31-.02-.43s-.56-1.34-.76-1.84c-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18s-.22-.16-.47-.28z"/></svg>
     <svg class="ic-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
     <span class="wa-badge">1</span>
   </button>
 </div>
 
+<script src="i18n.js"></script>
 <script>
   // Load store content; the ?v= changes every minute so customers see admin updates promptly.
   document.write('<script src="data/site-data.js?v=' + Math.floor(Date.now() / 60000) + '"><\/script>');
@@ -1206,11 +1250,65 @@ const AED_SVG = `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2
   <path d="M3.2 9.3H15.5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
   <path d="M3.2 14.7H15.5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
 </svg>`;
-function money(n){ return `<span class="aed-icon">${AED_SVG}</span>${n}`; }
+function money(n){ return `<bdi dir="ltr"><span class="aed-icon">${AED_SVG}</span>${n}</bdi>`; }
 
 /* ---------------- Store content (data/site-data.js, managed in admin.html) ---------------- */
 const SITE = window.SITE_DATA;
 function esc(v){ return String(v ?? '').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+/* ---------------- Languages (i18n.js) ---------------- */
+const I18N = window.I18N;
+function pickLang(){
+  try{ const saved = localStorage.getItem('lang'); if(I18N.strings[saved]) return saved; }catch(e){}
+  for(const l of (navigator.languages || [navigator.language || 'en'])){
+    let c = String(l).toLowerCase().split('-')[0];
+    if(c === 'tl') c = 'fil';
+    if(I18N.strings[c]) return c;
+  }
+  return 'en';
+}
+let lang = pickLang();
+const langInfo = () => I18N.languages.find(l=>l.code===lang) || I18N.languages[0];
+function t(key, vars){
+  let s = I18N.strings[lang]?.[key] ?? I18N.strings.en[key] ?? key;
+  if(vars) for(const k in vars) s = s.split('{'+k+'}').join(vars[k]);
+  return s;
+}
+const tp = text => I18N.phrases[lang]?.[text] ?? text;   // text that comes from the store data
+function tItems(n){
+  const form = new Intl.PluralRules(lang === 'fil' ? 'en' : lang).select(n);
+  const key = I18N.strings[lang]?.['items_'+form] !== undefined ? 'items_'+form : 'items_other';
+  return t(key, {n});
+}
+const langListeners = [];
+function loadLangFont(){
+  const fam = {ar:'Noto+Sans+Arabic', fa:'Noto+Sans+Arabic', ur:'Noto+Sans+Arabic', hi:'Noto+Sans+Devanagari'}[lang];
+  if(!fam || document.getElementById('font-'+fam)) return;
+  const l = document.createElement('link');
+  l.id = 'font-'+fam; l.rel = 'stylesheet';
+  l.href = `https://fonts.googleapis.com/css2?family=${fam}:wght@400;500;600;700&display=swap`;
+  document.head.appendChild(l);
+}
+function applyLang(){
+  const info = langInfo();
+  document.documentElement.lang = lang;
+  document.documentElement.dir = info.dir;
+  loadLangFont();
+  document.querySelectorAll('[data-i18n]').forEach(el=>{ el.textContent = t(el.dataset.i18n); });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{ el.placeholder = t(el.dataset.i18nPh); });
+  document.querySelectorAll('[data-i18n-aria]').forEach(el=>{ el.setAttribute('aria-label', t(el.dataset.i18nAria)); });
+  document.querySelectorAll('[data-q-key]').forEach(el=>{ el.dataset.q = t(el.dataset.qKey); });
+  document.querySelectorAll('.js-lang-name').forEach(el=>{ el.textContent = info.name; });
+  document.querySelectorAll('.js-lang-code').forEach(el=>{ el.textContent = info.code.toUpperCase(); });
+}
+function setLang(code){
+  if(!I18N.strings[code]) return;
+  lang = code;
+  try{ localStorage.setItem('lang', code); }catch(e){}
+  applyLang();
+  langListeners.forEach(fn=>fn());
+}
+applyLang();
 function mediaHTML(p){
   return p.image ? `<img src="${esc(p.image)}" alt="${esc(p.name)}" loading="lazy" style="width:100%;height:100%;object-fit:cover;">` : ICONS[p.cat];
 }
@@ -1248,12 +1346,14 @@ function cartTotals(){
 /* ---------------- Category rail ---------------- */
 const catRail = document.getElementById('catRail');
 const cats = ['all','pod','disposable','eliquid','device','accessory','tobacco','pouches'];
-catRail.innerHTML = cats.map(c=>`
-  <button class="cat-item ${c==='all'?'active':''}" data-cat="${c}">
+function renderCats(){
+  catRail.innerHTML = cats.map(c=>`
+  <button class="cat-item ${c===activeCat?'active':''}" data-cat="${c}">
     <div class="cat-circle" style="${c==='all'?'':`color:${CAT_COLOR[c]};`}">${ICONS[c]}</div>
-    <span>${CAT_LABEL[c]}</span>
-  </button>
-`).join('');
+    <span>${t('cat_'+c)}</span>
+  </button>`).join('');
+}
+renderCats();
 catRail.addEventListener('click', e=>{
   const btn = e.target.closest('.cat-item');
   if(!btn) return;
@@ -1265,9 +1365,11 @@ catRail.addEventListener('click', e=>{
 
 /* ---------------- Filter chips (full menu) ---------------- */
 const filtersEl = document.getElementById('filters');
-filtersEl.innerHTML = cats.map(c=>`
-  <button class="filter-chip ${c==='all'?'active':''}" data-cat="${c}">${CAT_LABEL[c]}</button>
-`).join('');
+function renderFilters(){
+  filtersEl.innerHTML = cats.map(c=>`
+  <button class="filter-chip ${c===activeCat?'active':''}" data-cat="${c}">${t('cat_'+c)}</button>`).join('');
+}
+renderFilters();
 filtersEl.addEventListener('click', e=>{
   const btn = e.target.closest('.filter-chip');
   if(!btn) return;
@@ -1287,8 +1389,8 @@ function renderPopular(){
   const featured = imagesFirst(PRODUCTS.filter(p=>p.badge));
   popScroll.innerHTML = featured.map(p=>`
     <div class="pop-card">
-      <span class="pop-badge" style="background:${BADGE_COLOR[p.badge]};">${esc(p.badge.toUpperCase())}</span>
-      <button class="pop-fav ${favorites.has(p.id)?'active':''}" data-fav="${p.id}" aria-label="Save">
+      <span class="pop-badge" style="background:${BADGE_COLOR[p.badge]};">${esc(t('badge_'+p.badge) === 'badge_'+p.badge ? p.badge.toUpperCase() : t('badge_'+p.badge))}</span>
+      <button class="pop-fav ${favorites.has(p.id)?'active':''}" data-fav="${p.id}" aria-label="${t('aria_save')}">
         <svg viewBox="0 0 24 24" fill="${favorites.has(p.id)?'currentColor':'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
       </button>
       <div class="pop-icon-wrap" style="background:${mediaBg(p)}; color:${CAT_COLOR[p.cat]};">${mediaHTML(p)}</div>
@@ -1297,7 +1399,7 @@ function renderPopular(){
       ${p.rating ? `<div class="pop-rating">${STAR} ${esc(p.rating)} (${esc(p.reviews)})</div>` : ''}
       <div class="pop-bottom">
         <div class="pop-price">${money(p.price)}</div>
-        <button class="pop-add" data-add="${p.id}" aria-label="Add to cart">
+        <button class="pop-add" data-add="${p.id}" aria-label="${t('aria_add')}">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
         </button>
       </div>
@@ -1320,11 +1422,11 @@ function renderGrid(){
   const q = searchQuery.trim().toLowerCase();
   const filtered = PRODUCTS.filter(p=>
     (activeCat==='all' || p.cat===activeCat) &&
-    (!q || `${p.name} ${p.desc} ${p.tags.join(' ')} ${CAT_LABEL[p.cat]}`.toLowerCase().includes(q))
+    (!q || `${p.name} ${p.desc} ${p.tags.join(' ')} ${CAT_LABEL[p.cat]} ${t('cat_'+p.cat)}`.toLowerCase().includes(q))
   );
   const list = imagesFirst(filtered);
-  countEl.textContent = `${list.length} item${list.length!==1?'s':''}`;
-  if(!list.length){ gridEl.innerHTML = `<div class="drawer-empty">No matches${q?` for “${q.replace(/[<>&]/g,'')}”`:''}.</div>`; return; }
+  countEl.textContent = tItems(list.length);
+  if(!list.length){ gridEl.innerHTML = `<div class="drawer-empty">${esc(q ? t('no_matches_q', {q}) : t('no_matches'))}</div>`; return; }
   gridEl.innerHTML = list.map(p=>`
     <div class="g-card">
       <div class="g-icon" style="background:${mediaBg(p)}; color:${CAT_COLOR[p.cat]};">${mediaHTML(p)}</div>
@@ -1335,7 +1437,7 @@ function renderGrid(){
       </div>
       <div class="g-right">
         <div class="g-price">${money(p.price)}</div>
-        <button class="g-add ${cart[p.id]?'in-cart':''}" data-add="${p.id}" aria-label="Add to cart">
+        <button class="g-add ${cart[p.id]?'in-cart':''}" data-add="${p.id}" aria-label="${t('aria_add')}">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
         </button>
       </div>
@@ -1378,7 +1480,7 @@ function updateCartUI(){
 
   const ids = Object.keys(cart);
   if(ids.length===0){
-    drawerItems.innerHTML = `<div class="drawer-empty">Your order is empty.<br>Add a flavor or a device to get started.</div>`;
+    drawerItems.innerHTML = `<div class="drawer-empty">${esc(t('cart_empty'))}<br>${esc(t('cart_empty_hint'))}</div>`;
     drawerFoot.style.display = 'none';
     return;
   }
@@ -1391,7 +1493,7 @@ function updateCartUI(){
         <div class="d-icon" style="background:${mediaBg(p)}; color:${CAT_COLOR[p.cat]};">${mediaHTML(p)}</div>
         <div class="d-info">
           <h5>${esc(p.name)}</h5>
-          <span>${money(p.price)} · ${CAT_LABEL[p.cat]}</span>
+          <span>${money(p.price)} · ${t('cat_'+p.cat)}</span>
         </div>
         <div class="d-qty">
           <button data-qty="${id}" data-delta="-1">–</button>
@@ -1462,27 +1564,28 @@ const citySheet = document.getElementById('citySheet');
 const cityBack = document.getElementById('cityBack');
 const cityList = document.getElementById('cityList');
 const delivGrid = document.getElementById('delivGrid');
-function feeLabel(c){ return `Delivery ${money(c.fee)}`; }
+function feeLabel(c){ return t('delivery_fee', {fee: money(c.fee)}); }
 function renderCityUI(){
   const c = currentCity();
-  document.querySelectorAll('.js-city').forEach(el=>el.textContent = c.name);
-  document.querySelectorAll('.js-eta').forEach(el=>el.textContent = c.eta);
-  document.querySelectorAll('.js-eta-long').forEach(el=>el.textContent = c.etaLong);
+  document.querySelectorAll('.js-city').forEach(el=>el.textContent = tp(c.name));
+  document.querySelectorAll('.js-eta').forEach(el=>el.textContent = tp(c.eta));
+  document.querySelectorAll('.js-eta-long').forEach(el=>el.textContent = tp(c.etaLong));
   cityList.innerHTML = DELIVERY.map((d,i)=>`
     <button class="city-opt ${d.id===cityId?'active':''}" data-city="${esc(d.id)}" style="animation-delay:${i*35}ms">
       <span class="ico">${esc(d.emoji)}</span>
-      <span class="nm"><b>${esc(d.name)}</b><span>${esc(d.etaLong)}</span></span>
-      <span class="fee">${money(d.fee)}<small>delivery</small></span>
+      <span class="nm"><b>${esc(tp(d.name))}</b><span>${esc(tp(d.etaLong))}</span></span>
+      <span class="fee">${money(d.fee)}<small>${esc(t('delivery_word'))}</small></span>
     </button>`).join('');
   delivGrid.innerHTML = DELIVERY.map(d=>`
     <button class="deliv-card ${d.id===cityId?'active':''}" data-city="${esc(d.id)}">
-      <span class="top"><span class="em">${esc(d.emoji)}</span><span class="spd" style="background:${SPEED_COLOR[d.speed]}">${d.speed}</span></span>
-      <b>${esc(d.name)}</b>
-      <span>${esc(d.etaLong)}</span>
+      <span class="top"><span class="em">${esc(d.emoji)}</span><span class="spd" style="background:${SPEED_COLOR[d.speed] || 'var(--amber)'}">${esc(tp(d.speed))}</span></span>
+      <b>${esc(tp(d.name))}</b>
+      <span>${esc(tp(d.etaLong))}</span>
       <span>${feeLabel(d)}</span>
     </button>`).join('');
 }
 function setCity(id){
+  if(!DELIVERY.some(c=>c.id===id)) return;
   cityId = id;
   try{ localStorage.setItem('deliveryCity', id); }catch(e){}
   renderCityUI();
@@ -1492,7 +1595,7 @@ function openCity(){ citySheet.classList.add('open'); cityBack.classList.add('op
 function closeCity(){ citySheet.classList.remove('open'); cityBack.classList.remove('open'); }
 document.addEventListener('click', e=>{
   if(e.target.closest('[data-open-city]')){ openCity(); return; }
-  const opt = e.target.closest('.city-opt');
+  const opt = e.target.closest('.city-opt[data-city]');
   if(opt){ setCity(opt.dataset.city); setTimeout(closeCity, 220); return; }
   const card = e.target.closest('.deliv-card');
   if(card) setCity(card.dataset.city);
@@ -1527,10 +1630,10 @@ function renderPayments(){
   document.getElementById('payGrid').innerHTML = PAYMENTS.map(x=>`
     <button class="pay-opt ${x.id===payId?'active':''}" data-pay="${x.id}" aria-pressed="${x.id===payId}">
       <span class="logos">${x.logos.map(pmLogo).join('')}</span>
-      <b>${x.name}</b>
+      <b>${esc(t('pay_'+x.id))}</b>
     </button>`).join('');
-  document.getElementById('payNote').innerHTML = INFO_ICON + `<span>${m.note}</span>`;
-  document.getElementById('placeLabel').textContent = `Place order · ${m.name}`;
+  document.getElementById('payNote').innerHTML = INFO_ICON + `<span>${esc(t('note_'+m.id))}</span>`;
+  document.getElementById('placeLabel').textContent = `${t('place_order')} · ${t('pay_'+m.id)}`;
 }
 document.getElementById('payGrid').addEventListener('click', e=>{
   const b = e.target.closest('[data-pay]');
@@ -1558,11 +1661,14 @@ function openWhatsApp(text){
   const form = document.getElementById('waForm');
   const input = document.getElementById('waInput');
   const now = ()=> new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-  const GREETING = [
-    "Marhaba! 👋 Welcome to Smoking UAE.",
-    "Ask us about flavors, stock or same-day delivery — we usually reply within minutes."
-  ];
+  const greeting = () => [t('wa_greet1'), t('wa_greet2')];
   let greeted = false, timers = [];
+  langListeners.push(()=>{
+    timers.forEach(clearTimeout); timers = [];
+    greeted = false; body.innerHTML = '';
+    quick.classList.remove('show');
+    if(wa.classList.contains('open')) greet();
+  });
 
   function addMsg(text, me){
     const m = document.createElement('div');
@@ -1583,8 +1689,8 @@ function openWhatsApp(text){
   }
   async function greet(){
     greeted = true;
-    body.innerHTML = '<div class="wa-day">Today</div>';
-    for(const [i, line] of GREETING.entries()) await typeThen(line, i===0 ? 900 : 1300);
+    body.innerHTML = `<div class="wa-day">${esc(t('wa_today'))}</div>`;
+    for(const [i, line] of greeting().entries()) await typeThen(line, i===0 ? 900 : 1300);
     quick.classList.add('show');
   }
   function setOpen(open){
@@ -1626,9 +1732,31 @@ function openWhatsApp(text){
     });
     const {subtotal, delivery, total} = cartTotals();
     const city = currentCity();
-    openWhatsApp(`Hi Smoking UAE! I'd like to order:\n${lines.join('\n')}\n\nSubtotal: AED ${subtotal.toFixed(2)}\nDelivery to ${city.name} (${city.etaLong}): AED ${delivery.toFixed(2)}\nTotal incl. VAT: AED ${total.toFixed(2)}\nPayment: ${currentPayment().name}\n\nDelivery address: `);
+    openWhatsApp(`Hi Smoking UAE! I'd like to order:\n${lines.join('\n')}\n\nSubtotal: AED ${subtotal.toFixed(2)}\nDelivery to ${city.name} (${city.etaLong}): AED ${delivery.toFixed(2)}\nTotal incl. VAT: AED ${total.toFixed(2)}\nPayment: ${currentPayment().name}${lang !== 'en' ? `\nCustomer language: ${langInfo().english}` : ''}\n\nDelivery address: `);
   });
 })();
+
+/* ---------------- Language picker ---------------- */
+const langSheet = document.getElementById('langSheet');
+const langBack = document.getElementById('langBack');
+const langList = document.getElementById('langList');
+function renderLangList(){
+  langList.innerHTML = I18N.languages.map((l,i)=>`
+    <button class="city-opt lang-opt ${l.code===lang?'active':''}" data-lang="${l.code}" style="animation-delay:${i*35}ms">
+      <span class="ico">${l.code.toUpperCase()}</span>
+      <span class="nm"><b lang="${l.code}" dir="${l.dir}" style="display:block; text-align:left;">${esc(l.name)}</b><span>${esc(l.english)}</span></span>
+    </button>`).join('');
+}
+function openLang(){ renderLangList(); langSheet.classList.add('open'); langBack.classList.add('open'); }
+function closeLang(){ langSheet.classList.remove('open'); langBack.classList.remove('open'); }
+document.addEventListener('click', e=>{
+  if(e.target.closest('[data-open-lang]')){ openLang(); return; }
+  const opt = e.target.closest('[data-lang]');
+  if(opt){ setLang(opt.dataset.lang); renderLangList(); setTimeout(closeLang, 200); }
+});
+langBack.addEventListener('click', closeLang);
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeLang(); });
+langListeners.push(renderCats, renderFilters, renderPopular, renderGrid, updateCartUI, renderCityUI, renderPayments);
 
 /* ---------------- Banner carousel ---------------- */
 const SLIDES = SITE.slides
