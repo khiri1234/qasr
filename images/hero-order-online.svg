@@ -1,0 +1,253 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" font-family="'Space Grotesk','Inter','Segoe UI',Arial,sans-serif">
+  <title>Order online — delivered across the UAE · Smoking UAE</title>
+  <defs>
+    <radialGradient id="glowMint" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#57E6C9" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#57E6C9" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowViolet" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#B79CFF" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#B79CFF" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowAmber" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#FFB454" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#FFB454" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0B1412"/>
+      <stop offset="0.55" stop-color="#101318"/>
+      <stop offset="1" stop-color="#17122A"/>
+    </linearGradient>
+    <pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.3" fill="#FFFFFF" fill-opacity="0.06"/>
+    </pattern>
+    <linearGradient id="mintBtn" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7BF2DA"/>
+      <stop offset="1" stop-color="#2FD3B0"/>
+    </linearGradient>
+    <linearGradient id="phoneFrame" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3A3F48"/>
+      <stop offset="0.5" stop-color="#1B1E24"/>
+      <stop offset="1" stop-color="#2B2F37"/>
+    </linearGradient>
+    <linearGradient id="tileA" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFD39A"/><stop offset="1" stop-color="#FF9F5A"/></linearGradient>
+    <linearGradient id="tileB" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#D9CCFF"/><stop offset="1" stop-color="#9B7CFF"/></linearGradient>
+    <linearGradient id="tileC" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#B8F7EA"/><stop offset="1" stop-color="#3CD6B6"/></linearGradient>
+    <linearGradient id="tileD" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFC2D9"/><stop offset="1" stop-color="#F2789F"/></linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="28" stdDeviation="30" flood-color="#000000" flood-opacity="0.55"/>
+    </filter>
+    <filter id="softShadow" x="-30%" y="-30%" width="160%" height="170%">
+      <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="#000000" flood-opacity="0.35"/>
+    </filter>
+    <filter id="mintGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="0" stdDeviation="18" flood-color="#57E6C9" flood-opacity="0.45"/>
+    </filter>
+    <clipPath id="screenClip"><rect x="-172" y="-352" width="344" height="704" rx="44"/></clipPath>
+    <!-- Generic disposable device silhouette, drawn centered at 0,0 -->
+    <g id="device">
+      <rect x="-15" y="-40" width="30" height="80" rx="11" fill="#FFFFFF" fill-opacity="0.92"/>
+      <rect x="-9" y="-54" width="18" height="18" rx="6" fill="#FFFFFF" fill-opacity="0.75"/>
+      <rect x="-15" y="4" width="30" height="36" rx="11" fill="#15171B" fill-opacity="0.18"/>
+      <circle cx="0" cy="-18" r="4" fill="#15171B" fill-opacity="0.25"/>
+    </g>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <rect width="1600" height="900" fill="url(#dots)"/>
+  <circle cx="1240" cy="170" r="520" fill="url(#glowMint)"/>
+  <circle cx="120" cy="900" r="520" fill="url(#glowViolet)"/>
+  <circle cx="1500" cy="860" r="360" fill="url(#glowAmber)"/>
+
+  <!-- Delivery route across the canvas -->
+  <path d="M 820 820 C 980 760, 1000 610, 1120 560 S 1420 470, 1470 250" fill="none" stroke="#57E6C9" stroke-opacity="0.55" stroke-width="4" stroke-dasharray="2 16" stroke-linecap="round"/>
+
+  <!-- ===== Left: message ===== -->
+  <g transform="translate(110 0)">
+    <!-- Eyebrow pill -->
+    <g transform="translate(0 118)">
+      <rect width="330" height="50" rx="25" fill="#FFFFFF" fill-opacity="0.08" stroke="#FFFFFF" stroke-opacity="0.18"/>
+      <circle cx="30" cy="25" r="8" fill="#57E6C9"/>
+      <circle cx="30" cy="25" r="15" fill="#57E6C9" fill-opacity="0.25"/>
+      <text x="54" y="33" font-size="21" font-weight="700" letter-spacing="2.4" fill="#F4F2ED">NOW ORDER ONLINE</text>
+    </g>
+
+    <!-- Headline -->
+    <text font-weight="700" font-size="112" letter-spacing="-2" fill="#F4F2ED">
+      <tspan x="-4" y="290">TAP.</tspan>
+      <tspan x="-4" y="400">ORDER.</tspan>
+      <tspan x="-4" y="510" fill="#57E6C9">DELIVERED.</tspan>
+    </text>
+
+    <!-- Subline -->
+    <text x="0" y="578" font-family="'Inter','Segoe UI',Arial,sans-serif" font-size="29" fill="#C9CDD1">Same-day delivery in Dubai · all 7 emirates covered</text>
+
+    <!-- CTAs -->
+    <g transform="translate(0 626)" filter="url(#mintGlow)">
+      <rect width="258" height="76" rx="38" fill="url(#mintBtn)"/>
+      <text x="36" y="48" font-size="27" font-weight="700" fill="#07120E">Shop now</text>
+      <circle cx="214" cy="38" r="24" fill="#07120E" fill-opacity="0.14"/>
+      <path d="M204 38 h20 M216 29 l9 9 -9 9" fill="none" stroke="#07120E" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+    <g transform="translate(282 626)">
+      <rect width="338" height="76" rx="38" fill="#25D366" fill-opacity="0.12" stroke="#25D366" stroke-width="2"/>
+      <!-- WhatsApp glyph -->
+      <g transform="translate(26 20) scale(1.5)" fill="#25D366">
+        <path d="M19.05 4.91A9.82 9.82 0 0 0 12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01zm-7.01 15.24c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.26 8.26 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c.02 4.54-3.68 8.23-8.22 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43s.17-.25.25-.41c.08-.17.04-.31-.02-.43s-.56-1.34-.76-1.84c-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18s-.22-.16-.47-.28z"/>
+      </g>
+      <text x="78" y="48" font-size="25" font-weight="700" fill="#E9FBEF">Order on WhatsApp</text>
+    </g>
+
+    <!-- Payment row -->
+    <g transform="translate(0 744)">
+      <text x="0" y="26" font-family="'Inter','Segoe UI',Arial,sans-serif" font-size="17" font-weight="700" letter-spacing="1.6" fill="#8E959B">PAY ON DELIVERY</text>
+      <g transform="translate(212 0)">
+        <rect width="64" height="40" rx="8" fill="#1F9D55"/>
+        <rect x="12" y="10" width="40" height="20" rx="3" fill="none" stroke="#FFFFFF" stroke-width="2.2"/>
+        <circle cx="32" cy="20" r="5" fill="none" stroke="#FFFFFF" stroke-width="2.2"/>
+      </g>
+      <g transform="translate(288 0)">
+        <rect width="64" height="40" rx="8" fill="#FFFFFF"/>
+        <text x="32" y="27" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="17" font-weight="900" font-style="italic" fill="#1A1F71">VISA</text>
+      </g>
+      <g transform="translate(364 0)">
+        <rect width="64" height="40" rx="8" fill="#16181D" stroke="#FFFFFF" stroke-opacity="0.15"/>
+        <circle cx="26" cy="20" r="11" fill="#EB001B"/>
+        <circle cx="38" cy="20" r="11" fill="#F79E1B"/>
+        <path d="M32 10.8a11 11 0 0 1 0 18.4a11 11 0 0 1 0-18.4z" fill="#FF5F00"/>
+      </g>
+      <g transform="translate(440 0)">
+        <rect width="64" height="40" rx="8" fill="#2E77BC"/>
+        <text x="32" y="26" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="900" fill="#FFFFFF" letter-spacing="0.6">AMEX</text>
+      </g>
+      <g transform="translate(516 0)">
+        <rect width="64" height="40" rx="8" fill="#000000" stroke="#FFFFFF" stroke-opacity="0.2"/>
+        <path transform="translate(9 7) scale(1.25)" d="M11.9 3.1c.4-.5.7-1.2.6-1.9-.6 0-1.3.4-1.7.9-.4.4-.7 1.1-.6 1.8.7.1 1.3-.3 1.7-.8zm.6 1c-.9-.1-1.7.5-2.2.5-.4 0-1.1-.5-1.9-.5-1 0-1.9.6-2.4 1.5-1 1.8-.3 4.4.7 5.8.5.7 1 1.4 1.8 1.4.7 0 1-.5 1.9-.5s1.1.5 1.9.5c.8 0 1.3-.7 1.7-1.4.5-.8.8-1.6.8-1.6s-1.5-.6-1.5-2.3c0-1.4 1.2-2.1 1.2-2.1-.6-1-1.7-1.1-2-1.3z" fill="#FFFFFF"/>
+        <text x="40" y="26" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" font-weight="700" fill="#FFFFFF">Pay</text>
+      </g>
+    </g>
+
+    <!-- Responsible-retail notice -->
+    <text x="0" y="850" font-family="'Inter','Segoe UI',Arial,sans-serif" font-size="16" fill="#80878D">18+ only. Nicotine is an addictive chemical. Age is verified at the door.</text>
+  </g>
+
+  <!-- ===== Right: phone with the store ===== -->
+  <g transform="translate(1175 470) rotate(-7)">
+    <g filter="url(#shadow)">
+      <rect x="-190" y="-372" width="380" height="744" rx="60" fill="url(#phoneFrame)"/>
+    </g>
+    <rect x="-190" y="-372" width="380" height="744" rx="60" fill="none" stroke="#FFFFFF" stroke-opacity="0.14" stroke-width="2"/>
+    <g clip-path="url(#screenClip)">
+      <rect x="-172" y="-352" width="344" height="704" fill="#F7F4EE"/>
+      <!-- status / header -->
+      <rect x="-40" y="-340" width="80" height="22" rx="11" fill="#0B0C0F"/>
+      <text x="0" y="-278" text-anchor="middle" font-size="22" font-weight="700" fill="#0EA988" letter-spacing="0.6">SMOKING UAE</text>
+      <text x="0" y="-256" text-anchor="middle" font-family="'Inter','Segoe UI',Arial,sans-serif" font-size="12" fill="#6B7076">Pure clouds. Every time.</text>
+      <!-- deliver-to pill -->
+      <rect x="-150" y="-236" width="300" height="42" rx="14" fill="#E4F7F1" stroke="#15171B" stroke-opacity="0.08"/>
+      <rect x="-140" y="-229" width="28" height="28" rx="9" fill="#57E6C9"/>
+      <path d="M-126 -207 c-6 -6 -8 -9 -8 -12 a8 8 0 0 1 16 0 c0 3 -2 6 -8 12z" fill="#07120E"/>
+      <text x="-102" y="-209" font-family="'Inter','Segoe UI',Arial,sans-serif" font-size="14" font-weight="700" fill="#15171B">Dubai</text>
+      <text x="-56" y="-209" font-family="'Inter','Segoe UI',Arial,sans-serif" font-size="14" font-weight="700" fill="#0EA988">· Same day</text>
+
+      <!-- product grid -->
+      <g font-family="'Inter','Segoe UI',Arial,sans-serif">
+        <g transform="translate(-150 -178)">
+          <rect width="144" height="182" rx="18" fill="#FFFFFF" stroke="#15171B" stroke-opacity="0.08"/>
+          <rect x="10" y="10" width="124" height="96" rx="12" fill="url(#tileA)"/>
+          <use href="#device" transform="translate(72 60) rotate(12)"/>
+          <rect x="14" y="16" width="62" height="18" rx="9" fill="#57E6C9"/>
+          <text x="45" y="29" text-anchor="middle" font-size="10" font-weight="700" fill="#07120E">BESTSELLER</text>
+          <rect x="12" y="118" width="96" height="10" rx="5" fill="#15171B" fill-opacity="0.75"/>
+          <rect x="12" y="136" width="70" height="8" rx="4" fill="#15171B" fill-opacity="0.25"/>
+          <text x="12" y="168" font-size="15" font-weight="700" fill="#15171B">AED 45</text>
+          <circle cx="120" cy="162" r="13" fill="#57E6C9"/>
+          <path d="M120 156 v12 M114 162 h12" stroke="#07120E" stroke-width="2.4" stroke-linecap="round"/>
+        </g>
+        <g transform="translate(6 -178)">
+          <rect width="144" height="182" rx="18" fill="#FFFFFF" stroke="#15171B" stroke-opacity="0.08"/>
+          <rect x="10" y="10" width="124" height="96" rx="12" fill="url(#tileB)"/>
+          <use href="#device" transform="translate(72 60) rotate(-10)"/>
+          <rect x="14" y="16" width="44" height="18" rx="9" fill="#FFB454"/>
+          <text x="36" y="29" text-anchor="middle" font-size="10" font-weight="700" fill="#07120E">NEW</text>
+          <rect x="12" y="118" width="104" height="10" rx="5" fill="#15171B" fill-opacity="0.75"/>
+          <rect x="12" y="136" width="62" height="8" rx="4" fill="#15171B" fill-opacity="0.25"/>
+          <text x="12" y="168" font-size="15" font-weight="700" fill="#15171B">AED 68</text>
+          <circle cx="120" cy="162" r="13" fill="#57E6C9"/>
+          <path d="M120 156 v12 M114 162 h12" stroke="#07120E" stroke-width="2.4" stroke-linecap="round"/>
+        </g>
+        <g transform="translate(-150 16)">
+          <rect width="144" height="182" rx="18" fill="#FFFFFF" stroke="#15171B" stroke-opacity="0.08"/>
+          <rect x="10" y="10" width="124" height="96" rx="12" fill="url(#tileC)"/>
+          <use href="#device" transform="translate(72 60) rotate(-4)"/>
+          <rect x="12" y="118" width="90" height="10" rx="5" fill="#15171B" fill-opacity="0.75"/>
+          <rect x="12" y="136" width="74" height="8" rx="4" fill="#15171B" fill-opacity="0.25"/>
+          <text x="12" y="168" font-size="15" font-weight="700" fill="#15171B">AED 135</text>
+          <circle cx="120" cy="162" r="13" fill="#57E6C9"/>
+          <path d="M120 156 v12 M114 162 h12" stroke="#07120E" stroke-width="2.4" stroke-linecap="round"/>
+        </g>
+        <g transform="translate(6 16)">
+          <rect width="144" height="182" rx="18" fill="#FFFFFF" stroke="#15171B" stroke-opacity="0.08"/>
+          <rect x="10" y="10" width="124" height="96" rx="12" fill="url(#tileD)"/>
+          <circle cx="72" cy="58" r="30" fill="#FFFFFF" fill-opacity="0.9"/>
+          <circle cx="72" cy="58" r="22" fill="none" stroke="#15171B" stroke-opacity="0.2" stroke-width="3"/>
+          <rect x="12" y="118" width="100" height="10" rx="5" fill="#15171B" fill-opacity="0.75"/>
+          <rect x="12" y="136" width="58" height="8" rx="4" fill="#15171B" fill-opacity="0.25"/>
+          <text x="12" y="168" font-size="15" font-weight="700" fill="#15171B">AED 28</text>
+          <circle cx="120" cy="162" r="13" fill="#57E6C9"/>
+          <path d="M120 156 v12 M114 162 h12" stroke="#07120E" stroke-width="2.4" stroke-linecap="round"/>
+        </g>
+
+        <!-- order summary -->
+        <rect x="-150" y="214" width="300" height="56" rx="14" fill="#FFFFFF" stroke="#15171B" stroke-opacity="0.08"/>
+        <text x="-134" y="238" font-size="12" fill="#6B7076">Delivery · Dubai</text>
+        <text x="-134" y="258" font-size="15" font-weight="700" fill="#15171B">Total  AED 165.90</text>
+        <rect x="58" y="226" width="80" height="32" rx="10" fill="#E4F7F1"/>
+        <text x="98" y="247" text-anchor="middle" font-size="12" font-weight="700" fill="#0EA988">Cash / Card</text>
+
+        <!-- place order button -->
+        <rect x="-150" y="284" width="300" height="52" rx="26" fill="#15171B"/>
+        <g transform="translate(-92 297) scale(1.05)" fill="#25D366">
+          <path d="M19.05 4.91A9.82 9.82 0 0 0 12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01z"/>
+        </g>
+        <text x="12" y="316" text-anchor="middle" font-size="16" font-weight="700" fill="#F7F4EE">Place order</text>
+      </g>
+    </g>
+    <!-- side button -->
+    <rect x="188" y="-200" width="6" height="90" rx="3" fill="#2B2F37"/>
+  </g>
+
+  <!-- ===== Floating status cards ===== -->
+  <!-- Order confirmed -->
+  <g transform="translate(772 150) rotate(-4)" filter="url(#softShadow)">
+    <rect width="250" height="84" rx="20" fill="#FFFFFF"/>
+    <circle cx="42" cy="42" r="22" fill="#57E6C9"/>
+    <path d="M32 42 l7 7 13 -14" fill="none" stroke="#07120E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="76" y="38" font-size="19" font-weight="700" fill="#15171B">Order confirmed</text>
+    <text x="76" y="62" font-family="'Inter','Segoe UI',Arial,sans-serif" font-size="15" fill="#6B7076">via WhatsApp · 2 min ago</text>
+  </g>
+
+  <!-- Out for delivery -->
+  <g transform="translate(762 668) rotate(3)" filter="url(#softShadow)">
+    <rect width="286" height="92" rx="22" fill="#15171B" stroke="#FFFFFF" stroke-opacity="0.12"/>
+    <rect x="18" y="18" width="56" height="56" rx="16" fill="#FFB454"/>
+    <g transform="translate(29 30)" fill="none" stroke="#241300" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M1 3h20v17H1z"/><path d="M21 9h7l5 6v5H21z"/><circle cx="8" cy="22" r="3.4" fill="#FFB454"/><circle cx="26" cy="22" r="3.4" fill="#FFB454"/>
+    </g>
+    <text x="92" y="42" font-size="20" font-weight="700" fill="#F4F2ED">Out for delivery</text>
+    <text x="92" y="67" font-family="'Inter','Segoe UI',Arial,sans-serif" font-size="15" fill="#AEB4B9">Arriving in 2–4 hours</text>
+  </g>
+
+  <!-- Location pin + city -->
+  <g transform="translate(1440 200)">
+    <circle cx="30" cy="70" r="46" fill="#57E6C9" fill-opacity="0.14"/>
+    <circle cx="30" cy="70" r="26" fill="#57E6C9" fill-opacity="0.2"/>
+    <path d="M30 78 c-16 -16 -22 -25 -22 -34 a22 22 0 0 1 44 0 c0 9 -6 18 -22 34z" fill="#57E6C9"/>
+    <circle cx="30" cy="44" r="8" fill="#0B1412"/>
+    <g transform="translate(-66 92)" filter="url(#softShadow)">
+      <rect width="130" height="40" rx="20" fill="#FFFFFF"/>
+      <text x="65" y="27" text-anchor="middle" font-size="17" font-weight="700" fill="#15171B">All 7 emirates</text>
+    </g>
+  </g>
+</svg>
