@@ -638,6 +638,19 @@
     .footer-note .fn-brand{grid-row:span 3;}
   }
 
+  /* ---------- Flavor chips ---------- */
+  .flv{display:flex; gap:5px; overflow-x:auto; scrollbar-width:none; margin:2px 0 8px; padding-bottom:1px;}
+  .flv::-webkit-scrollbar{display:none;}
+  .flv-chip{flex:none; border:1px solid var(--stroke); background:var(--panel); color:var(--text); font-size:10.5px; font-weight:600; padding:4px 9px; border-radius:999px; transition:background .15s, border-color .15s;}
+  .flv-chip:hover{border-color:var(--mint-ink);}
+  .flv-chip.on{background:var(--text); color:var(--void); border-color:transparent;}
+  .flv-chip.out{opacity:.45; text-decoration:line-through; cursor:not-allowed;}
+  .g-info .flv{margin:0 0 6px;}
+  .sold{font-size:11px; font-weight:700; color:#B42318; font-family:'Inter',sans-serif;}
+  .pop-add:disabled, .g-add:disabled{opacity:.35; cursor:not-allowed;}
+  .d-flv{font-weight:600; color:var(--text); margin-inline-start:4px;}
+  @media (min-width:960px){ .flv-chip{font-size:11.5px; padding:5px 11px;} }
+
   /* ---------- Language switcher ---------- */
   .lang-code{position:absolute; bottom:-6px; left:50%; transform:translateX(-50%); background:var(--text); color:var(--void); font-size:8.5px; font-weight:700; letter-spacing:.04em; padding:1px 5px; border-radius:999px; border:2px solid var(--void); line-height:1.3;}
   .lang-pill{display:flex; align-items:center; gap:7px; height:44px; padding:0 14px; border-radius:999px; background:var(--panel); border:1px solid var(--stroke); box-shadow:var(--shadow); color:var(--text); font-size:13px; font-weight:600;}
@@ -1310,11 +1323,11 @@ function setLang(code){
   langListeners.forEach(fn=>fn());
 }
 applyLang();
-function mediaHTML(p){
-  return p.image ? `<img src="${esc(p.image)}" alt="${esc(p.name)}" loading="lazy" style="width:100%;height:100%;object-fit:cover;">` : ICONS[p.cat];
+function mediaHTML(p, image = p.image){
+  return image ? `<img src="${esc(image)}" alt="${esc(p.name)}" loading="lazy" style="width:100%;height:100%;object-fit:cover;">` : ICONS[p.cat];
 }
-function mediaBg(p){
-  return p.image ? 'transparent' : `${CAT_COLOR[p.cat]}1f`;
+function mediaBg(p, image = p.image){
+  return image ? 'transparent' : `${CAT_COLOR[p.cat]}1f`;
 }
 
 /* ---------------- Product data ---------------- */
@@ -1328,6 +1341,47 @@ let cart = {};
 let favorites = new Set();
 let searchQuery = '';
 
+/* ---------------- Flavors ----------------
+   A product may list flavors: [{id, name, image?, price?, out?}]. A flavor's photo and price
+   replace the product's when set; "out" marks it out of stock. Cart keys are "id" or "id:flavorId". */
+const flavorsOf = p => (p && p.flavors) || [];
+const selFlavor = {};   // product id -> chosen flavor id
+function currentFlavor(p){
+  const fl = flavorsOf(p);
+  if(!fl.length) return null;
+  const chosen = fl.find(f=>f.id===selFlavor[p.id]);
+  return (chosen && !chosen.out) ? chosen : (fl.find(f=>!f.out) || fl[0]);
+}
+const flavorPrice = (p, f) => (f && f.price !== undefined && f.price !== null && f.price !== '') ? Number(f.price) : p.price;
+function productView(p){
+  const f = currentFlavor(p);
+  const fl = flavorsOf(p);
+  return { flavor: f, image: (f && f.image) || p.image, price: flavorPrice(p, f), soldOut: fl.length > 0 && fl.every(x=>x.out) };
+}
+function flavorChips(p){
+  const fl = flavorsOf(p);
+  if(!fl.length) return '';
+  const cur = currentFlavor(p);
+  return `<div class="flv" role="group" aria-label="${esc(t('flavor'))}">${fl.map(f=>`<button class="flv-chip ${cur && cur.id===f.id && !f.out ? 'on' : ''} ${f.out ? 'out' : ''}" data-flv="${p.id}" data-fid="${esc(f.id)}" ${f.out ? `disabled title="${esc(t('sold_out'))}"` : ''} aria-pressed="${cur && cur.id===f.id && !f.out}">${esc(f.name)}</button>`).join('')}</div>`;
+}
+const cartKey = (p, f) => f ? `${p.id}:${f.id}` : String(p.id);
+function cartLine(key){
+  const [pid, fid] = key.split(':');
+  const p = PRODUCTS.find(x=>x.id===Number(pid));
+  if(!p) return null;
+  const f = fid ? flavorsOf(p).find(x=>x.id===fid) : null;
+  if(fid && !f) return null;
+  return { p, f, price: flavorPrice(p, f), image: (f && f.image) || p.image, name: f ? `${p.name} — ${f.name}` : p.name };
+}
+const inCart = p => Object.keys(cart).some(k=>k === String(p.id) || k.startsWith(p.id + ':'));
+function onFlavorClick(e){
+  const chip = e.target.closest('[data-flv]');
+  if(!chip) return false;
+  selFlavor[chip.dataset.flv] = chip.dataset.fid;
+  renderPopular(); renderGrid();
+  return true;
+}
+
 /* ---------------- Delivery zones ---------------- */
 // Delivery fee (AED) and timing per city.
 const DELIVERY = SITE.delivery;
@@ -1338,7 +1392,7 @@ function currentCity(){ return DELIVERY.find(c=>c.id===cityId); }
 function deliveryFee(){ return currentCity().fee; }
 function cartTotals(){
   let subtotal = 0;
-  for(const id in cart){ subtotal += PRODUCTS.find(p=>p.id===Number(id)).price * cart[id]; }
+  for(const key in cart){ const l = cartLine(key); if(l) subtotal += l.price * cart[key]; }
   const delivery = deliveryFee();
   const tax = (subtotal + delivery) * 0.05;
   return {subtotal, delivery, tax, total: subtotal + delivery + tax};
@@ -1388,27 +1442,29 @@ function imagesFirst(list){
 }
 function renderPopular(){
   const featured = imagesFirst(PRODUCTS.filter(p=>p.badge));
-  popScroll.innerHTML = featured.map(p=>`
+  popScroll.innerHTML = featured.map(p=>{ const v = productView(p); return `
     <div class="pop-card">
       <span class="pop-badge" style="background:${BADGE_COLOR[p.badge]};">${esc(t('badge_'+p.badge) === 'badge_'+p.badge ? p.badge.toUpperCase() : t('badge_'+p.badge))}</span>
       <button class="pop-fav ${favorites.has(p.id)?'active':''}" data-fav="${p.id}" aria-label="${t('aria_save')}">
         <svg viewBox="0 0 24 24" fill="${favorites.has(p.id)?'currentColor':'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
       </button>
-      <div class="pop-icon-wrap" style="background:${mediaBg(p)}; color:${CAT_COLOR[p.cat]};">${mediaHTML(p)}</div>
+      <div class="pop-icon-wrap" style="background:${mediaBg(p, v.image)}; color:${CAT_COLOR[p.cat]};">${mediaHTML(p, v.image)}</div>
       <h4>${esc(p.name)}</h4>
       <p class="sub">${esc(pDesc(p))}</p>
+      ${flavorChips(p)}
       ${p.rating ? `<div class="pop-rating">${STAR} ${esc(p.rating)} (${esc(p.reviews)})</div>` : ''}
       <div class="pop-bottom">
-        <div class="pop-price">${money(p.price)}</div>
-        <button class="pop-add" data-add="${p.id}" aria-label="${t('aria_add')}">
+        <div class="pop-price">${v.soldOut ? `<span class="sold">${esc(t('sold_out'))}</span>` : money(v.price)}</div>
+        <button class="pop-add" data-add="${p.id}" aria-label="${t('aria_add')}" ${v.soldOut ? 'disabled' : ''}>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
         </button>
       </div>
     </div>
-  `).join('');
+  `; }).join('');
 }
 renderPopular();
 popScroll.addEventListener('click', e=>{
+  if(onFlavorClick(e)) return;
   const fav = e.target.closest('[data-fav]');
   if(fav){ const id=Number(fav.dataset.fav); favorites.has(id)?favorites.delete(id):favorites.add(id); renderPopular(); renderGrid(); return; }
   const add = e.target.closest('[data-add]');
@@ -1423,37 +1479,42 @@ function renderGrid(){
   const q = searchQuery.trim().toLowerCase();
   const filtered = PRODUCTS.filter(p=>
     (activeCat==='all' || p.cat===activeCat) &&
-    (!q || `${p.name} ${p.desc} ${pDesc(p)} ${p.tags.join(' ')} ${CAT_LABEL[p.cat]} ${t('cat_'+p.cat)}`.toLowerCase().includes(q))
+    (!q || `${p.name} ${p.desc} ${pDesc(p)} ${flavorsOf(p).map(f=>f.name).join(' ')} ${p.tags.join(' ')} ${CAT_LABEL[p.cat]} ${t('cat_'+p.cat)}`.toLowerCase().includes(q))
   );
   const list = imagesFirst(filtered);
   countEl.textContent = tItems(list.length);
   if(!list.length){ gridEl.innerHTML = `<div class="drawer-empty">${esc(q ? t('no_matches_q', {q}) : t('no_matches'))}</div>`; return; }
-  gridEl.innerHTML = list.map(p=>`
+  gridEl.innerHTML = list.map(p=>{ const v = productView(p); return `
     <div class="g-card">
-      <div class="g-icon" style="background:${mediaBg(p)}; color:${CAT_COLOR[p.cat]};">${mediaHTML(p)}</div>
+      <div class="g-icon" style="background:${mediaBg(p, v.image)}; color:${CAT_COLOR[p.cat]};">${mediaHTML(p, v.image)}</div>
       <div class="g-info">
         <h4>${esc(p.name)}</h4>
         <p class="sub">${esc(pDesc(p))}</p>
+        ${flavorChips(p)}
         ${p.rating ? `<div class="g-rating">${STAR} ${esc(p.rating)} (${esc(p.reviews)})</div>` : ''}
       </div>
       <div class="g-right">
-        <div class="g-price">${money(p.price)}</div>
-        <button class="g-add ${cart[p.id]?'in-cart':''}" data-add="${p.id}" aria-label="${t('aria_add')}">
+        <div class="g-price">${v.soldOut ? `<span class="sold">${esc(t('sold_out'))}</span>` : money(v.price)}</div>
+        <button class="g-add ${inCart(p)?'in-cart':''}" data-add="${p.id}" aria-label="${t('aria_add')}" ${v.soldOut ? 'disabled' : ''}>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
         </button>
       </div>
     </div>
-  `).join('');
+  `; }).join('');
 }
 renderGrid();
 gridEl.addEventListener('click', e=>{
+  if(onFlavorClick(e)) return;
   const add = e.target.closest('[data-add]');
   if(add) addToCart(Number(add.dataset.add));
 });
 
 /* ---------------- Cart logic ---------------- */
 function addToCart(id){
-  cart[id] = (cart[id]||0) + 1;
+  const p = PRODUCTS.find(x=>x.id===Number(id));
+  if(!p || productView(p).soldOut) return;
+  const key = cartKey(p, currentFlavor(p));
+  cart[key] = (cart[key]||0) + 1;
   updateCartUI();
   renderGrid();
   openDrawer();
@@ -1479,6 +1540,7 @@ function updateCartUI(){
   fabBadge.textContent = count;
   document.getElementById('deskCartCount').textContent = count;
 
+  for(const k of Object.keys(cart)) if(!cartLine(k)) delete cart[k];
   const ids = Object.keys(cart);
   if(ids.length===0){
     drawerItems.innerHTML = `<div class="drawer-empty">${esc(t('cart_empty'))}<br>${esc(t('cart_empty_hint'))}</div>`;
@@ -1487,14 +1549,16 @@ function updateCartUI(){
   }
   drawerFoot.style.display = 'block';
   drawerItems.innerHTML = ids.map(id=>{
-    const p = PRODUCTS.find(pr=>pr.id===Number(id));
+    const l = cartLine(id);
+    if(!l) return '';
+    const p = l.p;
     const qty = cart[id];
     return `
       <div class="d-item">
-        <div class="d-icon" style="background:${mediaBg(p)}; color:${CAT_COLOR[p.cat]};">${mediaHTML(p)}</div>
+        <div class="d-icon" style="background:${mediaBg(p, l.image)}; color:${CAT_COLOR[p.cat]};">${mediaHTML(p, l.image)}</div>
         <div class="d-info">
           <h5>${esc(p.name)}</h5>
-          <span>${money(p.price)} · ${t('cat_'+p.cat)}</span>
+          <span>${money(l.price)} · ${l.f ? `<b class="d-flv">${esc(l.f.name)}</b>` : t('cat_'+p.cat)}</span>
         </div>
         <div class="d-qty">
           <button data-qty="${id}" data-delta="-1">–</button>
@@ -1513,7 +1577,7 @@ function updateCartUI(){
 drawerItems.addEventListener('click', e=>{
   const btn = e.target.closest('[data-qty]');
   if(!btn) return;
-  changeQty(Number(btn.dataset.qty), Number(btn.dataset.delta));
+  changeQty(btn.dataset.qty, Number(btn.dataset.delta));
 });
 updateCartUI();
 
@@ -1728,9 +1792,9 @@ function openWhatsApp(text){
     const ids = Object.keys(cart);
     if(!ids.length) return;
     const lines = ids.map(id=>{
-      const p = PRODUCTS.find(pr=>pr.id===Number(id));
-      return `• ${cart[id]} × ${p.name} — AED ${p.price * cart[id]}`;
-    });
+      const l = cartLine(id);
+      return l ? `• ${cart[id]} × ${l.name} — AED ${l.price * cart[id]}` : null;
+    }).filter(Boolean);
     const {subtotal, delivery, total} = cartTotals();
     const city = currentCity();
     openWhatsApp(`Hi Smoking UAE! I'd like to order:\n${lines.join('\n')}\n\nSubtotal: AED ${subtotal.toFixed(2)}\nDelivery to ${city.name} (${city.etaLong}): AED ${delivery.toFixed(2)}\nTotal incl. VAT: AED ${total.toFixed(2)}\nPayment: ${currentPayment().name}${lang !== 'en' ? `\nCustomer language: ${langInfo().english}` : ''}\n\nDelivery address: `);
@@ -1761,7 +1825,11 @@ langListeners.push(renderCats, renderFilters, renderPopular, renderGrid, updateC
 
 /* ---------------- Banner carousel ---------------- */
 const SLIDES = SITE.slides
-  .map(sl=>{ const prod = sl.productId ? PRODUCTS.find(x=>x.id===sl.productId) : null; return {...sl, image: prod ? prod.image : null, product: prod}; })
+  .map(sl=>{
+    const prod = sl.productId ? PRODUCTS.find(x=>x.id===sl.productId) : null;
+    const f = prod && sl.flavorId ? flavorsOf(prod).find(x=>x.id===sl.flavorId) : null;
+    return {...sl, image: prod ? ((f && f.image) || prod.image) : null, product: prod, price: prod ? flavorPrice(prod, f) : null, flavor: f};
+  })
   .filter(sl=>!sl.productId || (sl.product && sl.image));
 let slideIndex = 0;
 const bannerHead = document.getElementById('bannerHead');
@@ -1814,8 +1882,8 @@ function renderSlide(i){
       bannerPhoto.style.opacity = 1;
       bannerScrim.style.opacity = 1;
       bannerProductImg.src = s.image;
-      bannerProductImg.alt = prod ? prod.name : '';
-      bannerTag.innerHTML = prod ? money(prod.price) : '';
+      bannerProductImg.alt = prod ? (s.flavor ? `${prod.name} — ${s.flavor.name}` : prod.name) : '';
+      bannerTag.innerHTML = prod ? money(s.price) : '';
       bannerTag.style.display = prod ? '' : 'none';
       void bannerProduct.offsetWidth;
       bannerProduct.classList.add('show');

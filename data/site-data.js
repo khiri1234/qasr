@@ -25,7 +25,8 @@ window.SITE_DATA = {
       ],
       "sub": "Crown Bar Al Fakher 60K E‑Hose X — 60,000 puffs of cool mango, dual airflow.",
       "accent": "#FFB454",
-      "productId": 16
+      "productId": 16,
+      "flavorId": "cool-mango"
     },
     {
       "eyebrow": "ORIGINAL BLEND",
@@ -91,7 +92,8 @@ window.SITE_DATA = {
       ],
       "sub": "Crown Bar Al Fakher 60K E‑Hose X — Mint, dual mode airflow.",
       "accent": "#57E6C9",
-      "productId": 22
+      "productId": 16,
+      "flavorId": "mint"
     },
     {
       "eyebrow": "LIMITED TIME ONLY",
@@ -534,13 +536,14 @@ window.SITE_DATA = {
     },
     {
       "id": 16,
-      "name": "Crown Bar Al Fakher 60K E‑Hose X — Cool Mango",
+      "name": "Crown Bar Al Fakher 60K E‑Hose X",
       "cat": "disposable",
-      "desc": "Cool mango, dual airflow, big-format E‑Hose device",
+      "desc": "60,000 puffs, dual airflow, big-format E‑Hose device",
       "tags": [
         "60000 puffs",
+        "Ice",
         "Mango",
-        "Ice"
+        "Mint"
       ],
       "price": 135,
       "rating": 4.8,
@@ -549,13 +552,25 @@ window.SITE_DATA = {
       "image": "images/crownbar-60k.jpg",
       "hidden": false,
       "descI18n": {
-        "ar": "مانجو باردة، تدفق هواء مزدوج، جهاز E‑Hose بحجم كبير",
-        "ru": "Холодное манго, двойная затяжка, большое устройство E‑Hose",
-        "fil": "Malamig na mangga, dual airflow, malaking E‑Hose device",
-        "hi": "ठंडा आम, डुअल एयरफ़्लो, बड़ा E‑Hose डिवाइस",
-        "ur": "ٹھنڈا آم، ڈوئل ایئر فلو، بڑا E‑Hose ڈیوائس",
-        "fa": "انبه خنک، جریان هوای دوگانه، دستگاه بزرگ E‑Hose"
-      }
+        "ar": "60,000 نفخة، تدفق هواء مزدوج، جهاز E‑Hose بحجم كبير",
+        "ru": "60 000 затяжек, двойная затяжка, большое устройство E‑Hose",
+        "fil": "60,000 puffs, dual airflow, malaking E‑Hose device",
+        "hi": "60,000 पफ़, डुअल एयरफ़्लो, बड़ा E‑Hose डिवाइस",
+        "ur": "60,000 پفس، ڈوئل ایئر فلو، بڑا E‑Hose ڈیوائس",
+        "fa": "60,000 پک، جریان هوای دوگانه، دستگاه بزرگ E‑Hose"
+      },
+      "flavors": [
+        {
+          "id": "cool-mango",
+          "name": "Cool Mango",
+          "image": "images/crownbar-60k.jpg"
+        },
+        {
+          "id": "mint",
+          "name": "Mint",
+          "image": "images/crownbar-mint-60k.jpg"
+        }
+      ]
     },
     {
       "id": 17,
@@ -673,29 +688,6 @@ window.SITE_DATA = {
         "hi": "डबल ऐपल फ्लेवर, मेश कॉइल, एडजस्टेबल एयरफ़्लो",
         "ur": "ڈبل ایپل فلیور، میش کوائل، ایڈجسٹ ایبل ایئر فلو",
         "fa": "طعم دو سیب، کویل مش، جریان هوای قابل تنظیم"
-      }
-    },
-    {
-      "id": 22,
-      "name": "Crown Bar Al Fakher 60K E‑Hose X — Mint",
-      "cat": "disposable",
-      "desc": "Clean mint, dual mode airflow, big-format E‑Hose device",
-      "tags": [
-        "60000 puffs",
-        "Mint"
-      ],
-      "price": 135,
-      "rating": 4.8,
-      "reviews": "640",
-      "image": "images/crownbar-mint-60k.jpg",
-      "hidden": false,
-      "descI18n": {
-        "ar": "نعناع صافٍ، تدفق هواء بوضعين، جهاز E‑Hose بحجم كبير",
-        "ru": "Чистая мята, два режима затяжки, большое устройство E‑Hose",
-        "fil": "Malinis na mint, dual mode airflow, malaking E‑Hose device",
-        "hi": "साफ़ मिंट, डुअल मोड एयरफ़्लो, बड़ा E‑Hose डिवाइस",
-        "ur": "صاف منٹ، ڈوئل موڈ ایئر فلو، بڑا E‑Hose ڈیوائس",
-        "fa": "نعنای خالص، جریان هوای دوحالته، دستگاه بزرگ E‑Hose"
       }
     }
   ]

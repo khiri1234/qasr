@@ -47,6 +47,8 @@ window.I18N = {
  ],
  "strings": {
   "en": {
+   "sold_out": "Out of stock",
+   "flavor": "Flavor",
    "cart": "Cart",
    "tagline": "Pure clouds. Every time.",
    "hello": "Hello, Cloud Chaser 👋",
@@ -144,6 +146,8 @@ window.I18N = {
    "aria_lang": "Choose language"
   },
   "ar": {
+   "sold_out": "نفدت الكمية",
+   "flavor": "النكهة",
    "cart": "السلة",
    "tagline": "غيوم نقية. في كل مرة.",
    "hello": "مرحباً بك 👋",
@@ -240,6 +244,8 @@ window.I18N = {
    "aria_lang": "اختر اللغة"
   },
   "ru": {
+   "sold_out": "Нет в наличии",
+   "flavor": "Вкус",
    "cart": "Корзина",
    "tagline": "Чистые облака. Каждый раз.",
    "hello": "Привет, любитель облаков 👋",
@@ -339,6 +345,8 @@ window.I18N = {
    "aria_lang": "Выбрать язык"
   },
   "fil": {
+   "sold_out": "Ubos na",
+   "flavor": "Flavor",
    "cart": "Cart",
    "tagline": "Purong ulap. Palagi.",
    "hello": "Kumusta, Cloud Chaser 👋",
@@ -436,6 +444,8 @@ window.I18N = {
    "aria_lang": "Piliin ang wika"
   },
   "hi": {
+   "sold_out": "स्टॉक में नहीं",
+   "flavor": "फ्लेवर",
    "cart": "कार्ट",
    "tagline": "शुद्ध बादल। हर बार।",
    "hello": "नमस्ते 👋",
@@ -533,6 +543,8 @@ window.I18N = {
    "aria_lang": "भाषा चुनें"
   },
   "ur": {
+   "sold_out": "اسٹاک ختم",
+   "flavor": "فلیور",
    "cart": "کارٹ",
    "tagline": "خالص بادل۔ ہر بار۔",
    "hello": "خوش آمدید 👋",
@@ -630,6 +642,8 @@ window.I18N = {
    "aria_lang": "زبان منتخب کریں"
   },
   "fa": {
+   "sold_out": "ناموجود",
+   "flavor": "طعم",
    "cart": "سبد خرید",
    "tagline": "ابرهای خالص. هر بار.",
    "hello": "سلام، خوش آمدید 👋",

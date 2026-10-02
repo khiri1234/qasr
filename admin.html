@@ -108,6 +108,25 @@
   .drop .dt b{display:block; font-size:13.5px; margin-bottom:3px;}
   .drop .dt span{font-size:12px; color:var(--muted); line-height:1.5;}
 
+  /* Flavor rows in the product form */
+  .flv-rows{display:flex; flex-direction:column; gap:8px;}
+  .flv-row{display:grid; grid-template-columns:48px 1fr 96px auto 32px; gap:8px; align-items:center; padding:8px; border:1px solid var(--stroke); border-radius:12px; background:var(--soft);}
+  .flv-row.is-out{opacity:.7;}
+  .flv-thumb{position:relative; width:48px; height:48px; border-radius:10px; border:1.5px dashed var(--stroke); background:var(--panel); display:flex; align-items:center; justify-content:center; overflow:hidden; color:var(--muted); font-size:18px; padding:0;}
+  .flv-thumb img{width:100%; height:100%; object-fit:contain; background:#fff;}
+  .flv-thumb:hover{border-color:var(--mint-ink);}
+  .flv-clear{position:absolute; top:-2px; right:-2px; width:18px; height:18px; border-radius:50%; background:var(--text); color:#fff; font-size:11px; line-height:18px; text-align:center;}
+  .flv-row .input{padding:8px 10px; font-size:13px;}
+  .flv-stock{display:flex; align-items:center; gap:6px; font-size:12px; font-weight:600; white-space:nowrap;}
+  .flv-stock input{width:17px; height:17px; accent-color:var(--mint-ink);}
+  .flv-del{width:32px; height:32px; border-radius:50%; border:none; background:transparent; color:var(--red); font-size:18px;}
+  .flv-del:hover{background:#FDE7E8;}
+  @media (max-width:560px){
+    .flv-row{grid-template-columns:48px 1fr 32px; }
+    .flv-row .flv-price{grid-column:2;}
+    .flv-row .flv-stock{grid-column:2;}
+  }
+
   /* Slides */
   .slides{display:flex; flex-direction:column; gap:12px;}
   .slide{display:grid; grid-template-columns:90px 1fr auto; gap:14px; align-items:center;}
@@ -370,6 +389,13 @@
       <p class="hint" style="margin:8px 0 10px;">Shown when a customer picks that language. Leave a box empty to show the English description. If you change the English text, update these too.</p>
       <div id="descTrFields" style="display:flex; flex-direction:column; gap:8px;"></div>
     </details>
+    <div class="field" id="flvField">
+      <label>Flavors <span style="font-weight:500; color:var(--muted);">(optional)</span></label>
+      <span class="hint" style="margin-top:-2px;">Customers pick a flavor before adding to cart. Photo and price are optional — empty means the product’s own photo and price.</span>
+      <div class="flv-rows" id="flvRows"></div>
+      <div><button type="button" class="btn small" id="addFlvBtn">+ Add flavor</button></div>
+      <input type="file" id="flvPhotoInput" accept="image/*" hidden>
+    </div>
     <div class="field"><label for="pTags">Tags</label><input class="input" id="pTags" placeholder="e.g. 5000 puffs, Watermelon, Ice"><span class="hint">Separate with commas. Used for search.</span></div>
     <div class="row">
       <div class="field"><label for="pBadge">Badge</label>
@@ -392,6 +418,7 @@
   <form class="modal" id="slideForm" novalidate>
     <h3><span id="slideModalTitle">Edit slide</span><button type="button" class="xbtn" data-close aria-label="Close">×</button></h3>
     <div class="field"><label for="sProduct">Product</label><select class="input" id="sProduct"></select><span class="hint">Shows the product’s photo and price. Choose “No product” for a text-only slide.</span></div>
+    <div class="field" id="sFlavorField" hidden><label for="sFlavor">Flavor</label><select class="input" id="sFlavor"></select><span class="hint">The slide shows this flavor’s photo and price.</span></div>
     <div class="field"><label for="sEyebrow">Small label</label><input class="input" id="sEyebrow" maxlength="30" placeholder="e.g. JUST IN"></div>
     <div class="field"><label>Headline (3 short lines)</label>
       <div class="row" style="grid-template-columns:1fr 1fr 1fr; gap:8px;"><input class="input" id="sL1" maxlength="14" placeholder="GOLD."><input class="input" id="sL2" maxlength="14" placeholder="COOL."><input class="input" id="sL3" maxlength="14" placeholder="MANGO."></div>
@@ -824,19 +851,20 @@ $('prodCat').addEventListener('change', renderProducts);
 function renderProducts(){
   const q = $('prodSearch').value.trim().toLowerCase();
   const cat = $('prodCat').value;
-  const list = data.products.filter(p=>(!cat || p.cat===cat) && (!q || `${p.name} ${p.desc} ${(p.tags||[]).join(' ')}`.toLowerCase().includes(q)));
+  const list = data.products.filter(p=>(!cat || p.cat===cat) && (!q || `${p.name} ${p.desc} ${(p.flavors||[]).map(f=>f.name).join(' ')} ${(p.tags||[]).join(' ')}`.toLowerCase().includes(q)));
   const visible = data.products.filter(p=>!p.hidden).length;
   $('prodCount').textContent = `${data.products.length} products · ${visible} shown in the store`;
   $('prodList').innerHTML = list.length ? list.map(p=>`
     <div class="pitem ${p.hidden?'is-hidden':''}">
-      <div class="pthumb">${p.image ? `<img src="${esc(photoSrc(p.image))}" alt="">` : 'No photo'}</div>
+      <div class="pthumb">${productImages(p)[0] ? `<img src="${esc(photoSrc(productImages(p)[0]))}" alt="">` : 'No photo'}</div>
       <div class="pinfo">
         <b>${esc(p.name)}</b>
         <div class="meta">
           <span>AED ${esc(p.price)}</span><span>·</span><span>${esc(CATEGORIES[p.cat] || p.cat)}</span>
           ${p.badge ? `<span class="chip b-${esc(p.badge)}">${esc(p.badge.toUpperCase())}</span>` : ''}
+          ${p.flavors?.length ? `<span class="chip">${p.flavors.length} FLAVOR${p.flavors.length>1?'S':''}${p.flavors.some(f=>f.out) ? ` · ${p.flavors.filter(f=>f.out).length} OUT` : ''}</span>` : ''}
           ${p.hidden ? `<span class="chip hid">HIDDEN</span>` : ''}
-          ${p.image && pendingPhotos[p.image] ? `<span class="chip pend">NEW PHOTO</span>` : ''}
+          ${productImages(p).some(x=>pendingPhotos[x]) ? `<span class="chip pend">NEW PHOTO</span>` : ''}
         </div>
       </div>
       <div class="pactions">
@@ -877,11 +905,86 @@ function openProduct(id){
   $('pName').value = editing.name; $('pCat').value = editing.cat; $('pPrice').value = editing.price;
   $('pDesc').value = editing.desc || ''; $('pTags').value = (editing.tags||[]).join(', ');
   renderDescTr(editing.descI18n || {});
+  editFlavors = (editing.flavors || []).map(f=>({ id:f.id, name:f.name, price: f.price ?? '', out: !!f.out, image: f.image || null, photo: null }));
+  renderFlvRows();
   $('pBadge').value = editing.badge || ''; $('pRating').value = editing.rating || ''; $('pReviews').value = editing.reviews || '';
   $('pHidden').checked = !!editing.hidden;
   showPhoto();
   openModal('prodModal');
   setTimeout(()=>$('pName').focus(), 50);
+}
+
+/* Flavors (product variants) */
+let editFlavors = [];          // [{id, name, price, out, image, photo}] while the product form is open
+let flvPhotoTarget = null;
+function flavorImages(p){ return (p.flavors || []).map(f=>f.image).filter(Boolean); }
+function productImages(p){ return [p.image, ...flavorImages(p)].filter(Boolean); }
+function renderFlvRows(){
+  $('flvRows').innerHTML = editFlavors.map((f,i)=>{
+    const src = f.photo ? f.photo.dataUrl : (f.image ? photoSrc(f.image) : '');
+    return `
+    <div class="flv-row ${f.out ? 'is-out' : ''}" data-i="${i}">
+      <button type="button" class="flv-thumb" data-flv-photo="${i}" title="Flavor photo (optional)">${src ? `<img src="${esc(src)}" alt=""><span class="flv-clear" data-flv-clear="${i}" title="Remove photo">×</span>` : '+'}</button>
+      <input class="input" data-k="name" placeholder="Flavor name, e.g. Mint" value="${esc(f.name)}" maxlength="40">
+      <input class="input flv-price" data-k="price" type="number" min="0" step="0.5" inputmode="decimal" placeholder="Price" value="${esc(f.price ?? '')}" title="Leave empty to use the product price">
+      <label class="flv-stock"><input type="checkbox" data-k="stock" ${f.out ? '' : 'checked'}> In stock</label>
+      <button type="button" class="flv-del" data-flv-del="${i}" title="Remove flavor" aria-label="Remove flavor">×</button>
+    </div>`; }).join('');
+}
+$('addFlvBtn').addEventListener('click', ()=>{
+  editFlavors.push({ id:'', name:'', price:'', out:false, image:null, photo:null });
+  renderFlvRows();
+  $('flvRows').lastElementChild?.querySelector('[data-k="name"]').focus();
+});
+$('flvRows').addEventListener('input', e=>{
+  const row = e.target.closest('.flv-row'); if(!row) return;
+  const f = editFlavors[+row.dataset.i], k = e.target.dataset.k;
+  if(k === 'name') f.name = e.target.value;
+  else if(k === 'price') f.price = e.target.value;
+  else if(k === 'stock'){ f.out = !e.target.checked; row.classList.toggle('is-out', f.out); }
+});
+$('flvRows').addEventListener('click', e=>{
+  const clear = e.target.closest('[data-flv-clear]');
+  if(clear){ e.stopPropagation(); const f = editFlavors[+clear.dataset.flvClear]; f.photo = null; f.image = null; renderFlvRows(); return; }
+  const ph = e.target.closest('[data-flv-photo]');
+  if(ph){ flvPhotoTarget = +ph.dataset.flvPhoto; $('flvPhotoInput').click(); return; }
+  const del = e.target.closest('[data-flv-del]');
+  if(del){ editFlavors.splice(+del.dataset.flvDel, 1); renderFlvRows(); }
+});
+$('flvPhotoInput').addEventListener('change', async ()=>{
+  const file = $('flvPhotoInput').files[0]; $('flvPhotoInput').value = '';
+  const f = editFlavors[flvPhotoTarget]; if(!file || !f) return;
+  if(!file.type.startsWith('image/')){ toast('Please choose an image file.', true); return; }
+  try{
+    const dataUrl = await resizePhoto(file);
+    const name = slugify(($('pName').value || 'product') + '-' + (f.name || 'flavor'));
+    f.photo = { path: `${IMAGE_DIR}/${name}-${Date.now().toString(36)}.jpg`, dataUrl, base64: dataUrl.split(',')[1] };
+    f.image = f.photo.path;
+    renderFlvRows();
+  }catch(err){ toast(err.message, true); }
+});
+// Turn the rows into saved flavors, or return an error message.
+function collectFlavors(){
+  const out = [], names = new Set(), ids = new Set();
+  for(const f of editFlavors){
+    const name = f.name.trim();
+    if(!name) return { error: 'Every flavor needs a name (or remove the empty row).' };
+    if(names.has(name.toLowerCase())) return { error: `The flavor “${name}” is listed twice.` };
+    names.add(name.toLowerCase());
+    let id = f.id || slugify(name) || 'flavor';
+    while(ids.has(id)) id += '-2';
+    ids.add(id);
+    const item = { id, name };
+    if(f.price !== '' && f.price !== null && f.price !== undefined){
+      const pr = Number(f.price);
+      if(!(pr >= 0)) return { error: `Check the price for “${name}”.` };
+      item.price = pr;
+    }
+    if(f.image) item.image = f.image;
+    if(f.out) item.out = true;
+    out.push(item);
+  }
+  return { flavors: out };
 }
 
 /* Description translations (shown on the store for each language) */
@@ -957,9 +1060,12 @@ $('prodForm').addEventListener('submit', e=>{
   const errors = [];
   if(!name) errors.push('Enter a product name.');
   if($('pPrice').value === '' || !(price >= 0)) errors.push('Enter a price of 0 or more.');
+  const flv = collectFlavors();
+  if(flv.error) errors.push(flv.error);
   if(errors.length){ $('prodErr').textContent = errors.join(' '); $('prodErr').hidden = false; return; }
 
   const oldImage = editing.image;
+  const oldFlavorImages = flavorImages(editing);
   const p = {
     id: editing.id ?? (Math.max(0, ...data.products.map(x=>x.id)) + 1),
     name, cat: $('pCat').value,
@@ -973,6 +1079,9 @@ $('prodForm').addEventListener('submit', e=>{
   };
   const badge = $('pBadge').value; if(badge) p.badge = badge;
   const descI18n = readDescTr(); if(Object.keys(descI18n).length) p.descI18n = descI18n;
+  if(flv.flavors.length) p.flavors = flv.flavors;
+  for(const f of editFlavors) if(f.photo && f.image === f.photo.path) pendingPhotos[f.photo.path] = { dataUrl: f.photo.dataUrl, base64: f.photo.base64 };
+  for(const path of oldFlavorImages) if(!flavorImages(p).includes(path)) delete pendingPhotos[path];
   if(editPhoto && editPhoto.base64) pendingPhotos[editPhoto.path] = { dataUrl: editPhoto.dataUrl, base64: editPhoto.base64 };
   if(oldImage && oldImage !== p.image) delete pendingPhotos[oldImage];   // replaced before publishing
 
@@ -986,7 +1095,7 @@ $('deleteProdBtn').addEventListener('click', ()=>{
   if(!confirm(`Delete “${editing.name}”? This removes it from the store after you publish.`)) return;
   data.products = data.products.filter(x=>x.id!==editing.id);
   data.slides = data.slides.filter(s=>s.productId!==editing.id);
-  if(editing.image) delete pendingPhotos[editing.image];
+  for(const path of productImages(editing)) delete pendingPhotos[path];
   closeModal('prodModal');
   toast('Product deleted — remember to publish.');
   changed();
@@ -994,6 +1103,18 @@ $('deleteProdBtn').addEventListener('click', ()=>{
 
 /* ================= Hero slides ================= */
 function slideProduct(s){ return s.productId ? data.products.find(p=>p.id===s.productId) : null; }
+function slideImage(s){
+  const p = slideProduct(s); if(!p) return null;
+  const f = s.flavorId ? (p.flavors || []).find(x=>x.id===s.flavorId) : null;
+  return (f && f.image) || p.image || null;
+}
+function fillSlideFlavors(productId, flavorId){
+  const p = data.products.find(x=>x.id===productId);
+  const fl = p ? (p.flavors || []) : [];
+  $('sFlavorField').hidden = !fl.length;
+  $('sFlavor').innerHTML = `<option value="">Main product photo</option>` + fl.map(f=>`<option value="${esc(f.id)}" ${f.id===flavorId?'selected':''}>${esc(f.name)}${f.out?' (out of stock)':''}</option>`).join('');
+}
+$('sProduct').addEventListener('change', ()=> fillSlideFlavors(Number($('sProduct').value), null));
 function renderSlides(){
   $('slideList').innerHTML = data.slides.length ? data.slides.map((s,i)=>{
     if(s.bannerImage) return `
@@ -1007,10 +1128,10 @@ function renderSlides(){
       </div>
     </div>`;
     const p = slideProduct(s);
-    const warn = s.productId && (!p || p.hidden || !p.image) ? `<br><span style="color:#B42318;">Not shown: linked product is ${!p ? 'deleted' : p.hidden ? 'hidden' : 'missing a photo'}.</span>` : '';
+    const warn = s.productId && (!p || p.hidden || !slideImage(s)) ? `<br><span style="color:#B42318;">Not shown: linked product is ${!p ? 'deleted' : p.hidden ? 'hidden' : 'missing a photo'}.</span>` : '';
     return `
     <div class="card slide">
-      <div class="sv">${p && p.image ? `<img src="${esc(photoSrc(p.image))}" alt="">` : `<span style="color:${esc(s.accent)}; font-family:'Space Grotesk'; font-weight:700; font-size:12px;">TEXT</span>`}<i style="background:${esc(s.accent)}"></i></div>
+      <div class="sv">${p && slideImage(s) ? `<img src="${esc(photoSrc(slideImage(s)))}" alt="">` : `<span style="color:${esc(s.accent)}; font-family:'Space Grotesk'; font-weight:700; font-size:12px;">TEXT</span>`}<i style="background:${esc(s.accent)}"></i></div>
       <div class="st">
         <b>${esc((s.lines||[]).join(' '))}</b>
         <span>${esc(s.eyebrow)}${p ? ' · ' + esc(p.name) : ' · Text-only slide'}${warn}</span>
@@ -1044,7 +1165,8 @@ function openSlide(i){
   const s = i == null ? { eyebrow:'NEW ARRIVAL', lines:['','',''], sub:'', accent:ACCENTS[0], productId:null } : data.slides[i];
   $('slideModalTitle').textContent = i == null ? 'Add slide' : 'Edit slide';
   $('sProduct').innerHTML = `<option value="">No product (text-only slide)</option>` +
-    data.products.filter(p=>p.image).map(p=>`<option value="${p.id}" ${p.id===s.productId?'selected':''}>${esc(p.name)}${p.hidden?' (hidden)':''}</option>`).join('');
+    data.products.filter(p=>productImages(p).length).map(p=>`<option value="${p.id}" ${p.id===s.productId?'selected':''}>${esc(p.name)}${p.hidden?' (hidden)':''}</option>`).join('');
+  fillSlideFlavors(s.productId, s.flavorId);
   $('sEyebrow').value = s.eyebrow || ''; $('sL1').value = s.lines?.[0] || ''; $('sL2').value = s.lines?.[1] || ''; $('sL3').value = s.lines?.[2] || '';
   $('sSub').value = s.sub || '';
   slideAccent = s.accent || ACCENTS[0]; renderAccents();
@@ -1059,6 +1181,7 @@ $('slideForm').addEventListener('submit', e=>{
     accent: slideAccent,
   };
   if($('sProduct').value) s.productId = Number($('sProduct').value);
+  if(s.productId && $('sFlavor').value) s.flavorId = $('sFlavor').value;
   if(slideIdx == null) data.slides.unshift(s); else data.slides[slideIdx] = s;
   closeModal('slideModal');
   changed();
@@ -1145,14 +1268,14 @@ async function publish(){
     const head = await gh(`/git/commits/${headSha}`);
 
     const tree = [];
-    const used = new Set(data.products.map(p=>p.image).filter(Boolean));
+    const used = new Set(data.products.flatMap(productImages));
     for(const [path, ph] of Object.entries(pendingPhotos)){
       if(!used.has(path)) continue;
       const blob = await gh('/git/blobs', { method:'POST', body: JSON.stringify({ content: ph.base64, encoding:'base64' }) });
       tree.push({ path, mode:'100644', type:'blob', sha: blob.sha });
     }
     // Delete photos that no product uses any more.
-    const before = new Set(saved.products.map(p=>p.image).filter(Boolean));
+    const before = new Set(saved.products.flatMap(productImages));
     for(const path of before){
       if(!used.has(path) && path.startsWith(IMAGE_DIR + '/')) tree.push({ path, mode:'100644', type:'blob', sha: null });
     }
