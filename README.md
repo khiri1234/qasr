@@ -1,6 +1,6 @@
 # Smoking UAE store
 
-Static storefront hosted on GitHub Pages.
+Static storefront hosted on GitHub Pages at https://smokinguae.com (the `CNAME` file sets the domain).
 
 | File | What it is |
 |---|---|
@@ -13,7 +13,7 @@ Static storefront hosted on GitHub Pages.
 
 ## Managing the store
 
-Open `admin.html` on the live site: `https://khiri1234.github.io/qasr/admin.html`.
+Open `admin.html` on the live site: `https://smokinguae.com/admin.html`.
 
 **Everyday:** sign in with your username and password, make changes, then press **Publish**.
 Each publish is one commit to `main`; the live store updates within 1–3 minutes.
@@ -49,3 +49,19 @@ The store has a language button (globe icon) with English, العربية, Ру�
 browser's language; the choice is remembered. Text entered in the admin (product names and
 descriptions, hero slides, the offer) is shown as typed. Orders sent on WhatsApp stay in English
 and note the customer's language. To change a translation, edit `i18n.js`.
+
+## Domain (smokinguae.com)
+
+DNS records at the domain registrar:
+
+| Type | Name | Value |
+|---|---|---|
+| A | @ | 185.199.108.153 |
+| A | @ | 185.199.109.153 |
+| A | @ | 185.199.110.153 |
+| A | @ | 185.199.111.153 |
+| CNAME | www | khiri1234.github.io |
+
+Remove any other A records and any domain forwarding for `@`. Then, in the repository's
+**Settings → Pages**, the custom domain shows `smokinguae.com`; tick **Enforce HTTPS** once the
+certificate is ready.
