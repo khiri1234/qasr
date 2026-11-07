@@ -203,10 +203,12 @@ window.SITE_DATA = {
   "products": [
     {
       "id": 22,
-      "name": "ROMEOYJULIETA",
+      "name": "ROMEOYJULIETA - 3 WIDE CHURCHILLS",
       "cat": "tobacco",
       "desc": "Romeo y Julieta 3 Wide Churchills is a premium Cuban handmade cigar, known for its rich aroma, smooth character, and excellent craftsmanship. It offers a balanc",
-      "tags": [],
+      "tags": [
+        "3-PACK HABANA CUBA"
+      ],
       "price": 650,
       "rating": 4.9,
       "reviews": "",
