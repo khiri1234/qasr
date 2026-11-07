@@ -202,6 +202,21 @@ window.SITE_DATA = {
   ],
   "products": [
     {
+      "id": 23,
+      "name": "MOODS 20 PREMIUM CIGARILLOS GOLD FILTER",
+      "cat": "tobacco",
+      "desc": "Moods 20 Premium Cigarillos gold filter –A compact pack of premium filter cigarillos, featuring a smooth tobacco aroma and convenient filtered design.",
+      "tags": [
+        "20 PREMIUM CIGARILLOS GOLD FILTER"
+      ],
+      "price": 160,
+      "rating": 4.8,
+      "reviews": "",
+      "image": "images/moods-20-premium-cigarillos-gold-filter-mw6qc835.jpg",
+      "hidden": false,
+      "badge": "Popular"
+    },
+    {
       "id": 22,
       "name": "ROMEOYJULIETA - 3 WIDE CHURCHILLS",
       "cat": "tobacco",
